@@ -24,10 +24,6 @@ public class Applicant {
     @Column
     private String aboutMe;
     @Column
-    private String firstName;
-    @Column
-    private String lastName;
-    @Column
     private String educationLevel;
     @Column
     private String educationField;

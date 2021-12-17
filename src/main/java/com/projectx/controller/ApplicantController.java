@@ -29,7 +29,7 @@ public class ApplicantController {
         if (decodedJWT == null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
-            
+
         }
         return new ResponseEntity<>(applicant, HttpStatus.OK);
     }
