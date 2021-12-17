@@ -7,10 +7,35 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Unit Test') {
             steps {
-                sh 'mvn package'
-                discordSend description: ":package: *Packaged ${env.JOB_NAME}*", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
+                sh 'mvn test'
+                discordSend description: ":memo: Successfully Passed Tests for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'mvn -DskipTests package'
+                discordSend description: ":package: Packaged .jar for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
+            }
+        }
+
+        stage('Static Analysis') {
+            steps {
+                sh 'echo todo'
+            }
+        }
+
+        stage('Deployment Preparation') {
+            steps {
+                sh 'echo todo'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'echo todo'
             }
         }
     }

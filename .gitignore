@@ -3,8 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-h2database
-h2testing
+h2database/
+h2testing/
 
 ### STS ###
 .apt_generated
