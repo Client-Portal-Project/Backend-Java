@@ -1,6 +1,6 @@
-package com.projectx.clientportal.controller;
+package com.projectx.controller;
 
-import com.projectx.clientportal.utility.CrossOriginUtil;
+import com.projectx.utility.CrossOriginUtil;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,11 +1,11 @@
-package com.projectx.clientportal.controller;
+package com.projectx.controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.projectx.clientportal.model.JsonResponse;
-import com.projectx.clientportal.model.User;
-import com.projectx.clientportal.service.UserService;
-import com.projectx.clientportal.utility.CrossOriginUtil;
-import com.projectx.clientportal.utility.JwtUtil;
+import com.projectx.model.JsonResponse;
+import com.projectx.model.User;
+import com.projectx.service.UserService;
+import com.projectx.utility.CrossOriginUtil;
+import com.projectx.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

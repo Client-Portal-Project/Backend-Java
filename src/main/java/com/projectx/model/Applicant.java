@@ -1,4 +1,4 @@
-package com.projectx.clientportal.model;
+package com.projectx.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

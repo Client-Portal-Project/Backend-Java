@@ -1,23 +1,26 @@
-package com.projectx.clientportal.model;
+package com.projectx.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
 
-// Will handle the Owner's information and functionality
+// Will handle scheduling and recording interviews
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Owners")
-public class Owner {
+@Table(name = "Interviews")
+public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer ownerId;
+    private Integer interviewId;
+    @Column
+    private Date date;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private User user;
+    private Application application;
 }

@@ -1,4 +1,4 @@
-package com.projectx.clientportal.utility;
+package com.projectx.utility;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

@@ -1,7 +1,7 @@
-package com.projectx.clientportal.service;
+package com.projectx.service;
 
-import com.projectx.clientportal.model.User;
-import com.projectx.clientportal.repository.UserDao;
+import com.projectx.model.User;
+import com.projectx.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

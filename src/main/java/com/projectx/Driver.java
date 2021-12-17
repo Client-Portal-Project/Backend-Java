@@ -1,13 +1,12 @@
-package com.projectx.clientportal;
+package com.projectx;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ClientportalApplication {
+public class Driver {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ClientportalApplication.class, args);
+		SpringApplication.run(Driver.class, args);
 	}
-
 }

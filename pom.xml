@@ -5,10 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.projectx</groupId>
-	<artifactId>clientportal</artifactId>
+	<artifactId>Client-Portal</artifactId>
 	<version>0.0.1</version>
-	<name>Client Portal</name>
-	<description>Client Portal Project</description>
 
 	<!-- Inherit defaults from Spring Boot -->
 	<parent>
@@ -27,11 +25,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-test</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -41,6 +39,8 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.22</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Testing -->
@@ -71,6 +71,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>Client-Portal</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

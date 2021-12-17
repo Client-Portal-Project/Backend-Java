@@ -1,4 +1,4 @@
-package com.projectx.clientportal.model;
+package com.projectx.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,20 +6,20 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-// Join table to display which skills an applicant claims to possess
+// Will handle the Client's information and functionality
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ApplicantSkills")
-public class ApplicantSkill {
+@Table(name = "ClientUsers")
+public class ClientUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer applicantSkillId;
+    private Integer clientUserId;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Applicant applicant;
+    private User user;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Skill skill;
+    private Client client;
 }
