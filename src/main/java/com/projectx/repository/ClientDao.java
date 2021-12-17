@@ -8,4 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository("clientDao")
 @Transactional
 public interface ClientDao extends JpaRepository<Client, Integer> {
+    Client findClientByCompanyName(String companyName);
 }
