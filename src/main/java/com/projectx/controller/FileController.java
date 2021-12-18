@@ -3,8 +3,10 @@ package com.projectx.controller;
 
 
 import com.projectx.DTOs.ResponseFile;
+import com.projectx.DTOs.ResponseMessage;
 import com.projectx.model.FileDB;
 import com.projectx.service.FileStorageService;
+import com.projectx.utility.CrossOriginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,22 +32,25 @@ public class FileController {
         this.storageService = storageService;
     }
 
+    @CrossOrigin
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file){
         String message = "";
         try{
             storageService.store(file);
             message = "Uploaded the file successfully: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(201).body(message);
+
+            return ResponseEntity.status(200).body(new ResponseMessage(message));
         } catch (IOException e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.badRequest().body(message);
+            return ResponseEntity.badRequest().body(new ResponseMessage(message));
         }
 
     }
 
 
 
+    @CrossOrigin
     @GetMapping("/files")
     public ResponseEntity<List<ResponseFile>> getListFiles() {
         List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
@@ -65,6 +70,7 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
+    @CrossOrigin
     @GetMapping("/files/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable String id) {
         FileDB fileDB = storageService.getFile(id);
