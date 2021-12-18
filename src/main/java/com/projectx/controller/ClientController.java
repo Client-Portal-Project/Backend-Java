@@ -1,6 +1,10 @@
 package com.projectx.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projectx.model.Client;
-import com.projectx.model.JsonResponse;
 import com.projectx.service.ClientService;
 import com.projectx.utility.CrossOriginUtil;
 
@@ -27,51 +30,39 @@ public class ClientController {
 
     // Currently, for testing purposes to see the User data in Postman
     @GetMapping("clients")
-    public JsonResponse getAllClients() {
-        return new JsonResponse(true, "Clients :", this.clientServ.findAllClients());
-    }
+    public ResponseEntity<List<Client>> getAllClients() {
+    	return new ResponseEntity<List<Client>>(this.clientServ.findAllClients(), HttpStatus.OK);
+    } 
 
     @GetMapping("client/id/{clientId}")
-    public JsonResponse getClientById(@PathVariable Integer clientId) {
-        JsonResponse jsonResponse;
-        Client reqClient = this.clientServ.findClientById(clientId);
-
-        if(reqClient != null) {
-            jsonResponse = new JsonResponse(true, "Client :", reqClient);
+    public ResponseEntity<?> getClientById(@PathVariable Integer clientId) {
+        Client client = this.clientServ.findClientById(clientId);
+        if(client != null) {
+           return new ResponseEntity<Client>(client, HttpStatus.OK);
         } else {
-            jsonResponse = new JsonResponse(false, "Client with id: " + clientId + " doesn't exist.", null);
+           return new ResponseEntity<String>("Failed to find Client by id: " + clientId, HttpStatus.NOT_FOUND);
         }
-
-        return jsonResponse;
     }
 
     @GetMapping("client/name/{companyName}")
-    public JsonResponse getClientByCompanyName(@PathVariable String companyName) {
-        JsonResponse jsonResponse;
-        Client reqClient = this.clientServ.findClientByCompanyName(companyName);
-
-        if(reqClient != null) {
-            jsonResponse = new JsonResponse(true, "Client :", reqClient);
+    public ResponseEntity<?> getClientByCompanyName(@PathVariable String companyName) {
+        Client client = this.clientServ.findClientByCompanyName(companyName);
+        if(client != null) {
+        	return new ResponseEntity<Client>(client, HttpStatus.OK);
         } else {
-            jsonResponse = new JsonResponse(false, "Client with Company Name: " + companyName + "' doesn't exist.", null);
+        	return new ResponseEntity<String>("Failed to find Client by Company Name: " + companyName, HttpStatus.NOT_FOUND);
         }
-
-        return jsonResponse;
     }
 
     //POST Creating Client
     @PostMapping("client")
-    public JsonResponse createClient(@RequestBody Client client) {
-        JsonResponse jsonResponse;
+    public ResponseEntity<?> createClient(@RequestBody Client client) {
         Client newClient = this.clientServ.createClient(client);
-
         if(newClient != null) {
-            jsonResponse = new JsonResponse(true, "Client successfully created.", newClient);
+        	return new ResponseEntity<Client>(newClient, HttpStatus.OK);
         } else {
-            jsonResponse = new JsonResponse(false, "Client '" + client.getCompanyName() + "' already exist.", null);
+        	return new ResponseEntity<String>("Failed to create: " + client + ", it is already exist", HttpStatus.CONFLICT);
         }
-
-        return jsonResponse;
     }
 
 
