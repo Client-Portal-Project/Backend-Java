@@ -24,6 +24,7 @@ public class ApplicantServiceTest {
 
     @BeforeEach
     void initMock() {
+
         String dummy = "";
         Blob resume = mock(Blob.class);
         User user = new User(1, dummy, dummy, dummy, dummy, true);
