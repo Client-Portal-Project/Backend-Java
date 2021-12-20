@@ -8,13 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Blob;
-
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 public class ApplicantServiceTest {
     private Applicant expected;
     @Mock
@@ -24,7 +25,7 @@ public class ApplicantServiceTest {
 
     @BeforeEach
     void initMock() {
-
+        MockitoAnnotations.openMocks(this);
         String dummy = "";
         Blob resume = mock(Blob.class);
         User user = new User(1, dummy, dummy, dummy, dummy, true);
