@@ -9,6 +9,7 @@ import com.projectx.model.Client;
 import com.projectx.model.ClientUser;
 import com.projectx.model.User;
 import com.projectx.repository.ClientUserDao;
+import com.projectx.utility.ClientUserRequestObject;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,6 +55,11 @@ public class ClientUserService {
 			log.error("clientService: " + checkUser + " , already exist.");
 			return null;
 		}
+	}
+	
+	public ClientUser editClientUser(Client client, User user) {
+		log.info("clientService: editClientUser() call");
+		ClientUser editClientUser = this.clientUserDao.findClientUserByUser(user);
 	}
 	
 	

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -95,5 +96,17 @@ public class ClientUserController {
 			return new ResponseEntity<String>("Failed to create Client User: user with email '" + clientUserRequestObject.getEmail() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<String>("Failed to create Client User: Company Name '" + clientUserRequestObject.getCompanyName() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+	}
+	
+	@PutMapping("clientUser")
+	public ResponseEntity<?> editClientUser(@RequestBody ClientUserRequestObject clientUserRequestObject) {
+		User user = this.userServ.findUserByEmail(clientUserRequestObject.getEmail());
+		if(user == null) return new ResponseEntity<String>("Failed to create Client User: user with email '" + clientUserRequestObject.getEmail() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+		
+		Client client = this.clientServ.findClientByCompanyName(clientUserRequestObject.getCompanyName());
+		if(client == null) return new ResponseEntity<String>("Failed to create Client User: Company Name '" + clientUserRequestObject.getCompanyName() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+		
+		ClientUser editClientUser = this.clientUserServ.editClientUser(client, user);
+		if(editClientUser == null)
 	}
 }
