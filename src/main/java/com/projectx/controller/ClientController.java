@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,6 +65,24 @@ public class ClientController {
         } else {
         	return new ResponseEntity<String>("Failed to create: " + client + ", it is already exist", HttpStatus.CONFLICT);
         }
+    }
+    
+    @PutMapping("client")
+    public ResponseEntity<?> editClient(@RequestBody Client client) {
+    	Client updateClient = this.clientServ.editClient(client);
+    	if(updateClient == null) {
+    		new ResponseEntity<String>("Failed to find Client by Company Name: " + client.getCompanyName(), HttpStatus.NOT_FOUND);
+    	}
+    	return new ResponseEntity<Client>(updateClient, HttpStatus.OK);
+    }
+    
+    @DeleteMapping("client")
+    public ResponseEntity<String> deleteClioent(@RequestBody Client client) {	
+    	boolean deleted = this.clientServ.deleteClient(client);
+    	if(deleted) {
+    		new ResponseEntity<String>("Client: " + client + ", was deleted", HttpStatus.OK);
+    	}
+    	return new ResponseEntity<String>("Failed to find Client by Company Name: " + client.getCompanyName(), HttpStatus.NOT_FOUND);
     }
 
 
