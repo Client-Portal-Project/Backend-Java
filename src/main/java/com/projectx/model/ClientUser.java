@@ -8,9 +8,7 @@ import javax.persistence.*;
 
 // Will handle the Client's information and functionality
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "ClientUsers")
 public class ClientUser {
@@ -22,4 +20,9 @@ public class ClientUser {
     private User user;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Client client;
+    
+    public ClientUser(Client client, User user) {
+    	this.client = client;
+    	this.user = user;
+    }
 }
