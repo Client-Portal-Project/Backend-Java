@@ -64,7 +64,7 @@ public class UserController {
         else {
             if(decodedJWT.getClaims().get("userId").asInt() == user.getUserId()) {
                 if(user.getPassword() != null && user.getPassword().length() >= 8) {
-                    // Password encryption goes here
+                    // Password encryption is here
                     User updatedUser = this.userService.editUser(user);
                     updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
                     if(updatedUser == null)

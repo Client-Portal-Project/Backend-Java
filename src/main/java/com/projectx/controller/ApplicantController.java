@@ -21,21 +21,35 @@ public class ApplicantController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    //create
     @PostMapping
-    public ResponseEntity<Applicant> createApplicant(@RequestBody Applicant applicant,
-                                                     @RequestHeader Map<String, String> headers) {
-        DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));
-        if (decodedJWT == null){
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Applicant> createApplicant(@RequestBody Applicant applicant) {
+        Applicant createdApplicant = applicantService.createApplicant(applicant);
+        if (createdApplicant != null) {
+            return new ResponseEntity<>(createdApplicant, HttpStatus.OK);
         } else {
-
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(applicant, HttpStatus.OK);
     }
-    //edit
 
-    //delete
+    @PutMapping
+    public ResponseEntity<Applicant> updateApplicant(@RequestBody Applicant applicant) {
+        Applicant updatedApplicant = applicantService.updateApplicant(applicant);
+        if (updatedApplicant != null) {
+            return new ResponseEntity<>(updatedApplicant, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteApplicant(@RequestBody Applicant applicant) {
+        Applicant deletedApplicant = applicantService.updateApplicant(applicant);
+        if (deletedApplicant != null) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     //get/getAll
 }
