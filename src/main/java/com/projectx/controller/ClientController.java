@@ -71,7 +71,7 @@ public class ClientController {
     public ResponseEntity<?> editClient(@RequestBody Client client) {
     	Client updateClient = this.clientServ.editClient(client);
     	if(updateClient == null) {
-    		new ResponseEntity<String>("Failed to find Client by Company Name: " + client.getCompanyName(), HttpStatus.NOT_FOUND);
+    		return new ResponseEntity<String>("Failed to find Client by Company Name: " + client.getCompanyName(), HttpStatus.NOT_FOUND);
     	}
     	return new ResponseEntity<Client>(updateClient, HttpStatus.OK);
     }
@@ -80,7 +80,7 @@ public class ClientController {
     public ResponseEntity<String> deleteClioent(@RequestBody Client client) {	
     	boolean deleted = this.clientServ.deleteClient(client);
     	if(deleted) {
-    		new ResponseEntity<String>("Client: " + client + ", was deleted", HttpStatus.OK);
+    		return new ResponseEntity<String>("Client: " + client + ", was deleted", HttpStatus.OK);
     	}
     	return new ResponseEntity<String>("Failed to find Client by Company Name: " + client.getCompanyName(), HttpStatus.NOT_FOUND);
     }

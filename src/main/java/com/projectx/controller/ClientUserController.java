@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,7 @@ public class ClientUserController {
 		return new ResponseEntity<List<ClientUser>>(this.clientUserServ.findAllClientUsers(), HttpStatus.OK);
 	}
 	
+	//Getting ClientUser by ClientUser ID
 	@GetMapping("clientUser/id/{clientUserId}")
 	public ResponseEntity<?> getClientUserById(@PathVariable Integer clientUserId) {
 		ClientUser clientUser = this.clientUserServ.findClientUserById(clientUserId);
@@ -51,6 +53,7 @@ public class ClientUserController {
 		return new ResponseEntity<String>("Failed to find Client User by id: " + clientUserId, HttpStatus.NOT_FOUND);
 	}
 	
+	//Getting ClientUser by User ID
 	@GetMapping("clientUser/user/id/{userId}")
 	public ResponseEntity<?> getClientUserByUserId(@PathVariable Integer userId) {
 		User user = this.userServ.findUserById(userId);
@@ -59,6 +62,7 @@ public class ClientUserController {
 		return new ResponseEntity<String>("Failed to find Client User by User Id: " + userId, HttpStatus.NOT_FOUND);
 	}
 	
+	//Getting List of ClientUser by Client ID
 	@GetMapping("clientUser/client/id/{clientId}")
 	public ResponseEntity<?> getClientUserByClientId(@PathVariable Integer clientId) {
 		Client client = this.clientServ.findClientById(clientId);
@@ -67,6 +71,7 @@ public class ClientUserController {
 		return new ResponseEntity<String>("Failed to find Client Users by Client Id: " + clientId, HttpStatus.NOT_FOUND);
 	}
 	
+	//Getting ClientUser by User email
 	@GetMapping("clientUser/user/email/{userEmail}")
 	public ResponseEntity<?> getClientUserByUserId(@PathVariable String userEmail) {
 		User user = this.userServ.findUserByEmail(userEmail);
@@ -75,6 +80,7 @@ public class ClientUserController {
 		return new ResponseEntity<String>("Failed to find Client User by User Email: " + userEmail, HttpStatus.NOT_FOUND);
 	}
 	
+	//Getting List of ClientUser by Client Company Name
 	@GetMapping("clientUser/client/name/{companyName}")
 	public ResponseEntity<?> getClientUserByCompanyName(@PathVariable String companyName) {
 		Client client = this.clientServ.findClientByCompanyName(companyName);
@@ -83,7 +89,26 @@ public class ClientUserController {
 		return new ResponseEntity<String>("Failed to find Client Users by Company Name: " + companyName, HttpStatus.NOT_FOUND);
 	}
 	
+	//Creating ClientUser by using ClientUser entity
 	@PostMapping("clientUser")
+	public ResponseEntity<?> createClientUser(@RequestBody ClientUser clientUser) {
+		String companyName = clientUser.getClient().getCompanyName();
+		Client client = this.clientServ.findClientByCompanyName(companyName);
+		if(client != null) {
+			String email = clientUser.getUser().getEmail();
+			User user = this.userServ.findUserByEmail(email);
+			if(user != null) {
+				ClientUser newClientUser = this.clientUserServ.createClientUser(client, user);
+				if(newClientUser != null) return new ResponseEntity<ClientUser>(newClientUser, HttpStatus.CREATED);
+				return new ResponseEntity<String> ("Failed to create Client User: client user'" + clientUser + "', already exist.",HttpStatus.CONFLICT);
+			}
+			return new ResponseEntity<String>("Failed to create Client User: user with email '" + email + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>("Failed to create Client User: Company Name '" + companyName + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+	}
+	
+	//Creating ClientUser by using clientUserRequestObject {"email", "companyName"} entity
+	@PostMapping("clientUser/request")
 	public ResponseEntity<?> createClientUser(@RequestBody ClientUserRequestObject clientUserRequestObject) {
 		Client client = this.clientServ.findClientByCompanyName(clientUserRequestObject.getCompanyName());
 		if(client != null) {
@@ -98,15 +123,32 @@ public class ClientUserController {
 		return new ResponseEntity<String>("Failed to create Client User: Company Name '" + clientUserRequestObject.getCompanyName() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 	}
 	
+	//Editing ClientUser by using ClientUser entity
 	@PutMapping("clientUser")
-	public ResponseEntity<?> editClientUser(@RequestBody ClientUserRequestObject clientUserRequestObject) {
-		User user = this.userServ.findUserByEmail(clientUserRequestObject.getEmail());
-		if(user == null) return new ResponseEntity<String>("Failed to create Client User: user with email '" + clientUserRequestObject.getEmail() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
-		
-		Client client = this.clientServ.findClientByCompanyName(clientUserRequestObject.getCompanyName());
-		if(client == null) return new ResponseEntity<String>("Failed to create Client User: Company Name '" + clientUserRequestObject.getCompanyName() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
-		
-		ClientUser editClientUser = this.clientUserServ.editClientUser(client, user);
-		if(editClientUser == null)
+	public ResponseEntity<?> editClientUser(@RequestBody ClientUser clientUser) {
+		String companyName = clientUser.getClient().getCompanyName();
+		Client client = this.clientServ.findClientByCompanyName(companyName);
+		if(client != null) {
+			String email = clientUser.getUser().getEmail();
+			User user = this.userServ.findUserByEmail(email);
+			if(user != null) {
+				ClientUser editClientUser = this.clientUserServ.editClientUser(clientUser);
+				if(editClientUser != null) return new ResponseEntity<ClientUser>(editClientUser, HttpStatus.OK);
+				return new ResponseEntity<String> ("Failed to create Client User: client user'" + clientUser + "', doesn't exist.",HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<String>("Failed to create Client User: user with email '" + email + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>("Failed to create Client User: Company Name '" + companyName + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 	}
+	
+	//Delete ClientUser by using ClientUser entity
+	@DeleteMapping("clientUser")
+	public ResponseEntity<String> deleteClientUser(@RequestBody ClientUser clientUser) {
+		boolean deleted = this.clientUserServ.deleteClientUser(clientUser);
+		if(deleted) {
+			return new ResponseEntity<String>("Client User: " + clientUser + ", was deleted", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Failed to find Client User with ID: " + clientUser.getClientUserId(), HttpStatus.NOT_FOUND); 
+	}
+
 }

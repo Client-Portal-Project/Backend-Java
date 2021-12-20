@@ -9,7 +9,6 @@ import com.projectx.model.Client;
 import com.projectx.model.ClientUser;
 import com.projectx.model.User;
 import com.projectx.repository.ClientUserDao;
-import com.projectx.utility.ClientUserRequestObject;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,20 +45,41 @@ public class ClientUserService {
 	
 	public ClientUser createClientUser(Client client, User user) {
 		log.info("clientService: createClientUser() call");
-		ClientUser checkUser = this.clientUserDao.findClientUserByUser(user);
-		if(checkUser == null) {
+		ClientUser checkClientUser = this.clientUserDao.findClientUserByUser(user);
+		if(checkClientUser == null) {
 			ClientUser clientUser = this.clientUserDao.save(new ClientUser(client, user));
 			log.info("clientService: " + clientUser + " , successfully created.");
 			return clientUser;
 		} else {
-			log.error("clientService: " + checkUser + " , already exist.");
+			log.error("clientService: " + checkClientUser + " , already exist.");
 			return null;
 		}
 	}
 	
-	public ClientUser editClientUser(Client client, User user) {
+	public ClientUser editClientUser(ClientUser clientUser) {
 		log.info("clientService: editClientUser() call");
-		ClientUser editClientUser = this.clientUserDao.findClientUserByUser(user);
+		ClientUser editClientUser = this.clientUserDao.findClientUserByUser(clientUser.getUser());
+		if(editClientUser != null) {
+			editClientUser.setClient(clientUser.getClient());
+			editClientUser.setUser(clientUser.getUser());
+			this.clientUserDao.save(editClientUser);
+			log.info("clientService: " + editClientUser + " , successfully edited.");
+			return editClientUser;
+		}
+		log.error("clientService: " + clientUser + " , doesn't exist.");
+		return null;
+	}
+	
+	public boolean deleteClientUser(ClientUser clientUser) {
+		log.info("clientService: deleteClientUser() call");
+		ClientUser delete = this.findClientUserById(clientUser.getClientUserId());
+		if (delete != null) {
+			this.clientUserDao.delete(delete);
+			log.info("clientService: " + delete + " , successfully deleted.");
+			return true;
+		}
+		log.error("clientService: " + clientUser + " , doesn't exist.");
+		return false;
 	}
 	
 	
