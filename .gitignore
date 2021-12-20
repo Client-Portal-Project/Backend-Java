@@ -15,6 +15,7 @@ h2testing/
 .springBeans
 .sts4-cache
 
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
