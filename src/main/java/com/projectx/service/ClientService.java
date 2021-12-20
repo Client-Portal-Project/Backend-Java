@@ -11,9 +11,9 @@ import com.projectx.repository.ClientDao;
 import lombok.extern.slf4j.Slf4j;
 
 @Service("clientService")
-@Slf4j
+@Slf4j //Using Self4j logger from lombok
 public class ClientService {
-    ClientDao clientDao;
+    private ClientDao clientDao;
 
     @Autowired
     public ClientService(ClientDao clientDao) {

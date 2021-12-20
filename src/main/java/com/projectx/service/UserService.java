@@ -19,6 +19,10 @@ public class UserService {
     public User findUserById(Integer userId) {
         return this.userDao.findById(userId).orElse(null);
     }
+    
+    public User findUserByEmail(String email) {
+    	return this.userDao.findUserByEmail(email);
+    }
 
     // Currently, for testing purposes to see the User data in Postman
     public List<User> findAllUsers() {
