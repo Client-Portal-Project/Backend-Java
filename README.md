@@ -34,5 +34,5 @@ Todo-List:
 - The CROSS_ORIGIN_VALUE is located in the CrossOriginUtil class; it's set to "http://localhost:4200" but may be changed.
 
 ## Usage
-- Run the application from the ClientportalApplication class.
+- Run the application from the Driver class.
 - HTTP requests may be made to "http://localhost:8080" using the web platform.
