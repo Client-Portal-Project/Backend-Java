@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class ApplicantServiceTest {
@@ -38,8 +37,14 @@ public class ApplicantServiceTest {
     void testCreateApplicant() {
         when(applicantDao.save(expected)).thenReturn(expected);
         Applicant actual = applicantService.createApplicant(expected);
-
         assertEquals(actual, expected);
+
+        Applicant wrong = expected;
+        wrong.setUser(null);
+
+        actual = applicantService.createApplicant(wrong);
+        assertNull(actual);
+
     }
 
     @Test
@@ -52,11 +57,9 @@ public class ApplicantServiceTest {
 
     @Test
     void testDeleteApplicant() {
-        Applicant actual = applicantService.deleteApplicant(expected);
-        assertEquals(actual, expected);
+        applicantService.deleteApplicant(expected);
 
-        actual = applicantService.updateApplicant(null);
-        assertNull(actual);
+        verify(applicantDao, times(1)).delete(expected);
     }
 
     @Test

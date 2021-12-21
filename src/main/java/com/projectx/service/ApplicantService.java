@@ -13,6 +13,9 @@ public class ApplicantService {
     ApplicantDao applicantDao;
 
     public Applicant createApplicant(Applicant applicant) {
+        if (applicant.getUser() == null) {
+            return null;
+        }
         return applicantDao.save(applicant);
     }
 
@@ -20,13 +23,8 @@ public class ApplicantService {
         return applicantDao.save(applicant);
     }
 
-    public Applicant deleteApplicant(Applicant applicant) {
-        try {
+    public void deleteApplicant(Applicant applicant) {
             applicantDao.delete(applicant);
-        } catch (Exception e) {
-            return null;
-        }
-        return applicant;
     }
 
     public List<Applicant> getAllApplicants() {

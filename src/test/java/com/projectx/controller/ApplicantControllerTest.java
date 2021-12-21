@@ -48,16 +48,6 @@ public class ApplicantControllerTest {
         }
     }
 
-//    @PostMapping
-//    public ResponseEntity<Applicant> createApplicant(@RequestBody Applicant applicant) {
-//        Applicant createdApplicant = applicantService.createApplicant(applicant);
-//        if (createdApplicant != null) {
-//            return new ResponseEntity<>(createdApplicant, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-//        }
-//    }
-
     @Test
     void testCreateApplicant() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/applicant")
@@ -66,5 +56,15 @@ public class ApplicantControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(asJsonString(expected)));
+
+        Applicant wrong = expected;
+        wrong.setUser(null);
+
+        mvc.perform(MockMvcRequestBuilders.post("/applicant")
+                        .content(asJsonString(wrong))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
     }
 }

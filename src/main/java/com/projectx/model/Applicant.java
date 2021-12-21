@@ -29,6 +29,6 @@ public class Applicant {
     private String educationField;
     @Column
     private String EmploymentStatus;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     private User user;
 }

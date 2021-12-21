@@ -43,10 +43,10 @@ public class ApplicantController {
 
     @DeleteMapping
     public ResponseEntity<Boolean> deleteApplicant(@RequestBody Applicant applicant) {
-        Applicant deletedApplicant = applicantService.updateApplicant(applicant);
-        if (deletedApplicant != null) {
+        try {
+            applicantService.deleteApplicant(applicant);
             return new ResponseEntity<>(true, HttpStatus.OK);
-        } else {
+        } catch (Exception e) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
