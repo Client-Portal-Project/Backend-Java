@@ -21,7 +21,7 @@ public class ClientUser {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Client client;
     
-    public ClientUser(Client client, User user) {
+    public ClientUser (User user, Client client) {
     	this.client = client;
     	this.user = user;
     }

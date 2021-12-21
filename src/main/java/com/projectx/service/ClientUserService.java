@@ -47,7 +47,7 @@ public class ClientUserService {
 		log.info("clientService: createClientUser() call");
 		ClientUser checkClientUser = this.clientUserDao.findClientUserByUser(user);
 		if(checkClientUser == null) {
-			ClientUser clientUser = this.clientUserDao.save(new ClientUser(client, user));
+			ClientUser clientUser = this.clientUserDao.save(new ClientUser(user, client));
 			log.info("clientService: " + clientUser + " , successfully created.");
 			return clientUser;
 		} else {
