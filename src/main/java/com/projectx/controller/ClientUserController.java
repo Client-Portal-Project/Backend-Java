@@ -71,7 +71,7 @@ public class ClientUserController {
 		return new ResponseEntity<String>("Failed to find Client Users by Client Id: " + clientId, HttpStatus.NOT_FOUND);
 	}
 	
-	//Getting ClientUser by User email
+	//Getting ClientUser by User Email
 	@GetMapping("clientUser/user/email/{userEmail}")
 	public ResponseEntity<?> getClientUserByUserId(@PathVariable String userEmail) {
 		User user = this.userServ.findUserByEmail(userEmail);
@@ -92,6 +92,7 @@ public class ClientUserController {
 	//Creating ClientUser by using ClientUser entity
 	@PostMapping("clientUser")
 	public ResponseEntity<?> createClientUser(@RequestBody ClientUser clientUser) {
+		//Consistency check
 		String companyName = clientUser.getClient().getCompanyName();
 		Client client = this.clientServ.findClientByCompanyName(companyName);
 		if(client != null) {
@@ -110,6 +111,7 @@ public class ClientUserController {
 	//Creating ClientUser by using clientUserRequestObject {"email", "companyName"} entity
 	@PostMapping("clientUser/request")
 	public ResponseEntity<?> createClientUser(@RequestBody ClientUserRequestObject clientUserRequestObject) {
+		//Consistency check
 		Client client = this.clientServ.findClientByCompanyName(clientUserRequestObject.getCompanyName());
 		if(client != null) {
 			User user = this.userServ.findUserByEmail(clientUserRequestObject.getEmail());
@@ -126,6 +128,7 @@ public class ClientUserController {
 	//Editing ClientUser by using ClientUser entity
 	@PutMapping("clientUser")
 	public ResponseEntity<?> editClientUser(@RequestBody ClientUser clientUser) {
+		//Consistency check
 		String companyName = clientUser.getClient().getCompanyName();
 		Client client = this.clientServ.findClientByCompanyName(companyName);
 		if(client != null) {

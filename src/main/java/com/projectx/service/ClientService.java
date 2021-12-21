@@ -55,7 +55,7 @@ public class ClientService {
     
     public Client editClient(Client client) {
     	log.info("clientService: updateClient() call");
-    	Client temp = this.findClientByCompanyName(client.getCompanyName());
+    	Client temp = this.clientDao.findClientByCompanyName(client.getCompanyName());
     	if(temp == null) {
     		 log.error("clientService: " + temp + " , doesn't exist.");
     		 return null;
@@ -69,7 +69,7 @@ public class ClientService {
     
     public boolean deleteClient(Client client) {
     	log.info("clientService: deleteClient() call");
-    	Client temp = this.findClientByCompanyName(client.getCompanyName());
+    	Client temp = this.clientDao.findClientByCompanyName(client.getCompanyName());
     	if(temp == null) {
    		 	log.error("clientService: " + temp + " , doesn't exist.");
    		 	return false;
