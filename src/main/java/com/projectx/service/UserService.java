@@ -50,6 +50,10 @@ public class UserService {
                 temp.setEmail(user.getEmail());
             if(user.getPassword() != null)
                 temp.setPassword(user.getPassword());
+            if(user.getFirstName() != null)
+                temp.setFirstName(user.getFirstName());
+            if(user.getLastName() != null)
+                temp.setLastName(user.getLastName());
             if(user.getApproved() != null)
                 temp.setApproved(user.getApproved());
             return this.userDao.save(temp);

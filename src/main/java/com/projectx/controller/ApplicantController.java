@@ -54,6 +54,6 @@ public class ApplicantController {
     //get/getAll
     @GetMapping
     public ResponseEntity<?> getApplicant() {
-        
+        return null;
     }
 }
