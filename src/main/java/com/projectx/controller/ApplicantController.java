@@ -43,18 +43,21 @@ public class ApplicantController {
 
     @DeleteMapping
     public ResponseEntity<Boolean> deleteApplicant(@RequestBody Applicant applicant) {
-        try {
+        Applicant foundApplicant = applicantService.getApplicant(applicant.getApplicantId());
+        if (foundApplicant != null) {
             applicantService.deleteApplicant(applicant);
             return new ResponseEntity<>(true, HttpStatus.OK);
-        } catch (Exception e) {
+        } else {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getApplicant(@PathVariable(required = false) int id) {
-        if (id == 0) {
-            Applicant applicant = applicantService.getApplicant(id);
+    @GetMapping(value = {"/{id}", ""})
+    public ResponseEntity<?> getApplicant(@PathVariable(required = false) String id) {
+        if (id != null) {
+            int applicantId = Integer.parseInt(id);
+            Applicant applicant = applicantService.getApplicant(applicantId);
+            System.out.println(applicant);
             if (applicant == null) {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             } else {
