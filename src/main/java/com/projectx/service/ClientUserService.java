@@ -56,23 +56,9 @@ public class ClientUserService {
 		}
 	}
 	
-	public ClientUser editClientUser(ClientUser clientUser) {
-		log.info("clientService: editClientUser() call");
-		ClientUser editClientUser = this.clientUserDao.findClientUserByUser(clientUser.getUser());
-		if(editClientUser != null) {
-			editClientUser.setClient(clientUser.getClient());
-			editClientUser.setUser(clientUser.getUser());
-			this.clientUserDao.save(editClientUser);
-			log.info("clientService: " + editClientUser + " , successfully edited.");
-			return editClientUser;
-		}
-		log.error("clientService: " + clientUser + " , doesn't exist.");
-		return null;
-	}
-	
 	public boolean deleteClientUser(ClientUser clientUser) {
 		log.info("clientService: deleteClientUser() call");
-		ClientUser delete = this.findClientUserById(clientUser.getClientUserId());
+		ClientUser delete = this.clientUserDao.findById(clientUser.getClientUserId()).orElse(null);
 		if (delete != null) {
 			this.clientUserDao.delete(delete);
 			log.info("clientService: " + delete + " , successfully deleted.");

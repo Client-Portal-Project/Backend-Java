@@ -54,7 +54,7 @@ public class ClientUserServiceTest {
 		testClientUser1 = new ClientUser(1, testUser1, testClient1);
 		testClientUser1Optional = Optional.of(testClientUser1);
 		testClientUser2 = new ClientUser(2, testUser2, testClient2);
-		testClientUser2 = new ClientUser(3, testUser3, testClient3);
+		testClientUser3 = new ClientUser(3, testUser3, testClient3);
 		
 		testClientUserList = new ArrayList<ClientUser>();
 		testClientUserList.add(testClientUser1);
@@ -67,7 +67,7 @@ public class ClientUserServiceTest {
 		
 		when(clientUserDao.findAll()).thenReturn(testClientUserList);
 		when(clientUserDao.findById(testClientUser1.getClientUserId())).thenReturn(testClientUser1Optional);
-		when(clientUserDao.findById(null)).thenReturn(null);
+		when(clientUserDao.findById(testClientUser2.getClientUserId())).thenReturn(Optional.ofNullable(null));
 		when(clientUserDao.findClientUserByClient(testClient1)).thenReturn(testClientUserSearchList1);
 		when(clientUserDao.findClientUserByClient(testClient2)).thenReturn(testClientUserSearchList2);
 		when(clientUserDao.findClientUserByUser(testUser1)).thenReturn(testClientUser1);
@@ -87,7 +87,7 @@ public class ClientUserServiceTest {
 	
 	@Test
 	public void testFindClientUserByIdUnsuccess() {
-		assertEquals(Optional.of(clientUserService.findClientUserById(null)), null);
+		assertEquals(clientUserService.findClientUserById(testClientUser2.getClientUserId()), null);
 	}
 	
 	@Test
@@ -117,7 +117,18 @@ public class ClientUserServiceTest {
 	
 	@Test
 	public void testCreateClientUserUnsuccess() {
-		assertEquals(clientUserService.createClientUser(testClient1, testUser1), testClientUser3);
+		assertEquals(clientUserService.createClientUser(testClient1, testUser1), null);
 	}
+	
+	@Test
+	public void testDeleteClientUserSuccess() {
+		assertEquals(clientUserService.deleteClientUser(testClientUser1), true);
+	}
+	
+	@Test
+	public void testDeleteClientUserUnsuccess() {
+		assertEquals(clientUserService.deleteClientUser(testClientUser2), false);
+	}
+	
 	
 }

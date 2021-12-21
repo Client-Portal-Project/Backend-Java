@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -123,25 +122,6 @@ public class ClientUserController {
 			return new ResponseEntity<String>("Failed to create Client User: user with email '" + clientUserRequestObject.getEmail() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<String>("Failed to create Client User: Company Name '" + clientUserRequestObject.getCompanyName() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
-	}
-	
-	//Editing ClientUser by using ClientUser entity
-	@PutMapping("clientUser")
-	public ResponseEntity<?> editClientUser(@RequestBody ClientUser clientUser) {
-		//Consistency check
-		String companyName = clientUser.getClient().getCompanyName();
-		Client client = this.clientServ.findClientByCompanyName(companyName);
-		if(client != null) {
-			String email = clientUser.getUser().getEmail();
-			User user = this.userServ.findUserByEmail(email);
-			if(user != null) {
-				ClientUser editClientUser = this.clientUserServ.editClientUser(clientUser);
-				if(editClientUser != null) return new ResponseEntity<ClientUser>(editClientUser, HttpStatus.OK);
-				return new ResponseEntity<String> ("Failed to create Client User: client user'" + clientUser + "', doesn't exist.",HttpStatus.NOT_FOUND);
-			}
-			return new ResponseEntity<String>("Failed to create Client User: user with email '" + email + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<String>("Failed to create Client User: Company Name '" + companyName + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 	}
 	
 	//Delete ClientUser by using ClientUser entity
