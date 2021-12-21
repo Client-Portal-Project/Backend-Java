@@ -55,9 +55,9 @@ public class ClientService {
     
     public Client editClient(Client client) {
     	log.info("clientService: updateClient() call");
-    	Client temp = this.clientDao.findClientByCompanyName(client.getCompanyName());
+    	Client temp = this.clientDao.findById(client.getClientId()).orElse(null);
     	if(temp == null) {
-    		 log.error("clientService: " + temp + " , doesn't exist.");
+    		 log.error("clientService: Client with id '" + client.getClientId() + "' , doesn't exist.");
     		 return null;
     	} else {
     		temp.setCompanyName(client.getCompanyName());

@@ -22,6 +22,7 @@ public class ClientServiceTest {
 	private ClientService clientServ;
 	private Client testClient1;
 	private Optional<Client> testClient1Optional;
+	private Client testEditClient1;
 	private Client testClient2;
 	private List<Client> testClientList;
 	
@@ -34,18 +35,20 @@ public class ClientServiceTest {
 		testClient1 = new Client(1, "Test Company 1");
 		testClient1Optional = Optional.of(testClient1);
 		testClient2 = new Client(2, "Test Company 2");
+		testEditClient1 = new Client(1, "Test");
 		
 		testClientList = new ArrayList<Client>();
 		testClientList.add(testClient1);
 		testClientList.add(testClient2);
 		
 		when(clientDao.findById(testClient1.getClientId())).thenReturn(testClient1Optional);
-		when(clientDao.findById(0)).thenReturn(null);
+		when(clientDao.findById(testClient2.getClientId())).thenReturn(Optional.ofNullable(null));
 		when(clientDao.findAll()).thenReturn(testClientList);
 		when(clientDao.findClientByCompanyName(testClient1.getCompanyName())).thenReturn(testClient1);
 		when(clientDao.findClientByCompanyName("qwd")).thenReturn(null);
 		when(clientDao.findClientByCompanyName(testClient2.getCompanyName())).thenReturn(null);
 		when(clientDao.save(testClient2)).thenReturn(testClient2);
+		when(clientDao.save(testEditClient1)).thenReturn(testEditClient1);
 	}
 	
 	@Test
@@ -60,7 +63,7 @@ public class ClientServiceTest {
 	
 	@Test
 	public void testFindClientByIdUnsuccess() {
-		assertEquals(clientServ.findClientById(0), null);
+		assertEquals(clientServ.findClientById(testClient2.getClientId()), null);
 	}
 	
 	@Test
@@ -85,7 +88,7 @@ public class ClientServiceTest {
 	
 	@Test
 	public void testEditClientSuccess() {
-		assertEquals(clientServ.editClient(testClient1), testClient1);
+		assertEquals(clientServ.editClient(testEditClient1), testEditClient1);
 	}
 	
 	@Test
