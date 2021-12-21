@@ -124,14 +124,14 @@ public class ApplicantControllerTest {
 
     @Test
     void testGetApplicant() throws Exception {
-        when(applicantService.getApplicant(1)).thenReturn(expected);
+        when(applicantService.getApplicant(expected.getUser().getUserId())).thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders.get("/applicant/{id}", 1)
                         .param("id", "1"))
                 .andExpect(status().isFound())
                 .andExpect(content().json(asJsonString(expected)));
 
-        //no applicant with id of 2 exists in database
+        //no applicant with user id of 2 exists in database
         when(applicantService.getApplicant(2)).thenReturn(null);
 
         mvc.perform(MockMvcRequestBuilders.get("/applicant/{id}", 2)
