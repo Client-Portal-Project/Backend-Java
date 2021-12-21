@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController("applicantController")
-@RequestMapping(value = "api")
+@RequestMapping("/applicant")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ApplicantController {
     @Autowired
@@ -25,7 +25,7 @@ public class ApplicantController {
     public ResponseEntity<Applicant> createApplicant(@RequestBody Applicant applicant) {
         Applicant createdApplicant = applicantService.createApplicant(applicant);
         if (createdApplicant != null) {
-            return new ResponseEntity<>(createdApplicant, HttpStatus.OK);
+            return new ResponseEntity<>(createdApplicant, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
@@ -51,9 +51,17 @@ public class ApplicantController {
         }
     }
 
-    //get/getAll
-    @GetMapping
-    public ResponseEntity<?> getApplicant() {
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getApplicant(@PathVariable(required = false) int id) {
+        if (id == 0) {
+            Applicant applicant = applicantService.getApplicant(id);
+            if (applicant == null) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<>(applicant, HttpStatus.FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(applicantService.getAllApplicants(), HttpStatus.OK);
+        }
     }
 }

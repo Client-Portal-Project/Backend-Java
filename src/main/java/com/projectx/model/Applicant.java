@@ -20,7 +20,7 @@ public class Applicant {
     @Column(name = "applicant_id")
     private Integer applicantId;
     @Column
-    private Blob resume;
+    private int resume;
     @Column
     private String aboutMe;
     @Column

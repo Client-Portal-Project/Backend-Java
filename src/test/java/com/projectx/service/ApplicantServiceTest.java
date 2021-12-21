@@ -30,9 +30,8 @@ public class ApplicantServiceTest {
     void initMock() {
         MockitoAnnotations.openMocks(this);
         String dummy = "";
-        Blob resume = mock(Blob.class);
         User user = new User(1, dummy, dummy, dummy, dummy, true);
-        expected = new Applicant(1, resume, dummy, dummy, dummy, dummy, user);
+        expected = new Applicant(1, 1, dummy, dummy, dummy, dummy, user);
     }
 
     @Test
