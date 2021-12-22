@@ -72,7 +72,7 @@ public class ClientUserController {
 	
 	//Getting ClientUser by User Email
 	@GetMapping("clientUser/user/email/{userEmail}")
-	public ResponseEntity<?> getClientUserByUserId(@PathVariable String userEmail) {
+	public ResponseEntity<?> getClientUserByUserEmail(@PathVariable String userEmail) {
 		User user = this.userServ.findUserByEmail(userEmail);
 		ClientUser clientUser = this.clientUserServ.findClientUserByUser(user);
 		if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.OK);
@@ -109,15 +109,15 @@ public class ClientUserController {
 	
 	//Creating ClientUser by using clientUserRequestObject {"email", "companyName"} entity
 	@PostMapping("clientUser/request")
-	public ResponseEntity<?> createClientUser(@RequestBody ClientUserRequestObject clientUserRequestObject) {
+	public ResponseEntity<?> createClientUserByRequestObject(@RequestBody ClientUserRequestObject clientUserRequestObject) {
 		//Consistency check
 		Client client = this.clientServ.findClientByCompanyName(clientUserRequestObject.getCompanyName());
 		if(client != null) {
 			User user = this.userServ.findUserByEmail(clientUserRequestObject.getEmail());
 			if(user != null) {
-				ClientUser clientUser = this.clientUserServ.createClientUser(client, user);
-				if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.CREATED);
-				return new ResponseEntity<String> ("Failed to create Client User: client user'" + clientUser + "', already exist.",HttpStatus.CONFLICT);
+				ClientUser newClientUser = this.clientUserServ.createClientUser(client, user);
+				if(newClientUser != null) return new ResponseEntity<ClientUser>(newClientUser, HttpStatus.CREATED);
+				return new ResponseEntity<String> ("Failed to create Client User: client user with user email'" + clientUserRequestObject.getEmail() + "', already exist.",HttpStatus.CONFLICT);
 			}
 			return new ResponseEntity<String>("Failed to create Client User: user with email '" + clientUserRequestObject.getEmail() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 		}

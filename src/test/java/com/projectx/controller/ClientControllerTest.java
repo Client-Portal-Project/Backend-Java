@@ -170,7 +170,7 @@ public class ClientControllerTest {
 	}
 	
 	@Test
-	public void testDeleteClioentSuccess() throws Exception {
+	public void testDeleteClientSuccess() throws Exception {
 		when(clientServ.deleteClient(testClient1)).thenReturn(true);
 		this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/client")
 				.content(asJSONString(testClient1))
@@ -182,7 +182,7 @@ public class ClientControllerTest {
 	}
 	
 	@Test
-	public void testDeleteClioentUnsuccess() throws Exception {
+	public void testDeleteClientUnsuccess() throws Exception {
 		when(clientServ.deleteClient(testClient2)).thenReturn(false);
 		this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/client")
 				.content(asJSONString(testClient2))
