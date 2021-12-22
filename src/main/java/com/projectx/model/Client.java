@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 // Will handle the Client's information and functionality
 
@@ -20,6 +21,10 @@ public class Client {
     private Integer clientId;
     @Column
     private String companyName;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
-    private User user;
+    @OneToMany
+    @JoinTable(
+            name = "ClientUser",
+            joinColumns = @JoinColumn(name = "clientId"),
+            inverseJoinColumns = @JoinColumn(name = "applicantId"))
+    Set<User> clientUser;
 }
