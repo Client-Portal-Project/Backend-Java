@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 // Will handle the Applicant's information and functionality
 
@@ -28,4 +30,20 @@ public class Applicant {
     private String EmploymentStatus;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     private User user;
+    @ManyToMany
+    @JoinTable(
+            name = "ApplicantSkills",
+            joinColumns = @JoinColumn(name = "applicant_id"),
+            inverseJoinColumns = @JoinColumn(name = "skillId"))
+    Set<Skill> applicantskills;
+
+    public Applicant(int applicant_id, String aboutMe, String educationLevel, String educationField, String EmploymentStatus, User user) {
+        this.applicantId = applicant_id;
+        this.aboutMe = aboutMe;
+        this.educationLevel = educationLevel;
+        this.educationField = educationField;
+        this.EmploymentStatus = EmploymentStatus;
+        this.user = user;
+        this.applicantskills = new HashSet<>();
+    }
 }

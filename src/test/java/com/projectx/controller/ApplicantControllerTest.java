@@ -39,7 +39,7 @@ public class ApplicantControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(applicantController).build();
         String dummy = "";
         User user = new User(1, dummy, dummy, dummy, dummy, true);
-        expected = new Applicant(1, 1, dummy, dummy, dummy, dummy, user);
+        expected = new Applicant(1, dummy, dummy, dummy, dummy, user);
     }
 
     //converts Object into a Json String
