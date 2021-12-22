@@ -41,15 +41,7 @@ public class ClientService {
     }
 
     public Client createClient(Client client) {
-        Client temp = this.clientDao.findClientByCompanyName(client.getCompanyName());
-        if(temp != null) {
-            log.error("clientService: " + temp + " , already exist.");
-            return null;
-        } else {
-            Client result = this.clientDao.save(client);
-            log.info("clientService: " + result + " , successfully created.");
-            return result;
-        }
+      return clientDao.save(client);
     }
 
 

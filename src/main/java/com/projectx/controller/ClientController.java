@@ -1,7 +1,10 @@
 package com.projectx.controller;
 
 import java.util.List;
+import java.util.Set;
 
+import com.projectx.model.Owner;
+import com.projectx.service.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +20,16 @@ import com.projectx.model.Client;
 import com.projectx.service.ClientService;
 import com.projectx.utility.CrossOriginUtil;
 
-@RestController("clientController")
-@RequestMapping(value = "api")
+@RestController
+@RequestMapping(value = "/api/v1")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ClientController {
     private ClientService clientServ;
+    private OwnerService ownerService;
 
     @Autowired
-    public ClientController(ClientService clientServ) {
+    public ClientController(ClientService clientServ, OwnerService ownerService) {
+        this.ownerService = ownerService;
         this.clientServ = clientServ;
     }
 
@@ -55,14 +60,16 @@ public class ClientController {
     }
 
     //POST Creating Client
-    @PostMapping("client")
-    public ResponseEntity<?> createClient(@RequestBody Client client) {
-        Client newClient = this.clientServ.createClient(client);
-        if(newClient != null) {
-        	return new ResponseEntity<Client>(newClient, HttpStatus.OK);
-        } else {
-        	return new ResponseEntity<String>("Failed to create: " + client + ", it is already exist", HttpStatus.CONFLICT);
-        }
+    @PostMapping("client/owner/{ownerId}")
+    public ResponseEntity<?> createClient(@RequestBody Client client, @PathVariable Integer ownerId) {
+        Owner owner = ownerService.getOwnerById(ownerId);
+        client.setOwner(owner);
+        Client newClient = clientServ.createClient(client);
+
+        owner.getClients().add(newClient);
+        ownerService.createOrSave(owner);
+
+        return ResponseEntity.ok(newClient);
     }
 
 

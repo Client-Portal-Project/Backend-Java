@@ -1,29 +1,27 @@
 package com.projectx.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-// Will handle the Client's information and functionality
-
-@Data @NoArgsConstructor @AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "client_users")
-public class ClientUser {
+public class OwnerUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer clientUserId;
-
-
+    private Integer id;
 
     @OneToOne(cascade = CascadeType.MERGE)
     private User userId;
 
-
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id")
-    private Client client;
-
+    @JoinColumn(name = "owner_id")
+    private Owner owner;
 }

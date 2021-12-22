@@ -1,5 +1,6 @@
 package com.projectx.service;
 
+import com.projectx.exceptions.ResourceDoesNotExist;
 import com.projectx.model.User;
 import com.projectx.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Service("userService")
 public class UserService {
-    UserDao userDao;
+    private final UserDao userDao;
 
     @Autowired
     public UserService(UserDao userDao) {
@@ -17,7 +18,7 @@ public class UserService {
     }
 
     public User findUserById(Integer userId) {
-        return this.userDao.findById(userId).orElse(null);
+        return this.userDao.findById(userId).orElseThrow(()-> new ResourceDoesNotExist("No User with id: "+ userId));
     }
     
     public User findUserByEmail(String email) {
@@ -40,27 +41,11 @@ public class UserService {
         return this.userDao.findUserByEmailAndPassword(email, password);
     }
 
-    public User editUser(User user) {
-        System.out.println(user);
-        User temp = this.userDao.findById(user.getUserId()).orElse(null);
-        if(temp == null)
-            return null;
-        else {
-            if(user.getEmail() != null)
-                temp.setEmail(user.getEmail());
-            if(user.getPassword() != null)
-                temp.setPassword(user.getPassword());
-            if(user.getFirstName() != null)
-                temp.setFirstName(user.getFirstName());
-            if(user.getLastName() != null)
-                temp.setLastName(user.getLastName());
-            if(user.getApproved() != null)
-                temp.setApproved(user.getApproved());
-            return this.userDao.save(temp);
-        }
-    }
+
 
     public void deleteUser(User user) {
         this.userDao.delete(user);
     }
+
+
 }

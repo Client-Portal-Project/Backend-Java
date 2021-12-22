@@ -12,7 +12,7 @@ import com.projectx.model.User;
 
 @Repository("clientUserDao")
 @Transactional
-public interface ClientUserDao extends JpaRepository<ClientUser, Integer> {
-	ClientUser findClientUserByUser(User user);
+public interface ClientUserRepo extends JpaRepository<ClientUser, Integer> {
+	ClientUser findClientUserByUserId(User user);
 	List<ClientUser> findClientUserByClient(Client client);
 }

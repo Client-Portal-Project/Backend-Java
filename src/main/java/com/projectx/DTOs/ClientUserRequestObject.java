@@ -1,4 +1,4 @@
-package com.projectx.utility;
+package com.projectx.DTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

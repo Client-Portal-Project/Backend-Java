@@ -4,15 +4,12 @@ package com.projectx.controller;
 
 import com.projectx.DTOs.ResponseFile;
 import com.projectx.DTOs.ResponseMessage;
-import com.projectx.model.FileDB;
-import com.projectx.service.FileStorageService;
-import com.projectx.utility.CrossOriginUtil;
+import com.projectx.model.ResumeFile;
+import com.projectx.service.ResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,10 +22,10 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "api")
 public class FileController {
 
-    private final FileStorageService storageService;
+    private final ResumeService storageService;
 
     @Autowired
-    public FileController(FileStorageService storageService){
+    public FileController(ResumeService storageService){
         this.storageService = storageService;
     }
 
@@ -73,11 +70,11 @@ public class FileController {
     @CrossOrigin
     @GetMapping("/files/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable String id) {
-        FileDB fileDB = storageService.getFile(id);
+        ResumeFile resumeFile = storageService.getFile(id);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
-                .body(fileDB.getData());
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resumeFile.getName() + "\"")
+                .body(resumeFile.getData());
     }
 
 }

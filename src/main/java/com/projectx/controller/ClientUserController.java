@@ -19,11 +19,11 @@ import com.projectx.model.User;
 import com.projectx.service.ClientService;
 import com.projectx.service.ClientUserService;
 import com.projectx.service.UserService;
-import com.projectx.utility.ClientUserRequestObject;
+import com.projectx.DTOs.ClientUserRequestObject;
 import com.projectx.utility.CrossOriginUtil;
 
-@RestController("clientUserController")
-@RequestMapping(value = "api")
+@RestController
+@RequestMapping(value = "/api/v1")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ClientUserController {
 	private ClientUserService clientUserServ;
@@ -40,60 +40,26 @@ public class ClientUserController {
 	// Currently, for testing purposes to see the User data in Postman
 	@GetMapping("clientUsers")
 	public ResponseEntity<List<ClientUser>> getAllClientUsers() {
-		return new ResponseEntity<List<ClientUser>>(this.clientUserServ.findAllClientUsers(), HttpStatus.OK);
+		return ResponseEntity.ok(clientUserServ.getAll());
 	}
 	
-	@GetMapping("clientUser/id/{clientUserId}")
-	public ResponseEntity<?> getClientUserById(@PathVariable Integer clientUserId) {
-		ClientUser clientUser = this.clientUserServ.findClientUserById(clientUserId);
-		if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client User by id: " + clientUserId, HttpStatus.NOT_FOUND);
+	@GetMapping("clientUser/{id}")
+	public ResponseEntity<?> getClientUserById(@PathVariable Integer id) {
+		return ResponseEntity.ok(clientUserServ.findClientUserById(id));
 	}
+
 	
-	@GetMapping("clientUser/user/id/{userId}")
-	public ResponseEntity<?> getClientUserByUserId(@PathVariable Integer userId) {
-		User user = this.userServ.findUserById(userId);
-		ClientUser clientUser = this.clientUserServ.findClientUserByUser(user);
-		if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client User by User Id: " + userId, HttpStatus.NOT_FOUND);
+	@PostMapping("clientUser/user/{userId}")
+	public ResponseEntity<?> createClientUser(@RequestBody ClientUser clientUser, @PathVariable Integer userId) {
+
+		User user = userServ.findUserById(userId);
+		clientUser.setUserId(user);
+		ClientUser newClientUser = clientUserServ.createClientUser(clientUser);
+		user.setClientUser(newClientUser);
+
+		return ResponseEntity.ok(newClientUser);
 	}
-	
-	@GetMapping("clientUser/client/id/{clientId}")
-	public ResponseEntity<?> getClientUserByClientId(@PathVariable Integer clientId) {
-		Client client = this.clientServ.findClientById(clientId);
-		List<ClientUser> clientUser = this.clientUserServ.findClientUserByClient(client);
-		if(clientUser.size() != 0) return new ResponseEntity<List<ClientUser>>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client Users by Client Id: " + clientId, HttpStatus.NOT_FOUND);
-	}
-	
-	@GetMapping("clientUser/user/email/{userEmail}")
-	public ResponseEntity<?> getClientUserByUserId(@PathVariable String userEmail) {
-		User user = this.userServ.findUserByEmail(userEmail);
-		ClientUser clientUser = this.clientUserServ.findClientUserByUser(user);
-		if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client User by User Email: " + userEmail, HttpStatus.NOT_FOUND);
-	}
-	
-	@GetMapping("clientUser/client/name/{companyName}")
-	public ResponseEntity<?> getClientUserByCompanyName(@PathVariable String companyName) {
-		Client client = this.clientServ.findClientByCompanyName(companyName);
-		List<ClientUser> clientUser = this.clientUserServ.findClientUserByClient(client);
-		if(clientUser.size() != 0) return new ResponseEntity<List<ClientUser>>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client Users by Company Name: " + companyName, HttpStatus.NOT_FOUND);
-	}
-	
-	@PostMapping("clientUser")
-	public ResponseEntity<?> createClientUser(@RequestBody ClientUserRequestObject clientUserRequestObject) {
-		Client client = this.clientServ.findClientByCompanyName(clientUserRequestObject.getCompanyName());
-		if(client != null) {
-			User user = this.userServ.findUserByEmail(clientUserRequestObject.getEmail());
-			if(user != null) {
-				ClientUser clientUser = this.clientUserServ.createClientUser(client, user);
-				if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.CREATED);
-				return new ResponseEntity<String> ("Failed to create Client User: client user'" + clientUser + "', already exist.",HttpStatus.CONFLICT);
-			}
-			return new ResponseEntity<String>("Failed to create Client User: user with email '" + clientUserRequestObject.getEmail() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<String>("Failed to create Client User: Company Name '" + clientUserRequestObject.getCompanyName() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
-	}
+
+
+
 }

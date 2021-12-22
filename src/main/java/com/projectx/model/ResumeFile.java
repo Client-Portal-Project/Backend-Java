@@ -6,24 +6,31 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "files")
-public class FileDB {
+public class ResumeFile {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
+    @Column(name = "file_name")
     private String name;
 
+    @Column(name = "file_type")
     private String type;
 
+    @OneToOne(cascade = CascadeType.MERGE)
+    @MapsId
+    private Applicant applicant;
+
     @Lob
+    @Column(name = "file_data")
     private byte[] data;
 
-    public FileDB() {
+    public ResumeFile() {
     }
 
-    public FileDB(String name, String type, byte[] data) {
+    public ResumeFile(String name, String type, byte[] data) {
         this.name = name;
         this.type = type;
         this.data = data;

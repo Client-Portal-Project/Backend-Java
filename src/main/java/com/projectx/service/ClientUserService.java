@@ -2,58 +2,39 @@ package com.projectx.service;
 
 import java.util.List;
 
+import com.projectx.exceptions.ResourceDoesNotExist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.projectx.model.Client;
 import com.projectx.model.ClientUser;
-import com.projectx.model.User;
-import com.projectx.repository.ClientUserDao;
+import com.projectx.repository.ClientUserRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service("clientUserService")
+@Service
 @Slf4j
 public class ClientUserService {
-	private ClientUserDao clientUserDao;
+	private ClientUserRepo clientUserRepo;
 	
 	@Autowired
-	public ClientUserService(ClientUserDao clientUserDao) {
-		this.clientUserDao = clientUserDao;
+	public ClientUserService(ClientUserRepo clientUserRepo) {
+		this.clientUserRepo = clientUserRepo;
 	}
 	
 	// Currently, for testing purposes to see the User data in Postman
-	public List<ClientUser> findAllClientUsers() {
+	public List<ClientUser> getAll() {
 		log.info("clientService: findAllClientUsers() call");
-		return this.clientUserDao.findAll();
+		return clientUserRepo.findAll();
 	}
 	
 	public ClientUser findClientUserById(Integer id) {
 		log.info("clientService: findClientUserById() call");
-		return this.clientUserDao.findById(id).orElse(null);
+		return clientUserRepo.findById(id).orElseThrow(()-> new ResourceDoesNotExist("No ClientUser with Id: "+ id));
 	}
+
 	
-	public List<ClientUser> findClientUserByClient(Client client) {
-		log.info("clientService: findClientUserByClient() call");
-		return this.clientUserDao.findClientUserByClient(client);
-	}
-	
-	public ClientUser findClientUserByUser(User user) {
-		log.info("clientService: findClientUserByUser() call");
-		return this.clientUserDao.findClientUserByUser(user);
-	}
-	
-	public ClientUser createClientUser(Client client, User user) {
-		log.info("clientService: createClientUser() call");
-		ClientUser checkUser = this.clientUserDao.findClientUserByUser(user);
-		if(checkUser == null) {
-			ClientUser clientUser = this.clientUserDao.save(new ClientUser(client, user));
-			log.info("clientService: " + clientUser + " , successfully created.");
-			return clientUser;
-		} else {
-			log.error("clientService: " + checkUser + " , already exist.");
-			return null;
-		}
+	public ClientUser createClientUser(ClientUser clientUser) {
+return clientUserRepo.save(clientUser);
 	}
 	
 	

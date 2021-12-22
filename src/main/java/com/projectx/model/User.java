@@ -1,8 +1,7 @@
 package com.projectx.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,24 +10,40 @@ import javax.persistence.*;
     (Owner, Applicant, Client)
  */
 
-@Data
+
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Users")
+@Table(name = "app_users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Integer userId;
-    @Column(unique = true, nullable = false)
+    @Column(name = "user_email",unique = true, nullable = false)
     private String email;
-    @Column(nullable = false)
+    @Column(name = "user_password",nullable = false)
+    @JsonIgnore
     private String password;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
     private String lastName;
-    @Column
-    private Boolean approved;
+
+
+
+    @OneToOne(mappedBy = "userId")
+    @JsonIgnore
+    private Applicant applicant;
+
+    @OneToOne(mappedBy = "userId")
+    @JsonIgnore
+    private OwnerUser ownerUser;
+
+    @OneToOne(mappedBy = "userId")
+    @JsonIgnore
+    private ClientUser clientUser;
+
 }

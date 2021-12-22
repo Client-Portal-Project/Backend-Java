@@ -13,7 +13,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Interviews")
+@Table(name = "interviews")
 public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,25 @@ public class Interview {
     private Integer interviewId;
     @Column
     private Date date;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Application application;
+
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @Column
+    private String interviewer;
+
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "applicant_id")
+    private Applicant applicant;
+
+    @Column
+    private String comments;
+
+    @Column
+    private Boolean selected;
+
+
+
+
 }
