@@ -1,12 +1,10 @@
 package com.projectx.controller;
 
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.projectx.model.JsonResponse;
 import com.projectx.model.User;
 import com.projectx.service.UserService;
 import com.projectx.utility.JwtUtil;
-import jdk.nashorn.internal.ir.annotations.Ignore;
-import org.apache.catalina.connector.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -117,14 +115,35 @@ class UserControllerTest {
         assertEquals(expectedResult, actualResult);
     }
 
-    @Ignore
     @Test
     void editUser() {
         //Assign
-        User user = new User(1, "testuser@testing.com",
-                "password", "test1", "user1", null);
+        User before = new User(-1, "testuser@test.com",
+                "password", "test", "user", null);
+        User after = new User(-1, "testuser@test.com",
+                null, "test-1", "user-1", null);
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "VALID");
+        // encoded token generated using JWT's debugger, token's userId is -1
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
+        headers.put("authorization", token);
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+        Mockito.when(userService.editUser(before)).thenReturn(after);
+        ResponseEntity<?> expectedResult = new ResponseEntity(after, HttpStatus.ACCEPTED);
+
+        //Act
+        ResponseEntity<?> actualResult = this.userController.editUser(before, headers);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void editUserWhenTokenIsInvalid() {
+        //Assign
+        User user = new User(1, "testuser@test.com",
+                "password", "test", "user", null);
+        Map<String, String> headers = new HashMap<>();
+        // lacks key-pair of 'authorization' and encoded token
         ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (1), no authorization",
                 HttpStatus.UNAUTHORIZED);
 
@@ -135,15 +154,57 @@ class UserControllerTest {
         assertEquals(expectedResult, actualResult);
     }
 
-    // Passed; however, need to investigate if a generated web token will be needed for the next test
     @Test
-    void editUserWhenTokenIsInvalid() {
+    void editUserWhenUserTokenMismatch() {
         //Assign
-        User user = new User(1, "testuser@testing.com",
-                "password", "test1", "user1", null);
+        User user = new User(1, "testuser@test.com",
+                "password", "test", "user", null);
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "INVALID");
-        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (1), no authorization",
+        // encoded token generated using JWT's debugger, token's userId is -1
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
+        headers.put("authorization", token);
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
+
+        //Act
+        ResponseEntity<?> actualResult = this.userController.editUser(user, headers);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void editUserWhenPasswordLengthLessThenEight() {
+        //Assign
+        User user = new User(-1, "testuser@test.com",
+                "pass", "test", "user", null);
+        Map<String, String> headers = new HashMap<>();
+        // encoded token generated using JWT's debugger, token's userId is -1
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
+        headers.put("authorization", token);
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (3), invalid password",
+                HttpStatus.UNAUTHORIZED);
+
+        //Act
+        ResponseEntity<?> actualResult = this.userController.editUser(user, headers);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void editUserWhenUserIsNull() {
+        //Assign
+        User user = new User(-1, "testuser@test.com",
+                "password", "test", "user", null);
+        Map<String, String> headers = new HashMap<>();
+        // encoded token generated using JWT's debugger, token's userId is -1
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
+        headers.put("authorization", token);
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+        Mockito.when(userService.editUser(user)).thenReturn(null);
+        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (4), user does not exist",
                 HttpStatus.UNAUTHORIZED);
 
         //Act
@@ -155,5 +216,57 @@ class UserControllerTest {
 
     @Test
     void deleteUser() {
+        //Assign
+        Integer userId = -1;
+        User user = new User(-1, "testuser@test.com",
+                "password", "test", "user", null);
+        Map<String, String> headers = new HashMap<>();
+        // encoded token generated using JWT's debugger, token's userId is -1
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
+        headers.put("authorization", token);
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+        Mockito.when(userService.findUserById(userId)).thenReturn(user);
+
+        ResponseEntity<?> expectedResult = new ResponseEntity("Valid token, user deleted", HttpStatus.ACCEPTED);
+
+        //Act
+        ResponseEntity<?> actualResult = this.userController.deleteUser(userId, headers);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
+        Mockito.verify(userService, Mockito.times(1)).deleteUser(user);
+    }
+
+    @Test
+    void deleteUserWhenTokenIsInvalid() {
+        //Assign
+        Integer userId = -1;
+        Map<String, String> headers = new HashMap<>(); // lacks key-pair of 'authorization' and encoded token
+        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
+
+        //Act
+        ResponseEntity<?> actualResult = this.userController.deleteUser(userId, headers);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void deleteUserWhenUserTokenMismatch() {
+        //Assign
+        Integer userId = 1;
+        Map<String, String> headers = new HashMap<>();
+        // encoded token generated using JWT's debugger, token's userId is -1
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
+        headers.put("authorization", token);
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+
+        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
+
+        //Act
+        ResponseEntity<?> actualResult = this.userController.deleteUser(userId, headers);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
     }
 }
