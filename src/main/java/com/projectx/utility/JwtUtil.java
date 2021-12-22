@@ -12,6 +12,13 @@ import java.util.Date;
 
 @Component("jwtUtil")
 public class JwtUtil {
+
+    /*
+     * Resources:
+     * https://jwt.io/introduction
+     * https://github.com/auth0/node-jsonwebtoken
+     * */
+
     public static final String SECRET = "Project-X";
     public static final Algorithm algorithm = Algorithm.HMAC256(SECRET);
     public static final JWTVerifier jwtVerifier = JWT.require(algorithm).build();
