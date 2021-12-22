@@ -28,14 +28,14 @@ public class Applicant {
     private String educationField;
     @Column
     private String EmploymentStatus;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     private User user;
     @ManyToMany
     @JoinTable(
             name = "ApplicantSkills",
             joinColumns = @JoinColumn(name = "applicant_id"),
             inverseJoinColumns = @JoinColumn(name = "skillId"))
-    Set<Skill> applicantskills;
+    Set<Skill> applicantSkills;
 
     public Applicant(int applicant_id, String aboutMe, String educationLevel, String educationField, String EmploymentStatus, User user) {
         this.applicantId = applicant_id;
@@ -44,6 +44,15 @@ public class Applicant {
         this.educationField = educationField;
         this.EmploymentStatus = EmploymentStatus;
         this.user = user;
-        this.applicantskills = new HashSet<>();
+        this.applicantSkills = new HashSet<>();
+    }
+
+    public Applicant(String aboutMe, String educationLevel, String educationField, String EmploymentStatus, User user) {
+        this.aboutMe = aboutMe;
+        this.educationLevel = educationLevel;
+        this.educationField = educationField;
+        this.EmploymentStatus = EmploymentStatus;
+        this.user = user;
+        this.applicantSkills = new HashSet<>();
     }
 }

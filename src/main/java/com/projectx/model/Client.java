@@ -20,4 +20,6 @@ public class Client {
     private Integer clientId;
     @Column
     private String companyName;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    private User user;
 }

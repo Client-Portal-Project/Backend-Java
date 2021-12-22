@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /*
     Need class describes the needs for an application
@@ -37,4 +38,10 @@ public class Need {
     private String educationLevel; // i.e. Associate's Bachelor's...
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Client client;
+    @ManyToMany
+    @JoinTable(
+            name = "NeedSkill",
+            joinColumns = @JoinColumn(name = "needId"),
+            inverseJoinColumns = @JoinColumn(name = "skillId"))
+    Set<Skill> needSkills;
 }

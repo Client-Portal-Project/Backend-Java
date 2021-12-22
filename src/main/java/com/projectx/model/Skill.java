@@ -24,6 +24,8 @@ public class Skill {
     private Integer skillId;
     @Column
     private String skillName;
-    @ManyToMany(mappedBy = "applicantskills")
+    @ManyToMany(mappedBy = "applicantSkills")
     Set<Applicant> applicants;
+    @ManyToMany(mappedBy = "needSkills")
+    Set<Need> needs;
 }
