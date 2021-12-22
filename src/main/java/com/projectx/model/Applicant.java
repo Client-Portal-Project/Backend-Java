@@ -27,8 +27,8 @@ public class Applicant {
     @Column
     private String educationField;
     @Column
-    private String EmploymentStatus;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    private String employmentStatus;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     private User user;
     @ManyToMany
     @JoinTable(
@@ -42,7 +42,7 @@ public class Applicant {
         this.aboutMe = aboutMe;
         this.educationLevel = educationLevel;
         this.educationField = educationField;
-        this.EmploymentStatus = EmploymentStatus;
+        this.employmentStatus = EmploymentStatus;
         this.user = user;
         this.applicantSkills = new HashSet<>();
     }
@@ -51,7 +51,7 @@ public class Applicant {
         this.aboutMe = aboutMe;
         this.educationLevel = educationLevel;
         this.educationField = educationField;
-        this.EmploymentStatus = EmploymentStatus;
+        this.employmentStatus = EmploymentStatus;
         this.user = user;
         this.applicantSkills = new HashSet<>();
     }
