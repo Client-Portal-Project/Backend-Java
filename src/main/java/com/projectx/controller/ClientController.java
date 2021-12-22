@@ -61,7 +61,7 @@ public class ClientController {
     public ResponseEntity<?> createClient(@RequestBody Client client) {
         Client newClient = this.clientServ.createClient(client);
         if(newClient != null) {
-        	return new ResponseEntity<Client>(newClient, HttpStatus.OK);
+        	return new ResponseEntity<Client>(newClient, HttpStatus.CREATED);
         } else {
         	return new ResponseEntity<String>("Failed to create: " + client + ", it is already exist", HttpStatus.CONFLICT);
         }
@@ -71,7 +71,7 @@ public class ClientController {
     public ResponseEntity<?> editClient(@RequestBody Client client) {
     	Client updateClient = this.clientServ.editClient(client);
     	if(updateClient == null) {
-    		return new ResponseEntity<String>("Failed to find Client by Company Name: " + client.getCompanyName(), HttpStatus.NOT_FOUND);
+    		return new ResponseEntity<String>("Failed to find Client by Id: " + client.getClientId(), HttpStatus.NOT_FOUND);
     	}
     	return new ResponseEntity<Client>(updateClient, HttpStatus.OK);
     }
