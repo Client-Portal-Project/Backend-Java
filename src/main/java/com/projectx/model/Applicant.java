@@ -19,8 +19,6 @@ public class Applicant {
     @Column(name = "applicant_id")
     private Integer applicantId;
     @Column
-    private int resume;
-    @Column
     private String aboutMe;
     @Column
     private String educationLevel;

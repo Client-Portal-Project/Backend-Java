@@ -29,7 +29,7 @@ public class ApplicantServiceTest {
         MockitoAnnotations.openMocks(this);
         String dummy = "";
         User user = new User(1, dummy, dummy, dummy, dummy, true);
-        expected = new Applicant(1, 1, dummy, dummy, dummy, dummy, user);
+        expected = new Applicant(1, dummy, dummy, dummy, dummy, user);
     }
 
     @Test
