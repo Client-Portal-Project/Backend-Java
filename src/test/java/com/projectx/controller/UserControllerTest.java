@@ -114,7 +114,6 @@ class UserControllerTest {
         //Assert
         assertEquals(expectedResult, actualResult);
     }
-
     @Test
     void editUser() {
         //Assign
@@ -153,7 +152,6 @@ class UserControllerTest {
         //Assert
         assertEquals(expectedResult, actualResult);
     }
-
     @Test
     void editUserWhenUserTokenMismatch() {
         //Assign

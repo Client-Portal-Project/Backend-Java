@@ -45,15 +45,27 @@ public class ClientUserService {
 	
 	public ClientUser createClientUser(Client client, User user) {
 		log.info("clientService: createClientUser() call");
-		ClientUser checkUser = this.clientUserDao.findClientUserByUser(user);
-		if(checkUser == null) {
-			ClientUser clientUser = this.clientUserDao.save(new ClientUser(client, user));
+		ClientUser checkClientUser = this.clientUserDao.findClientUserByUser(user);
+		if(checkClientUser == null) {
+			ClientUser clientUser = this.clientUserDao.save(new ClientUser(user, client));
 			log.info("clientService: " + clientUser + " , successfully created.");
 			return clientUser;
 		} else {
-			log.error("clientService: " + checkUser + " , already exist.");
+			log.error("clientService: " + checkClientUser + " , already exist.");
 			return null;
 		}
+	}
+	
+	public boolean deleteClientUser(ClientUser clientUser) {
+		log.info("clientService: deleteClientUser() call");
+		ClientUser delete = this.clientUserDao.findById(clientUser.getClientUserId()).orElse(null);
+		if (delete != null) {
+			this.clientUserDao.delete(delete);
+			log.info("clientService: " + delete + " , successfully deleted.");
+			return true;
+		}
+		log.error("clientService: " + clientUser + " , doesn't exist.");
+		return false;
 	}
 	
 	
