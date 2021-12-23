@@ -78,6 +78,7 @@ class UserControllerTest {
         Mockito.when(jwtUtil.generateToken(user.getUserId())).thenReturn(token);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Authorization", token);
+        responseHeaders.set("Access-Control-Expose-Headers", "authorization");
         ResponseEntity<User> expectedResult = new ResponseEntity<>(user, responseHeaders, HttpStatus.CREATED);
 
         //Act

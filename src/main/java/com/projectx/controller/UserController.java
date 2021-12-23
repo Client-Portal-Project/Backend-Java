@@ -52,7 +52,8 @@ public class UserController {
         if(existingUser != null) {
             String token = jwtUtil.generateToken(existingUser.getUserId());
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("Authorization", token);
+            responseHeaders.set("authorization", token);
+            responseHeaders.set("Access-Control-Expose-Headers", "authorization");
             existingUser.setPassword(null); // To prevent sensitive information getting leaked out
             // jsonResponse = new JsonResponse(true, token, existingUser);
             response = new ResponseEntity(existingUser, responseHeaders, HttpStatus.CREATED);
@@ -75,7 +76,7 @@ public class UserController {
     public ResponseEntity<?> editUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
         // JsonResponse jsonResponse;
         ResponseEntity<String> response;
-        DecodedJWT decodedJWT = jwtUtil.verify(headers.get("Authorization"));
+        DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));
         if(decodedJWT == null) {
             // jsonResponse = new JsonResponse(false, "Invalid token, no authorization", null);
             response = new ResponseEntity("Invalid token (1), no authorization",
