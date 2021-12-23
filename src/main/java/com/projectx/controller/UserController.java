@@ -1,7 +1,6 @@
 package com.projectx.controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.projectx.model.JsonResponse;
 import com.projectx.model.User;
 import com.projectx.service.UserService;
 import com.projectx.utility.CrossOriginUtil;
@@ -28,25 +27,37 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
+    /*
+     * Adds a user to the database
+     * The request body must contain a user
+     *
+     * @param user - the user to be added to the database
+     * @return http response with a string message in a {@link ResponseEntity} that contains a CREATED request if the
+     * user is added, else a CONFLICT request.
+     * */
+
     @PostMapping("user")
     public ResponseEntity<String> createUser(@RequestBody User user) {
-        // JsonResponse jsonResponse;
         ResponseEntity<String> response;
         User newUser = this.userService.createUser(user);
-        if(newUser != null) {
-            // jsonResponse = new JsonResponse(true, "User successfully created", newUser);
+        if(newUser != null)
             response = new ResponseEntity("User successfully created", HttpStatus.CREATED);
-        } else {
-            // jsonResponse= new JsonResponse(false, "Email entered already exists", null);
+        else
             response = new ResponseEntity("Email entered already exists", HttpStatus.CONFLICT);
-        }
-
         return response;
     }
 
+    /*
+     * Verify a user's credentials, and generates a web token if successful
+     * The request body must contain a user (email, password)
+     *
+     * @param user - the user intending to log in to their account
+     * @return http response with a user object in a {@link ResponseEntity} that contains a CREATED request if the
+     * user exists; thus, generating a token, else a CONFLICT request.
+     * */
+
     @PostMapping("login")
     public ResponseEntity<User> login(@RequestBody User user) {
-        // JsonResponse jsonResponse;
         ResponseEntity<User> response;
         User existingUser = this.userService.getUserByEmailAndPassword(user.getEmail(), user.getPassword());
         if(existingUser != null) {
@@ -55,78 +66,88 @@ public class UserController {
             responseHeaders.set("authorization", token);
             responseHeaders.set("Access-Control-Expose-Headers", "authorization");
             existingUser.setPassword(null); // To prevent sensitive information getting leaked out
-            // jsonResponse = new JsonResponse(true, token, existingUser);
             response = new ResponseEntity(existingUser, responseHeaders, HttpStatus.CREATED);
-        }
-        else {
-            // jsonResponse= new JsonResponse(false, "Invalid email or password", null);
+        } else {
             response = new ResponseEntity(null, HttpStatus.CONFLICT);
         }
-
         return response;
     }
 
-    // Currently, for testing purposes to see the User data in Postman
+    /*
+     * Retrieve all users in the database
+     *
+     * @return http response with a list of user objects in a {@link ResponseEntity} that contains an ACCEPTED
+     * request; this endpoint is intended for verifying users in the database via Postman, but may be deleted.
+     * */
+
     @GetMapping("user")
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity(this.userService.findAllUsers(), HttpStatus.ACCEPTED);
     }
 
+    /*
+     * Update the user in the database
+     * The header must have a key-value pair of 'authorization' and encoded token
+     * The request body must contain a user
+     *
+     * @param user - the user to be updated in the database
+     * @return http response with a user object in a {@link ResponseEntity} that contains an ACCEPTED request if the
+     * user was updated, else response with a string message and an UNAUTHORIZED request.
+     * */
+
     @PutMapping("user")
     public ResponseEntity<?> editUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
-        // JsonResponse jsonResponse;
         ResponseEntity<String> response;
         DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));
         if(decodedJWT == null) {
-            // jsonResponse = new JsonResponse(false, "Invalid token, no authorization", null);
-            response = new ResponseEntity("Invalid token (1), no authorization",
-                    HttpStatus.UNAUTHORIZED);
+            response = new ResponseEntity("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
         } else {
             if(decodedJWT.getClaims().get("userId").asInt() == user.getUserId()) {
                 if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
                     // Password encryption goes here
                     User updatedUser = this.userService.editUser(user);
-                    updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
                     if(updatedUser == null) {
-                        // jsonResponse = new JsonResponse(false, "Invalid token, user does not exist", null);
                         response = new ResponseEntity("Invalid token (4), user does not exist",
                                 HttpStatus.UNAUTHORIZED);
                     } else {
-                        // jsonResponse = new JsonResponse(true, "Valid token received", updatedUser);
+                        updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
                         response = new ResponseEntity(updatedUser, HttpStatus.ACCEPTED);
                     }
 
                 } else {
-                    // jsonResponse = new JsonResponse(false, "Invalid token, invalid password", null);
-                    response = new ResponseEntity("Invalid token (3), invalid password",
-                            HttpStatus.UNAUTHORIZED);
+                    response = new ResponseEntity("Invalid token (3), invalid password", HttpStatus.UNAUTHORIZED);
                 }
 
             } else {
-                // jsonResponse = new JsonResponse(false, "Invalid token (2), user mismatch", null);
                 response = new ResponseEntity("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
             }
         }
         return response;
     }
 
+    /*
+     * Update the user in the database
+     * The header must have a key-value pair of 'authorization' and encoded token
+     * The path variable must contain a user id
+     *
+     * @param userId - the user's id to retrieve the user from database, then delete said user
+     * @return http response with a string message in a {@link ResponseEntity} that contains an ACCEPTED request if the
+     * user was updated, else an UNAUTHORIZED request.
+     * */
+
     @DeleteMapping("user/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
-        // JsonResponse jsonResponse;
         ResponseEntity<String> response;
         DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));
-        if(decodedJWT == null)
-            // jsonResponse = new JsonResponse(false, "Invalid token, no authorization", null);
+        if(decodedJWT == null) {
             response = new ResponseEntity("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
-        else {
+        } else {
             if(decodedJWT.getClaims().get("userId").asInt() == userId) {
                 User user = userService.findUserById(userId);
                 userService.deleteUser(user);
-                // jsonResponse = new JsonResponse(true, "Valid token, user deleted", null);
                 response = new ResponseEntity("Valid token, user deleted", HttpStatus.ACCEPTED);
             }
             else {
-                // jsonResponse = new JsonResponse(false, "Invalid token, user mismatch", null);
                 response = new ResponseEntity("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
             }
         }
