@@ -7,7 +7,6 @@ package com.projectx.controller;
 import com.projectx.model.Applicant;
 import com.projectx.service.ApplicantService;
 import com.projectx.utility.CrossOriginUtil;
-import com.projectx.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicantController {
     @Autowired
     private ApplicantService applicantService;
-    @Autowired
-    private JwtUtil jwtUtil;
 
     /**
      * Adds an applicant to the database

@@ -24,7 +24,7 @@ import com.projectx.utility.ClientUserRequestObject;
 import com.projectx.utility.CrossOriginUtil;
 
 @RestController("clientUserController")
-@RequestMapping(value = "api")
+@RequestMapping(value = "api/clientUser")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ClientUserController {
 	private ClientUserService clientUserServ;
@@ -39,13 +39,17 @@ public class ClientUserController {
 	}
 	
 	// Currently, for testing purposes to see the User data in Postman
-	@GetMapping("clientUsers")
+
+	//Change to return all clients
+	@GetMapping
 	public ResponseEntity<List<ClientUser>> getAllClientUsers() {
 		return new ResponseEntity<List<ClientUser>>(this.clientUserServ.findAllClientUsers(), HttpStatus.OK);
 	}
 	
 	//Getting ClientUser by ClientUser ID
-	@GetMapping("clientUser/id/{clientUserId}")
+
+	//Go find a Client that has the User --> Return Client with the User attached
+	@GetMapping("/id/{clientUserId}")
 	public ResponseEntity<?> getClientUserById(@PathVariable Integer clientUserId) {
 		ClientUser clientUser = this.clientUserServ.findClientUserById(clientUserId);
 		if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.OK);
@@ -53,7 +57,9 @@ public class ClientUserController {
 	}
 	
 	//Getting ClientUser by User ID
-	@GetMapping("clientUser/user/id/{userId}")
+
+	//Same as last one
+	@GetMapping("/user/id/{userId}")
 	public ResponseEntity<?> getClientUserByUserId(@PathVariable Integer userId) {
 		User user = this.userServ.findUserById(userId);
 		ClientUser clientUser = this.clientUserServ.findClientUserByUser(user);
@@ -62,7 +68,9 @@ public class ClientUserController {
 	}
 	
 	//Getting List of ClientUser by Client ID
-	@GetMapping("clientUser/client/id/{clientId}")
+
+	//Just a Client
+	@GetMapping("/client/id/{clientId}")
 	public ResponseEntity<?> getClientUserByClientId(@PathVariable Integer clientId) {
 		Client client = this.clientServ.findClientById(clientId);
 		List<ClientUser> clientUser = this.clientUserServ.findClientUserByClient(client);
@@ -71,7 +79,7 @@ public class ClientUserController {
 	}
 	
 	//Getting ClientUser by User Email
-	@GetMapping("clientUser/user/email/{userEmail}")
+	@GetMapping("/user/email/{userEmail}")
 	public ResponseEntity<?> getClientUserByUserEmail(@PathVariable String userEmail) {
 		User user = this.userServ.findUserByEmail(userEmail);
 		ClientUser clientUser = this.clientUserServ.findClientUserByUser(user);
@@ -80,7 +88,7 @@ public class ClientUserController {
 	}
 	
 	//Getting List of ClientUser by Client Company Name
-	@GetMapping("clientUser/client/name/{companyName}")
+	@GetMapping("/client/name/{companyName}")
 	public ResponseEntity<?> getClientUserByCompanyName(@PathVariable String companyName) {
 		Client client = this.clientServ.findClientByCompanyName(companyName);
 		List<ClientUser> clientUser = this.clientUserServ.findClientUserByClient(client);
@@ -89,7 +97,7 @@ public class ClientUserController {
 	}
 	
 	//Creating ClientUser by using ClientUser entity
-	@PostMapping("clientUser")
+	@PostMapping
 	public ResponseEntity<?> createClientUser(@RequestBody ClientUser clientUser) {
 		//Consistency check
 		String companyName = clientUser.getClient().getCompanyName();
@@ -108,7 +116,7 @@ public class ClientUserController {
 	}
 	
 	//Creating ClientUser by using clientUserRequestObject {"email", "companyName"} entity
-	@PostMapping("clientUser/request")
+	@PostMapping("/request")
 	public ResponseEntity<?> createClientUserByRequestObject(@RequestBody ClientUserRequestObject clientUserRequestObject) {
 		//Consistency check
 		Client client = this.clientServ.findClientByCompanyName(clientUserRequestObject.getCompanyName());
@@ -125,7 +133,7 @@ public class ClientUserController {
 	}
 	
 	//Delete ClientUser by using ClientUser entity
-	@DeleteMapping("clientUser")
+	@DeleteMapping
 	public ResponseEntity<String> deleteClientUser(@RequestBody ClientUser clientUser) {
 		boolean deleted = this.clientUserServ.deleteClientUser(clientUser);
 		if(deleted) {
