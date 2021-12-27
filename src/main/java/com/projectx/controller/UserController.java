@@ -27,14 +27,14 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-    /*
+    /**
      * Adds a user to the database
      * The request body must contain a user
      *
      * @param user - the user to be added to the database
      * @return http response with a string message in a {@link ResponseEntity} that contains a CREATED request if the
      * user is added, else a CONFLICT request.
-     * */
+     */
 
     @PostMapping("user")
     public ResponseEntity<String> createUser(@RequestBody User user) {
@@ -47,14 +47,14 @@ public class UserController {
         return response;
     }
 
-    /*
+    /**
      * Verify a user's credentials, and generates a web token if successful
      * The request body must contain a user (email, password)
      *
      * @param user - the user intending to log in to their account
      * @return http response with a user object in a {@link ResponseEntity} that contains a CREATED request if the
      * user exists; thus, generating a token, else a CONFLICT request.
-     * */
+     */
 
     @PostMapping("login")
     public ResponseEntity<User> login(@RequestBody User user) {
@@ -72,19 +72,19 @@ public class UserController {
         return response;
     }
 
-    /*
+    /**
      * Retrieve all users in the database
      *
      * @return http response with a list of user objects in a {@link ResponseEntity} that contains an ACCEPTED
      * request; this endpoint is intended for verifying users in the database via Postman, but may be deleted.
-     * */
+     */
 
     @GetMapping("user")
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity(this.userService.findAllUsers(), HttpStatus.ACCEPTED);
     }
 
-    /*
+    /**
      * Update the user in the database
      * The header must have a key-value pair of 'authorization' and encoded token
      * The request body must contain a user
@@ -92,7 +92,7 @@ public class UserController {
      * @param user - the user to be updated in the database
      * @return http response with a user object in a {@link ResponseEntity} that contains an ACCEPTED request if the
      * user was updated, else response with a string message and an UNAUTHORIZED request.
-     * */
+     */
 
     @PutMapping("user")
     public ResponseEntity<?> editUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
@@ -124,7 +124,7 @@ public class UserController {
         return response;
     }
 
-    /*
+    /**
      * Update the user in the database
      * The header must have a key-value pair of 'authorization' and encoded token
      * The path variable must contain a user id
@@ -132,7 +132,7 @@ public class UserController {
      * @param userId - the user's id to retrieve the user from database, then delete said user
      * @return http response with a string message in a {@link ResponseEntity} that contains an ACCEPTED request if the
      * user was updated, else an UNAUTHORIZED request.
-     * */
+     */
 
     @DeleteMapping("user/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {

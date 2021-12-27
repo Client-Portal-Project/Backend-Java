@@ -1,9 +1,6 @@
 package com.projectx.controller;
 
-
-
 import com.projectx.DTOs.ResponseFile;
-import com.projectx.DTOs.ResponseMessage;
 import com.projectx.model.File;
 import com.projectx.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,18 +28,13 @@ public class FileController {
 
     @CrossOrigin
     @PostMapping("/upload")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file){
-        String message = "";
+    public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile file){
         try{
             storageService.store(file);
-            message = "Uploaded the file successfully: " + file.getOriginalFilename() + "!";
-
-            return ResponseEntity.status(200).body(new ResponseMessage(message));
+            return ResponseEntity.status(200).body(true);
         } catch (IOException e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.badRequest().body(new ResponseMessage(message));
+            return ResponseEntity.badRequest().body(false);
         }
-
     }
 
 
@@ -71,10 +63,8 @@ public class FileController {
     @GetMapping("/files/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable String id) {
         File file = storageService.getFile(id);
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
                 .body(file.getData());
     }
-
 }

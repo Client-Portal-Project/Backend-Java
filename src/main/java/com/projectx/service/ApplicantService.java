@@ -5,6 +5,7 @@
 package com.projectx.service;
 
 import com.projectx.model.Applicant;
+import com.projectx.model.User;
 import com.projectx.repository.ApplicantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import java.util.List;
 public class ApplicantService {
     @Autowired
     ApplicantDao applicantDao;
+    @Autowired
+    UserService userService;
 
     /**
      * Adds an applicant into the database
@@ -26,6 +29,12 @@ public class ApplicantService {
         if (applicant.getUser() == null) {
             return null;
         }
+
+        applicant.setUser(userService.getUserById(applicant.getUser().getUserId()));
+        if (applicant.getUser() == null) {
+            return null;
+        }
+
         return applicantDao.save(applicant);
     }
 

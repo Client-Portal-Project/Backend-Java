@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController("applicantController")
-@RequestMapping("/applicant")
+@RequestMapping(value = "api/applicant")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ApplicantController {
     @Autowired

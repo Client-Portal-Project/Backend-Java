@@ -28,7 +28,8 @@ public class Applicant {
     private String educationField;
     @Column
     private String employmentStatus;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
     @ManyToMany
     @JoinTable(
