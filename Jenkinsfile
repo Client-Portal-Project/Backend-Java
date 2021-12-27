@@ -28,13 +28,15 @@ pipeline {
 
         stage('Package') {
             steps {
-                CURR = 'Packaging'
-                CMD = 'mvn -DskipTests package > result'
-                if (sh(script: CMD, returnStatus: true) != 0) {
-                        ERR = readFile('result').trim()
-                        CMD = CMD.split(' > ')[0].trim()
-                        error('Failure')
-                    }
+                script {
+                    CURR = 'Packaging'
+                    CMD = 'mvn -DskipTests package > result'
+                    if (sh(script: CMD, returnStatus: true) != 0) {
+                            ERR = readFile('result').trim()
+                            CMD = CMD.split(' > ')[0].trim()
+                            error('Failure')
+                        }
+                }
                 discordSend description: ":package: Packaged .jar for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
             }
         }
