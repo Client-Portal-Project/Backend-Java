@@ -1,9 +1,9 @@
 package com.projectx.repository;
 
-import com.projectx.model.FileDB;
+import com.projectx.model.File;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FileDBRepo extends JpaRepository<FileDB, String> {
+public interface FileRepo extends JpaRepository<File, String> {
 }
