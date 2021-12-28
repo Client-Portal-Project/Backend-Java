@@ -60,7 +60,9 @@ public class FileController {
     @CrossOrigin
     @GetMapping("/files/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable String id) {
+        System.out.println(id);
         File file = fileService.getFile(id);
+        System.out.println(file);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
                 .body(file.getData());

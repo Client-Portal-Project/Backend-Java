@@ -8,23 +8,29 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
 public class FileControllerTest {
     private File expected;
     private MockMvc mvc;
-    @Mock
+
+    @Autowired
+    private WebApplicationContext context;
+    @MockBean
     private FileService fileService;
     @InjectMocks
     private FileController fileController;
@@ -32,7 +38,7 @@ public class FileControllerTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        mvc = MockMvcBuilders.standaloneSetup(fileController).build();
+        this.mvc = webAppContextSetup(context).build();
         expected = new File("aaa", "test", "test", ("test").getBytes(), null);
     }
 
@@ -65,20 +71,13 @@ public class FileControllerTest {
                 .andExpect(content().string("[]"));
     }
 
-//    @CrossOrigin
-//    @GetMapping("/files/{id}")
-//    public ResponseEntity<byte[]> getFile(@PathVariable String id) {
-//        File file = fileService.getFile(id);
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-//                .body(file.getData());
-//    }
     @Test
     void testGetFile() throws Exception {
-        when(fileService.getFile(any(String.class))).thenReturn(expected);
-        mvc.perform(MockMvcRequestBuilders.get("/api/files/{id}", "aaa")
-                .param("id", "aaa"))
+        when(fileService.getFile(expected.getId())).thenReturn(expected);
+        mvc.perform(MockMvcRequestBuilders.get("/api/files/{id}", expected.getId())
+                .param("id", expected.getId()))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(String.valueOf(expected.getData())));
+                .andExpect(content().string(new String(expected.getData())));
     }
 }
