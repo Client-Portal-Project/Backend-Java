@@ -19,30 +19,28 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "api")
 public class FileController {
 
-    private final FileService storageService;
+    private final FileService fileService;
 
     @Autowired
-    public FileController(FileService storageService){
-        this.storageService = storageService;
+    public FileController(FileService fileService){
+        this.fileService = fileService;
     }
 
     @CrossOrigin
     @PostMapping("/upload")
     public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile file){
         try{
-            storageService.store(file);
+            fileService.store(file);
             return ResponseEntity.status(200).body(true);
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(false);
         }
     }
 
-
-
     @CrossOrigin
     @GetMapping("/files")
     public ResponseEntity<List<ResponseFile>> getListFiles() {
-        List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
+        List<ResponseFile> files = fileService.getAllFiles().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/api/files/")
@@ -62,7 +60,7 @@ public class FileController {
     @CrossOrigin
     @GetMapping("/files/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable String id) {
-        File file = storageService.getFile(id);
+        File file = fileService.getFile(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
                 .body(file.getData());

@@ -22,9 +22,9 @@ public class FileService {
 
     public File store(MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        File File = new File(fileName, file.getContentType(), file.getBytes());
+        File newFile = new File(fileName, file.getContentType(), file.getBytes());
 
-        return fileRepository.save(File);
+        return fileRepository.save(newFile);
     }
 
     public File getFile(String id) {
