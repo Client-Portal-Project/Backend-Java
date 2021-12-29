@@ -3,10 +3,10 @@ package com.projectx.services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import com.projectx.models.User;
+import com.projectx.repositories.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,25 +19,38 @@ import com.projectx.repositories.ClientDao;
 public class ClientServiceTest {
 	@Mock
 	private ClientDao clientDao;
+	@Mock
+	private UserDao userDao;
 
 	@InjectMocks
 	private ClientService clientServ;
+	@InjectMocks
+	private UserService userService;
 
 	private Client testClient1;
 	private Optional<Client> testClient1Optional;
 	private Client testEditClient1;
 	private Client testClient2;
 	private List<Client> testClientList;
+	private User testUser;
+	private User testUserExtra;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
-		clientServ = new ClientService(clientDao);
-		
+		userService = new UserService(userDao);
+		clientServ = new ClientService(clientDao, userService);
+
+		testUser = new User(1, "", "", "", "", true);
+		testUserExtra = new User(2, "", "", "", "", true);
 		testClient1 = new Client(1, "Test Company 1");
+		Set<User> expected = new HashSet<>();
+		expected.add(testUser);
+		testClient1.setClientUser(expected);
 		testClient1Optional = Optional.of(testClient1);
 		testClient2 = new Client(2, "Test Company 2");
 		testEditClient1 = new Client(1, "Test");
+		testEditClient1.setClientUser(expected);
 		
 		testClientList = new ArrayList<Client>();
 		testClientList.add(testClient1);
@@ -51,6 +64,10 @@ public class ClientServiceTest {
 		when(clientDao.findClientByCompanyName(testClient2.getCompanyName())).thenReturn(null);
 		when(clientDao.save(testClient2)).thenReturn(testClient2);
 		when(clientDao.save(testEditClient1)).thenReturn(testEditClient1);
+
+		when(userDao.findById(testUser.getUserId())).thenReturn(Optional.of(testUser));
+		when(userDao.findById(3)).thenReturn(null);
+		when(userDao.findById(testUserExtra.getUserId())).thenReturn(Optional.of(testUserExtra));
 	}
 	
 	@Test
@@ -107,5 +124,53 @@ public class ClientServiceTest {
 	public void testDeleteClientUnsuccess() {
 		assertFalse(clientServ.deleteClient(testClient2));
 	}
-	
+
+	@Test
+	void testFindAllClientUsers() {
+		assertArrayEquals(clientServ.findAllClientUsers(testClient1).toArray(), testClient1.getClientUser().toArray()); //to not use array, need to override hashcode()
+	}
+
+	@Test
+	void testFindClientUser() {
+		assertNull(clientServ.findClientUser(testClient1, 3));
+		assertEquals(clientServ.findClientUser(testClient1, 1), testUser);
+	}
+//	public Boolean createClientUser(Client client, int id) {
+//		User user = userService.getUserById(id);
+//		if (user == null) {
+//			return false;
+//		} else { //takes list from client from database and updates it
+//			Client temp = findClientById(client.getClientId());
+//			Set<User> list = temp.getClientUser();
+//			Boolean result = list.add(user); //true if added, false if already a duplicate
+//			temp.setClientUser(list);
+//			clientDao.save(temp); //updates list in database
+//			return result;
+//		}
+//	}
+
+	@Test
+	void testCreateClientUser() {
+		assertFalse(clientServ.createClientUser(testClient1, 3));
+		assertFalse(clientServ.createClientUser(testClient1, 1));
+		assertTrue(clientServ.createClientUser(testClient1, 2));
+	}
+//	public Boolean deleteClientUser(Client client, int id) {
+//		User user = userService.getUserById(id);
+//		if (user == null) {
+//			return false;
+//		} else { //takes list from client from database and updates it
+//			Client temp = findClientById(client.getClientId());
+//			Set<User> list = temp.getClientUser();
+//			Boolean result = list.remove(user); //true if deleted, false if it does not exist
+//			temp.setClientUser(list);
+//			clientDao.save(temp); //updates list in database
+//			return result;
+//		}
+//	}
+
+	@Test
+	void testDeleteClientUser() {
+
+	}
 }

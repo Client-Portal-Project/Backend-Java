@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectx.models.Client;
 import com.projectx.services.ClientService;
 
@@ -52,7 +51,6 @@ public class ClientControllerTest {
 		
 		testClientList = new ArrayList<Client>();
 		testClientList.add(testClient1);
-		
 	}
 	
 	@Test
