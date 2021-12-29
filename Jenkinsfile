@@ -60,7 +60,7 @@ pipeline {
                     script {
                         ERR = waitForQualityGate()
                         if (ERR.status != 'OK') {
-                            writeFile(file: 'result', text: "${ERR}")
+                            writeFile(file: 'result', text: "${ERR.conditions}")
                             error('Quality Gate Failed')
                         }
                         discordSend description: ":unlock: Passed Static Analysis of ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
