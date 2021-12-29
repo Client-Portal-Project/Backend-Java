@@ -4,11 +4,10 @@ import com.projectx.models.User;
 import com.projectx.repositories.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +15,16 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-    UserService userService;
     @Mock
-    UserDao userDao;
+    private UserDao userDao;
+
+    @InjectMocks
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userDao);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

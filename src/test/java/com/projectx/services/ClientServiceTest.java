@@ -1,6 +1,6 @@
 package com.projectx.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -18,18 +19,19 @@ import com.projectx.repositories.ClientDao;
 public class ClientServiceTest {
 	@Mock
 	private ClientDao clientDao;
-	
+
+	@InjectMocks
 	private ClientService clientServ;
+
 	private Client testClient1;
 	private Optional<Client> testClient1Optional;
 	private Client testEditClient1;
 	private Client testClient2;
 	private List<Client> testClientList;
-	
-	@SuppressWarnings("deprecation")
+
 	@BeforeEach
 	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.openMocks(this);
 		clientServ = new ClientService(clientDao);
 		
 		testClient1 = new Client(1, "Test Company 1");
@@ -42,7 +44,7 @@ public class ClientServiceTest {
 		testClientList.add(testClient2);
 		
 		when(clientDao.findById(testClient1.getClientId())).thenReturn(testClient1Optional);
-		when(clientDao.findById(testClient2.getClientId())).thenReturn(Optional.ofNullable(null));
+		when(clientDao.findById(testClient2.getClientId())).thenReturn(Optional.empty());
 		when(clientDao.findAll()).thenReturn(testClientList);
 		when(clientDao.findClientByCompanyName(testClient1.getCompanyName())).thenReturn(testClient1);
 		when(clientDao.findClientByCompanyName("qwd")).thenReturn(null);
@@ -63,7 +65,7 @@ public class ClientServiceTest {
 	
 	@Test
 	public void testFindClientByIdUnsuccess() {
-		assertEquals(clientServ.findClientById(testClient2.getClientId()), null);
+		assertNull(clientServ.findClientById(testClient2.getClientId()));
 	}
 	
 	@Test
@@ -73,7 +75,7 @@ public class ClientServiceTest {
 	
 	@Test
 	public void testFindClientByCompanyNameUnsuccess() {
-		assertEquals(clientServ.findClientByCompanyName("qwd"), null);
+		assertNull(clientServ.findClientByCompanyName("qwd"));
 	}
 	
 	@Test
@@ -83,7 +85,7 @@ public class ClientServiceTest {
 	
 	@Test
 	public void testCreateClientUnsuccess() {
-		assertEquals(clientServ.createClient(testClient1), null);
+		assertNull(clientServ.createClient(testClient1));
 	}
 	
 	@Test
@@ -93,17 +95,17 @@ public class ClientServiceTest {
 	
 	@Test
 	public void testEditClientUnsuccess() {
-		assertEquals(clientServ.editClient(testClient2), null);
+		assertNull(clientServ.editClient(testClient2));
 	}
 	
 	@Test
 	public void testDeleteClientSuccess() {
-		assertEquals(clientServ.deleteClient(testClient1), true);
+		assertTrue(clientServ.deleteClient(testClient1));
 	}
 	
 	@Test
 	public void testDeleteClientUnsuccess() {
-		assertEquals(clientServ.deleteClient(testClient2), false);
+		assertFalse(clientServ.deleteClient(testClient2));
 	}
 	
 }

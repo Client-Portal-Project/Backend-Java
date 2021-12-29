@@ -19,8 +19,8 @@ import com.projectx.models.Client;
 import com.projectx.services.ClientService;
 import com.projectx.utility.CrossOriginUtil;
 
-@RestController("clientController")
-@RequestMapping(value = "api")
+@RestController
+@RequestMapping("client")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ClientController {
     private ClientService clientServ;
@@ -31,12 +31,12 @@ public class ClientController {
     }
 
     // Currently, for testing purposes to see the User data in Postman
-    @GetMapping("clients")
+    @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
     	return new ResponseEntity<List<Client>>(this.clientServ.findAllClients(), HttpStatus.OK);
     } 
 
-    @GetMapping("client/id/{clientId}")
+    @GetMapping("id/{clientId}")
     public ResponseEntity<?> getClientById(@PathVariable Integer clientId) {
         Client client = this.clientServ.findClientById(clientId);
         if(client != null) {
@@ -46,7 +46,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("client/name/{companyName}")
+    @GetMapping("name/{companyName}")
     public ResponseEntity<?> getClientByCompanyName(@PathVariable String companyName) {
         Client client = this.clientServ.findClientByCompanyName(companyName);
         if(client != null) {
@@ -56,8 +56,7 @@ public class ClientController {
         }
     }
 
-    //POST Creating Client
-    @PostMapping("client")
+    @PostMapping
     public ResponseEntity<?> createClient(@RequestBody Client client) {
         Client newClient = this.clientServ.createClient(client);
         if(newClient != null) {
@@ -67,7 +66,7 @@ public class ClientController {
         }
     }
     
-    @PutMapping("client")
+    @PutMapping
     public ResponseEntity<?> editClient(@RequestBody Client client) {
     	Client updateClient = this.clientServ.editClient(client);
     	if(updateClient == null) {
@@ -76,7 +75,7 @@ public class ClientController {
     	return new ResponseEntity<Client>(updateClient, HttpStatus.OK);
     }
     
-    @DeleteMapping("client")
+    @DeleteMapping
     public ResponseEntity<String> deleteClioent(@RequestBody Client client) {	
     	boolean deleted = this.clientServ.deleteClient(client);
     	if(deleted) {
@@ -84,7 +83,4 @@ public class ClientController {
     	}
     	return new ResponseEntity<String>("Failed to find Client by Company Name: " + client.getCompanyName(), HttpStatus.NOT_FOUND);
     }
-
-
-
 }
