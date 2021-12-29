@@ -1,12 +1,12 @@
 package com.projectx.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.projectx.helper.JSONStringHelper;
 import com.projectx.model.File;
 import com.projectx.service.FileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.when;
@@ -40,17 +39,6 @@ public class FileControllerTest {
         MockitoAnnotations.openMocks(this);
         this.mvc = webAppContextSetup(context).build();
         expected = new File("aaa", "test", "test", ("test").getBytes(), null);
-    }
-
-    //converts Object into a Json String
-    public static String asJsonString(final Object obj) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            final String jsonContent = mapper.writeValueAsString(obj);
-            return jsonContent;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     //need to test throwing an exception to get bad request and false!!!!!

@@ -1,6 +1,6 @@
 package com.projectx.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.projectx.helper.JSONStringHelper;
 import com.projectx.model.Applicant;
 import com.projectx.model.User;
 import com.projectx.service.ApplicantService;
@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ApplicantControllerTest {
     private Applicant expected;
     private MockMvc mvc;
+    private JSONStringHelper jsonHelper;
     @Mock
     private ApplicantService applicantService;
     @InjectMocks
@@ -35,20 +36,10 @@ public class ApplicantControllerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         mvc = MockMvcBuilders.standaloneSetup(applicantController).build();
+        this.jsonHelper = new JSONStringHelper();
         String dummy = "";
         User user = new User(1, dummy, dummy, dummy, dummy, true);
         expected = new Applicant(1, dummy, dummy, dummy, dummy, user);
-    }
-
-    //converts Object into a Json String
-    public static String asJsonString(final Object obj) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            final String jsonContent = mapper.writeValueAsString(obj);
-            return jsonContent;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
@@ -56,18 +47,18 @@ public class ApplicantControllerTest {
         when(applicantService.createApplicant(expected)).thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders.post("/api/applicant")
-                .content(asJsonString(expected))
+                .content(jsonHelper.asJSONString(expected))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(asJsonString(expected)));
+                .andExpect(content().json(jsonHelper.asJSONString(expected)));
 
         Applicant wrong = expected;
         wrong.setUser(null);
         when(applicantService.createApplicant(wrong)).thenReturn(null);
 
         mvc.perform(MockMvcRequestBuilders.post("/api/applicant")
-                        .content(asJsonString(wrong))
+                        .content(jsonHelper.asJSONString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -79,16 +70,16 @@ public class ApplicantControllerTest {
         when(applicantService.updateApplicant(expected)).thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders.put("/api/applicant")
-                .content(asJsonString(expected))
+                .content(jsonHelper.asJSONString(expected))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(asJsonString(expected)));
+                .andExpect(content().json(jsonHelper.asJSONString(expected)));
 
         when(applicantService.updateApplicant(null)).thenReturn(null);
 
         mvc.perform(MockMvcRequestBuilders.put("/api/applicant")
-                        .content(asJsonString(null))
+                        .content(jsonHelper.asJSONString(null))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -101,7 +92,7 @@ public class ApplicantControllerTest {
         when(applicantService.getApplicant(expected.getApplicantId())).thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders.delete("/api/applicant")
-                        .content(asJsonString(expected))
+                        .content(jsonHelper.asJSONString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -113,7 +104,7 @@ public class ApplicantControllerTest {
         when(applicantService.getApplicant(0)).thenReturn(null);
 
         mvc.perform(MockMvcRequestBuilders.delete("/api/applicant")
-                        .content(asJsonString(wrong))
+                        .content(jsonHelper.asJSONString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -127,7 +118,7 @@ public class ApplicantControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/api/applicant/{id}", 1)
                         .param("id", "1"))
                 .andExpect(status().isFound())
-                .andExpect(content().json(asJsonString(expected)));
+                .andExpect(content().json(jsonHelper.asJSONString(expected)));
 
         //no applicant with user id of 2 exists in database
         when(applicantService.getApplicant(2)).thenReturn(null);
@@ -145,6 +136,6 @@ public class ApplicantControllerTest {
         when(applicantService.getAllApplicants()).thenReturn(list);
         mvc.perform(MockMvcRequestBuilders.get("/api/applicant"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(asJsonString(list)));
+                .andExpect(content().json(jsonHelper.asJSONString(list)));
     }
 }

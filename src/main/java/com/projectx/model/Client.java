@@ -29,9 +29,9 @@ public class Client {
             inverseJoinColumns = @JoinColumn(name = "applicantId"))
     Set<User> clientUser;
 
-    public Client(Integer clientId, String companyname) {
+    public Client(Integer clientId, String companyName) {
         this.clientId=clientId;
-        this.companyName=companyname;
+        this.companyName=companyName;
         this.clientUser=new HashSet<>();
     }
 }

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.ArrayList;
 import java.util.List;
 
+import com.projectx.helper.JSONStringHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,7 @@ import com.projectx.service.ClientService;
 public class ClientControllerTest {
 	
 	private MockMvc mockMvc;
+	private JSONStringHelper jsonHelper;
 	
 	@Autowired
 	private WebApplicationContext context;
@@ -40,17 +42,10 @@ public class ClientControllerTest {
 	private Client testClient1;
 	private Client testClient2;
 	
-	public static String asJSONString(Object obj) {
-	    try {
-	      return new ObjectMapper().writeValueAsString(obj);
-	    } catch (Exception e) {
-	      throw new RuntimeException(e);
-	    }
-	}
-	
 	@BeforeEach
 	void setUp() throws Exception {
 		this.mockMvc = webAppContextSetup(context).build();
+		this.jsonHelper = new JSONStringHelper();
 		
 		testClient1 = new Client(1, "Test1");
 		testClient2 = new Client(null, "Test2");
@@ -68,7 +63,7 @@ public class ClientControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClientList)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(testClientList)));
 	}
 	
 	@Test
@@ -79,7 +74,7 @@ public class ClientControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClient1)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(testClient1)));
 	}
 	
 	@Test
@@ -102,7 +97,7 @@ public class ClientControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClient1)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(testClient1)));
 	}
 	
 	@Test
@@ -122,12 +117,12 @@ public class ClientControllerTest {
 		Client returnClient = new Client(2, "Test2");
 		when(clientServ.createClient(testClient2)).thenReturn(returnClient);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/api/client")
-				.content(asJSONString(testClient2))
+				.content(jsonHelper.asJSONString(testClient2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(returnClient)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(returnClient)));
 	}
 	
 	@Test
@@ -135,7 +130,7 @@ public class ClientControllerTest {
 		Client returnClient = null;
 		when(clientServ.createClient(testClient1)).thenReturn(returnClient);
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/api/client")
-				.content(asJSONString(testClient1))
+				.content(jsonHelper.asJSONString(testClient1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isConflict())
@@ -148,12 +143,12 @@ public class ClientControllerTest {
 		Client returnClient = new Client(2, "TestEdit");
 		when(clientServ.editClient(testClient2)).thenReturn(returnClient);
 		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/client")
-				.content(asJSONString(testClient2))
+				.content(jsonHelper.asJSONString(testClient2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(returnClient)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(returnClient)));
 	}
 	
 	@Test
@@ -161,7 +156,7 @@ public class ClientControllerTest {
 		Client returnClient = null;
 		when(clientServ.editClient(testClient1)).thenReturn(returnClient);
 		this.mockMvc.perform(MockMvcRequestBuilders.put("/api/client")
-				.content(asJSONString(testClient1))
+				.content(jsonHelper.asJSONString(testClient1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
@@ -173,7 +168,7 @@ public class ClientControllerTest {
 	public void testDeleteClientSuccess() throws Exception {
 		when(clientServ.deleteClient(testClient1)).thenReturn(true);
 		this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/client")
-				.content(asJSONString(testClient1))
+				.content(jsonHelper.asJSONString(testClient1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -185,7 +180,7 @@ public class ClientControllerTest {
 	public void testDeleteClientUnsuccess() throws Exception {
 		when(clientServ.deleteClient(testClient2)).thenReturn(false);
 		this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/client")
-				.content(asJSONString(testClient2))
+				.content(jsonHelper.asJSONString(testClient2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
