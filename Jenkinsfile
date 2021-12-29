@@ -33,8 +33,7 @@ pipeline {
                     CMD = 'mvn -DskipTests package > result'
                     if (sh(script: CMD, returnStatus: true) != 0) {
                             ERR = readFile('result').trim()
-                            CMD = CMD.split(' > ')[0].trim()
-                            error('Failure')
+                            error('Packaging Failure')
                         }
                 }
                 discordSend description: ":package: Packaged .jar for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
@@ -42,8 +41,32 @@ pipeline {
         }
 
         stage('Static Analysis') {
+            environment {
+                SCAN = tool 'sonarcloud'
+                ORG = 'client-portal-project'
+                NAME = 'Backend-Java'
+            }
             steps {
-                sh 'echo todo'
+                script {
+                    CURR = 'Static Analysis'
+                    CMD = '''$SCAN/bin/sonar-scanner -Dsonar.organization=$ORG \
+                                                  -Dsonar.java.binaries=target/classes/com/projectx/ \
+                                                  -Dsonar.projectKey=$NAME \
+                                                  -Dsonar.sources=.'''
+                }
+                withSonarQubeEnv('sonarserve') {
+                    sh "${CMD}"
+                }
+                timeout(time: 5, unit: 'MINUTES') {
+                    script {
+                        ERR = waitForQualityGate()
+                        if (ERR.status != 'OK') {
+                            writeFile(file: 'result', text: "${ERR}")
+                            error('Quality Gate Failed')
+                        }
+                        discordSend description: ":unlock: Passed Static Analysis of ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
+                    }
+                }
             }
         }
 
@@ -61,7 +84,9 @@ pipeline {
     }
     post {
         always {
-            sh 'cat result'
+            script{
+                CMD = CMD.split(' > ')[0].trim()
+            }
         }
         failure {
             discordSend title: "**:boom: ${env.JOB_NAME} Failure in ${CURR} Stage**",
