@@ -1,6 +1,6 @@
 package com.projectx.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -21,7 +22,8 @@ import com.projectx.repositories.ClientUserDao;
 public class ClientUserServiceTest {
 	@Mock
 	private ClientUserDao clientUserDao;
-	
+
+	@InjectMocks
 	private ClientUserService clientUserService;
 	private ClientUser testClientUser1;
 	private Optional<ClientUser> testClientUser1Optional;
@@ -36,13 +38,11 @@ public class ClientUserServiceTest {
 	private List<ClientUser> testClientUserList;
 	private List<ClientUser> testClientUserSearchList1;
 	private List<ClientUser> testClientUserSearchList2;
-	
-	@SuppressWarnings("deprecation")
+
 	@BeforeEach
 	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
-		clientUserService = new ClientUserService(clientUserDao);
-		
+		MockitoAnnotations.openMocks(this);
+
 		testClient1 = new Client(1, "Test Company 1");
 		testClient2 = new Client(2, "Test Company 2");
 		testClient3 = new Client(3, "Test Company 3");
@@ -56,18 +56,18 @@ public class ClientUserServiceTest {
 		testClientUser2 = new ClientUser(2, testUser2, testClient2);
 		testClientUser3 = new ClientUser(3, testUser3, testClient3);
 		
-		testClientUserList = new ArrayList<ClientUser>();
+		testClientUserList = new ArrayList<>();
 		testClientUserList.add(testClientUser1);
 		testClientUserList.add(testClientUser2);
 		
-		testClientUserSearchList1 = new ArrayList<ClientUser>();
+		testClientUserSearchList1 = new ArrayList<>();
 		testClientUserSearchList1.add(testClientUser1);
 		
-		testClientUserSearchList2 = new ArrayList<ClientUser>();
+		testClientUserSearchList2 = new ArrayList<>();
 		
 		when(clientUserDao.findAll()).thenReturn(testClientUserList);
 		when(clientUserDao.findById(testClientUser1.getClientUserId())).thenReturn(testClientUser1Optional);
-		when(clientUserDao.findById(testClientUser2.getClientUserId())).thenReturn(Optional.ofNullable(null));
+		when(clientUserDao.findById(testClientUser2.getClientUserId())).thenReturn(Optional.empty());
 		when(clientUserDao.findClientUserByClient(testClient1)).thenReturn(testClientUserSearchList1);
 		when(clientUserDao.findClientUserByClient(testClient2)).thenReturn(testClientUserSearchList2);
 		when(clientUserDao.findClientUserByUser(testUser1)).thenReturn(testClientUser1);
@@ -87,7 +87,7 @@ public class ClientUserServiceTest {
 	
 	@Test
 	public void testFindClientUserByIdUnsuccess() {
-		assertEquals(clientUserService.findClientUserById(testClientUser2.getClientUserId()), null);
+		assertNull(clientUserService.findClientUserById(testClientUser2.getClientUserId()));
 	}
 	
 	@Test
@@ -107,7 +107,7 @@ public class ClientUserServiceTest {
 	
 	@Test
 	public void testFindClientUserByUserUnsuccess() {
-		assertEquals(clientUserService.findClientUserByUser(testUser3), null);
+		assertNull(clientUserService.findClientUserByUser(testUser3));
 	}
 	
 	@Test
@@ -117,17 +117,17 @@ public class ClientUserServiceTest {
 	
 	@Test
 	public void testCreateClientUserUnsuccess() {
-		assertEquals(clientUserService.createClientUser(testClient1, testUser1), null);
+		assertNull(clientUserService.createClientUser(testClient1, testUser1));
 	}
 	
 	@Test
 	public void testDeleteClientUserSuccess() {
-		assertEquals(clientUserService.deleteClientUser(testClientUser1), true);
+		assertTrue(clientUserService.deleteClientUser(testClientUser1));
 	}
 	
 	@Test
 	public void testDeleteClientUserUnsuccess() {
-		assertEquals(clientUserService.deleteClientUser(testClientUser2), false);
+		assertFalse(clientUserService.deleteClientUser(testClientUser2));
 	}
 	
 	
