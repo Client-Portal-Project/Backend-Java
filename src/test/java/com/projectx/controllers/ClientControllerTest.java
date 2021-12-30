@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.SneakyThrows;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,8 +63,8 @@ public class ClientControllerTest {
 		
 	}
 	
-	@Test
-	public void testGetAllClients() throws Throwable {
+	@SneakyThrows @Test
+	public void testGetAllClients() {
 		when(clientServ.findAllClients()).thenReturn(testClientList);
 		this.mockMvc.perform(MockMvcRequestBuilders.get(URI)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -73,8 +74,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClientList)));
 	}
 	
-	@Test
-	public void testGetClientByIdSuccess() throws Throwable {
+	@SneakyThrows @Test
+	public void testGetClientByIdSuccess() {
 		when(clientServ.findClientById(testClient1.getClientId())).thenReturn(testClient1);
 		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/id/" + testClient1.getClientId())
 				.contentType(MediaType.APPLICATION_JSON)

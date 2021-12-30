@@ -133,7 +133,7 @@ public class UserController {
         if(decodedJWT == null) {
             response = new ResponseEntity<>("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
         } else {
-            if(decodedJWT.getClaims().get("userId").asInt() == userId) {
+            if(Objects.equals(decodedJWT.getClaims().get("userId").asInt(), userId)) {
                 User user = userService.findUserById(userId);
                 userService.deleteUser(user);
                 response = new ResponseEntity<>("Valid token, user deleted", HttpStatus.ACCEPTED);
