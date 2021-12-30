@@ -145,8 +145,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().string("Failed to create: " + testClient1 + ", it is already exist"));
 	}
 	
-	@Test
-	public void testEditClientSuccess() throws Throwable {
+	@Test @SneakyThrows
+	public void testEditClientSuccess() {
 		Client returnClient = new Client(2, "TestEdit");
 		when(clientServ.editClient(testClient2)).thenReturn(returnClient);
 		mockMvc.perform(MockMvcRequestBuilders.put(URI)

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,23 +53,18 @@ public class ClientUserControllerTest {
 	private Client testClient1;
 	private Client testClient2;
 	private ClientUserRequestObject testClientUserRequestObject;
-	
-	
+
 	//Located in helper package
 	public JSONStringHelper jsonHelper;
 	public MockMvcPerformHelper mockMvcPerformHelper;
 	
-	
-	
 	@BeforeEach
-	void setUp() throws Exception {
-		this.mockMvc = webAppContextSetup(context).build();
+	void setUp() {
+		mockMvc = webAppContextSetup(context).build();
 		
 		//Located in helper package
-		this.jsonHelper = new JSONStringHelper();//Convert object to JSON String
-		this.mockMvcPerformHelper = new MockMvcPerformHelper();//Lunches mockMvc.perform action
-		//function mockPerform(MockMvc mockMvc,String method, String url, String result, ResultMatcher status, String content)
-		//details in package helper at MockMvcPerformHelper class
+		jsonHelper = new JSONStringHelper();//Convert object to JSON String
+		mockMvcPerformHelper = new MockMvcPerformHelper();//Lunches mockMvc.perform action
 		
 		testClient1 = new Client(1, "Test Company 1");
 		testClient2 = new Client(2, "Test Company 2");
@@ -79,7 +75,7 @@ public class ClientUserControllerTest {
 		testClientUser1 = new ClientUser(1, testUser1, testClient1);
 		testClientUser2 = new ClientUser(2, testUser2, testClient2);
 		
-		testClientUserList =  new ArrayList<ClientUser>();
+		testClientUserList =  new ArrayList<>();
 		testClientUserList.add(testClientUser1);
 		
 		testClientUserRequestObject = new ClientUserRequestObject(testUser2.getEmail(), testClient2.getCompanyName());
@@ -88,249 +84,249 @@ public class ClientUserControllerTest {
 	@Test
 	public void testGetAllClientUsers() throws Exception {
 		when(clientUserServ.findAllClientUsers()).thenReturn(testClientUserList);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 					"GET",
-					"/api/clientUsers",
+					"/clientUsers",
 					jsonHelper.asJSONString(testClientUserList),
 					status().isOk(),
 					null);
 	}
 	
-	@Test
-	public void testGetClientUserByIdSuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testGetClientUserByIdSuccess() {
 		when(clientUserServ.findClientUserById(testClientUser1.getClientUserId())).thenReturn(testClientUser1);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"GET",
-				"/api/clientUser/id/" + testClientUser1.getClientUserId(),
+				"/clientUser/id/" + testClientUser1.getClientUserId(),
 				jsonHelper.asJSONString(testClientUser1),
 				status().isOk(),
 				null);
 	}
 	
-	@Test
-	public void testGetClientUserByIdUnsuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testGetClientUserByIdUnsuccess() {
 		when(clientUserServ.findClientUserById(testClientUser2.getClientUserId())).thenReturn(null);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"GET",
-				"/api/clientUser/id/" + testClientUser2.getClientUserId(),
+				"/clientUser/id/" + testClientUser2.getClientUserId(),
 				"Failed to find Client User by id: " + testClientUser2.getClientUserId(),
 				status().isNotFound(),
 				null);
 	}
 	
-	@Test
-	public void testGetClientUserByUserIdSuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testGetClientUserByUserIdSuccess() {
 		when(userServ.findUserById(testUser1.getUserId())).thenReturn(testUser1);
 		when(clientUserServ.findClientUserByUser(testUser1)).thenReturn(testClientUser1);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"GET",
-				"/api/clientUser/user/id/" + testUser1.getUserId(),
+				"/clientUser/user/id/" + testUser1.getUserId(),
 				jsonHelper.asJSONString(testClientUser1),
 				status().isOk(),
 				null);
 	}
 	
-	@Test
-	public void testGetClientUserByUserIdUnsuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testGetClientUserByUserIdUnsuccess() {
 		when(userServ.findUserById(testUser2.getUserId())).thenReturn(null);
 		when(clientUserServ.findClientUserByUser(null)).thenReturn(null);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"GET",
-				"/api/clientUser/user/id/" + testUser2.getUserId(),
+				"/clientUser/user/id/" + testUser2.getUserId(),
 				"Failed to find Client User by User Id: " + testUser2.getUserId(),
 				status().isNotFound(),
 				null);
 	}
 	
-	@Test
-	public void testGetClientUserByClientIdSuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testGetClientUserByClientIdSuccess() {
 		when(clientServ.findClientById(testClient1.getClientId())).thenReturn(testClient1);
 		when(clientUserServ.findClientUserByClient(testClient1)).thenReturn(testClientUserList);
 		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
 				"GET",
-				"/api/clientUser/client/id/" + testClient1.getClientId(),
+				"/clientUser/client/id/" + testClient1.getClientId(),
 				jsonHelper.asJSONString(testClientUserList),
 				status().isOk(),
 				null);
 	}
 	
-	@Test
-	public void testGetClientUserByClientIdUnsuccess() throws Exception {
-		List<ClientUser> testClientUserListFail = new ArrayList<ClientUser>();
+	@Test @SneakyThrows
+	public void testGetClientUserByClientIdFail() {
+		List<ClientUser> testClientUserListFail = new ArrayList<>();
 		when(clientServ.findClientById(testClient2.getClientId())).thenReturn(null);
 		when(clientUserServ.findClientUserByClient(testClient2)).thenReturn(testClientUserListFail);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"GET",
-				"/api/clientUser/client/id/" + testClient2.getClientId(),
+				"/clientUser/client/id/" + testClient2.getClientId(),
 				"Failed to find Client Users by Client Id: " + testClient2.getClientId(),
 				status().isNotFound(),
 				null);
 	}
 	
-	@Test
-	public void testGetClientUserByUserEmailSuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testGetClientUserByUserEmailSuccess() {
 		when(userServ.findUserByEmail(testUser1.getEmail())).thenReturn(testUser1);
 		when(clientUserServ.findClientUserByUser(testUser1)).thenReturn(testClientUser1);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"GET",
-				"/api/clientUser/user/email/" + testUser1.getEmail(),
+				"/clientUser/user/email/" + testUser1.getEmail(),
 				jsonHelper.asJSONString(testClientUser1),
 				status().isOk(),
 				null);
 	}
 	
-	@Test
-	public void testGetClientUserByUserEmailUnsuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testGetClientUserByUserEmailFail() {
 		when(userServ.findUserByEmail(testUser2.getEmail())).thenReturn(null);
 		when(clientUserServ.findClientUserByUser(null)).thenReturn(null);
 		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
 				"GET",
-				"/api/clientUser/user/email/" + testUser2.getEmail(),
+				"/clientUser/user/email/" + testUser2.getEmail(),
 				"Failed to find Client User by User Email: " + testUser2.getEmail(),
 				status().isNotFound(),
 				null);
 	}
 	
-	@Test
-	public void testGetClientUserByCompanyNameSuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testGetClientUserByCompanyNameSuccess() {
 		when(clientServ.findClientByCompanyName(testClient1.getCompanyName())).thenReturn(testClient1);
 		when(clientUserServ.findClientUserByClient(testClient1)).thenReturn(testClientUserList);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"GET",
-				"/api/clientUser/client/name/" + testClient1.getCompanyName(),
+				"/clientUser/client/name/" + testClient1.getCompanyName(),
 				jsonHelper.asJSONString(testClientUserList),
 				status().isOk(),
 				null);
 	}
 	
-	@Test
-	public void testGetClientUserByCompanyNameUnsuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testGetClientUserByCompanyNameFail() {
 		List<ClientUser> testClientUserListFail = new ArrayList<ClientUser>();
 		when(clientServ.findClientByCompanyName(testClient2.getCompanyName())).thenReturn(null);
 		when(clientUserServ.findClientUserByClient(null)).thenReturn(testClientUserListFail);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"GET",
-				"/api/clientUser/client/name/" + testClient2.getCompanyName(),
+				"/clientUser/client/name/" + testClient2.getCompanyName(),
 				"Failed to find Client Users by Company Name: " + testClient2.getCompanyName(),
 				status().isNotFound(),
 				null);
 	}
 	
-	@Test
-	public void testCreateClientUserSuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testCreateClientUserSuccess() {
 		when(clientServ.findClientByCompanyName(testClient2.getCompanyName())).thenReturn(testClient2);
 		when(userServ.findUserByEmail(testUser2.getEmail())).thenReturn(testUser2);
 		when(clientUserServ.createClientUser(testClient2, testUser2)).thenReturn(testClientUser2);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"POST",
-				"/api/clientUser",
+				"/clientUser",
 				jsonHelper.asJSONString(testClientUser2),
 				status().isCreated(),
 				jsonHelper.asJSONString(testClientUser2));
 	}
 	
-	@Test
-	public void testCreateClientUserUnsuccessByClient() throws Exception {
+	@Test @SneakyThrows
+	public void testCreateClientUserFailByClient() {
 		when(clientServ.findClientByCompanyName(testClient2.getCompanyName())).thenReturn(null);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"POST",
-				"/api/clientUser",
+				"/clientUser",
 				"Failed to create Client User: Company Name '" + testClient2.getCompanyName() + "', doesn't exist in the system",
 				status().isNotFound(),
 				jsonHelper.asJSONString(testClientUser2));
 	}
 	
-	@Test
-	public void testCreateClientUserUnsuccessByUser() throws Exception {
+	@Test @SneakyThrows
+	public void testCreateClientUserFailByUser() {
 		when(clientServ.findClientByCompanyName(testClient2.getCompanyName())).thenReturn(testClient2);
 		when(userServ.findUserByEmail(testUser2.getEmail())).thenReturn(null);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"POST",
-				"/api/clientUser",
+				"/clientUser",
 				"Failed to create Client User: user with email '" + testUser2.getEmail() + "', doesn't exist in the system",
 				status().isNotFound(),
 				jsonHelper.asJSONString(testClientUser2));
 	}
 	
-	@Test
-	public void testCreateClientUserUnsuccessByClientUser() throws Exception {
+	@Test @SneakyThrows
+	public void testCreateClientUserFailByClientUser() {
 		when(clientServ.findClientByCompanyName(testClient2.getCompanyName())).thenReturn(testClient2);
 		when(userServ.findUserByEmail(testUser2.getEmail())).thenReturn(testUser2);
 		when(clientUserServ.createClientUser(testClient2, testUser2)).thenReturn(null);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"POST",
-				"/api/clientUser",
+				"/clientUser",
 				"Failed to create Client User: client user'" + testClientUser2 + "', already exist.",
 				status().isConflict(),
 				jsonHelper.asJSONString(testClientUser2));
 	}
 	
-	@Test
-	public void testCreateClientUserByRequestObjectSuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testCreateClientUserByRequestObjectSuccess() {
 		when(clientServ.findClientByCompanyName(testClientUserRequestObject.getCompanyName())).thenReturn(testClient2);
 		when(userServ.findUserByEmail(testClientUserRequestObject.getEmail())).thenReturn(testUser2);
 		when(clientUserServ.createClientUser(testClient2, testUser2)).thenReturn(testClientUser2);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"POST",
-				"/api/clientUser/request",
+				"/clientUser/request",
 				jsonHelper.asJSONString(testClientUser2),
 				status().isCreated(),
 				jsonHelper.asJSONString(testClientUserRequestObject));
 	}
 	
-	@Test
-	public void testCreateClientUserByRequestObjectUnsuccessByClient() throws Exception {
+	@Test @SneakyThrows
+	public void testCreateClientUserByRequestObjectFailByClient() {
 		when(clientServ.findClientByCompanyName(testClientUserRequestObject.getCompanyName())).thenReturn(null);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"POST",
-				"/api/clientUser/request",
+				"/clientUser/request",
 				"Failed to create Client User: Company Name '" + testClient2.getCompanyName() + "', doesn't exist in the system",
 				status().isNotFound(),
 				jsonHelper.asJSONString(testClientUserRequestObject));
 	}
 	
-	@Test
-	public void testCreateClientUserByRequestObjectUnsuccessByUser() throws Exception {
+	@Test @SneakyThrows
+	public void testCreateClientUserByRequestObjectFailByUser() {
 		when(clientServ.findClientByCompanyName(testClientUserRequestObject.getCompanyName())).thenReturn(testClient2);
 		when(userServ.findUserByEmail(testClientUserRequestObject.getEmail())).thenReturn(null);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"POST",
-				"/api/clientUser/request",
+				"/clientUser/request",
 				"Failed to create Client User: user with email '" + testUser2.getEmail() + "', doesn't exist in the system",
 				status().isNotFound(),
 				jsonHelper.asJSONString(testClientUserRequestObject));
 	}
 	
-	@Test
-	public void testCreateClientUserByRequestObjectUnsuccessByClientUser() throws Exception {
+	@Test @SneakyThrows
+	public void testCreateClientUserByRequestObjectFailByClientUser() {
 		when(clientServ.findClientByCompanyName(testClientUserRequestObject.getCompanyName())).thenReturn(testClient2);
 		when(userServ.findUserByEmail(testClientUserRequestObject.getEmail())).thenReturn(testUser2);
 		when(clientUserServ.createClientUser(testClient2, testUser2)).thenReturn(null);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"POST",
-				"/api/clientUser/request",
+				"/clientUser/request",
 				"Failed to create Client User: client user with user email'" + testClientUserRequestObject.getEmail() + "', already exist.",
 				status().isConflict(),
 				jsonHelper.asJSONString(testClientUserRequestObject));
 	}
 	
-	@Test
-	public void testDeleteClientUserSuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testDeleteClientUserSuccess() {
 		when(clientUserServ.deleteClientUser(testClientUser1)).thenReturn(true);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"DELETE",
-				"/api/clientUser",
+				"/clientUser",
 				"Client User: " + testClientUser1 + ", was deleted",
 				status().isOk(),
 				jsonHelper.asJSONString(testClientUser1));
 	}
 	
-	@Test
-	public void testDeleteClientUserUnsuccess() throws Exception {
+	@Test @SneakyThrows
+	public void testDeleteClientUserFail() {
 		when(clientUserServ.deleteClientUser(testClientUser2)).thenReturn(false);
-		this.mockMvcPerformHelper.mockPerform(this.mockMvc,
+		mockMvcPerformHelper.mockPerform(mockMvc,
 				"DELETE",
-				"/api/clientUser",
+				"/clientUser",
 				"Failed to find Client User with ID: " + testClientUser2.getClientUserId(),
 				status().isNotFound(),
 				jsonHelper.asJSONString(testClientUser2));
