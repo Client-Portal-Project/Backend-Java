@@ -74,8 +74,7 @@ class UserControllerTest {
         //Assign
         String email = "testuser@test.com";
         String password = "password";
-        User user = new User(1, "testuser@test.com",
-                "password", "test", "user", null);
+        User user = new User(1, "testuser@test.com", "password", "test", "user", null);
         Mockito.when(userService.getUserByEmailAndPassword(email, password)).thenReturn(user);
         String token = "JWT";
         Mockito.when(jwtUtil.generateToken(user.getUserId())).thenReturn(token);
@@ -123,17 +122,15 @@ class UserControllerTest {
     @Test
     void editUser() {
         //Assign
-        User before = new User(-1, "testuser@test.com",
-                "password", "test", "user", null);
-        User after = new User(-1, "testuser@test.com",
-                null, "test-1", "user-1", null);
+        User before = new User(-1, "testuser@test.com", "password", "test", "user", null);
+        User after = new User(-1, "testuser@test.com", null, "test-1", "user-1", null);
         Map<String, String> headers = new HashMap<>();
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
         headers.put("authorization", token);
-        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn(JWT.decode(token));
         Mockito.when(userService.editUser(before)).thenReturn(after);
-        ResponseEntity<?> expectedResult = new ResponseEntity(after, HttpStatus.ACCEPTED);
+        ResponseEntity<?> expectedResult = new ResponseEntity<>(after, HttpStatus.ACCEPTED);
 
         //Act
         ResponseEntity<?> actualResult = this.userController.editUser(before, headers);
@@ -145,12 +142,10 @@ class UserControllerTest {
     @Test
     void editUserWhenTokenIsInvalid() {
         //Assign
-        User user = new User(1, "testuser@test.com",
-                "password", "test", "user", null);
+        User user = new User(1, "testuser@test.com", "password", "test", "user", null);
         Map<String, String> headers = new HashMap<>();
         // lacks key-pair of 'authorization' and encoded token
-        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (1), no authorization",
-                HttpStatus.UNAUTHORIZED);
+        ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
 
         //Act
         ResponseEntity<?> actualResult = this.userController.editUser(user, headers);
@@ -161,14 +156,13 @@ class UserControllerTest {
     @Test
     void editUserWhenUserTokenMismatch() {
         //Assign
-        User user = new User(1, "testuser@test.com",
-                "password", "test", "user", null);
+        User user = new User(1, "testuser@test.com", "password", "test", "user", null);
         Map<String, String> headers = new HashMap<>();
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
         headers.put("authorization", token);
-        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
-        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn(JWT.decode(token));
+        ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
 
         //Act
         ResponseEntity<?> actualResult = this.userController.editUser(user, headers);
@@ -186,8 +180,8 @@ class UserControllerTest {
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
         headers.put("authorization", token);
-        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
-        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (3), invalid password",
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn(JWT.decode(token));
+        ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (3), invalid password",
                 HttpStatus.UNAUTHORIZED);
 
         //Act
@@ -206,9 +200,9 @@ class UserControllerTest {
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
         headers.put("authorization", token);
-        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn(JWT.decode(token));
         Mockito.when(userService.editUser(user)).thenReturn(null);
-        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (4), user does not exist",
+        ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (4), user does not exist",
                 HttpStatus.UNAUTHORIZED);
 
         //Act
@@ -222,16 +216,15 @@ class UserControllerTest {
     void deleteUser() {
         //Assign
         Integer userId = -1;
-        User user = new User(-1, "testuser@test.com",
-                "password", "test", "user", null);
+        User user = new User(-1, "testuser@test.com", "password", "test", "user", null);
         Map<String, String> headers = new HashMap<>();
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
         headers.put("authorization", token);
-        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn(JWT.decode(token));
         Mockito.when(userService.findUserById(userId)).thenReturn(user);
 
-        ResponseEntity<?> expectedResult = new ResponseEntity("Valid token, user deleted", HttpStatus.ACCEPTED);
+        ResponseEntity<?> expectedResult = new ResponseEntity<>("Valid token, user deleted", HttpStatus.ACCEPTED);
 
         //Act
         ResponseEntity<?> actualResult = this.userController.deleteUser(userId, headers);
@@ -246,7 +239,7 @@ class UserControllerTest {
         //Assign
         Integer userId = -1;
         Map<String, String> headers = new HashMap<>(); // lacks key-pair of 'authorization' and encoded token
-        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
+        ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
 
         //Act
         ResponseEntity<?> actualResult = this.userController.deleteUser(userId, headers);
@@ -263,9 +256,9 @@ class UserControllerTest {
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
         headers.put("authorization", token);
-        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn((DecodedJWT) JWT.decode(token));
+        Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn(JWT.decode(token));
 
-        ResponseEntity<?> expectedResult = new ResponseEntity("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
+        ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
 
         //Act
         ResponseEntity<?> actualResult = this.userController.deleteUser(userId, headers);

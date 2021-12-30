@@ -18,7 +18,7 @@ pipeline {
                     CMD = 'mvn test > result'
                     sh (script: CMD)
                 }
-                discordSend description: ":memo: Successfully Passed Tests for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
+                discordSend description: ":memo: Successfully Passed Tests for ${JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
             }
         }
         stage('Package') {

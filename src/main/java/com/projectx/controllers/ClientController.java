@@ -43,7 +43,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("company/{companyName}")
+    @GetMapping("name/{companyName}")
     public ResponseEntity<?> getClientByCompanyName(@PathVariable String companyName) {
         Client client = clientServ.findClientByCompanyName(companyName);
         if(client != null) {
