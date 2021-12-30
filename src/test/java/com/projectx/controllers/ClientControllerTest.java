@@ -29,6 +29,7 @@ import com.projectx.services.ClientService;
 public class ClientControllerTest {
 	
 	private MockMvc mockMvc;
+	private final String URI = "/client";
 	
 	@Autowired
 	private WebApplicationContext context;
@@ -63,7 +64,7 @@ public class ClientControllerTest {
 	@Test
 	public void testGetAllClients() throws Exception{
 		when(clientServ.findAllClients()).thenReturn(testClientList);
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/client")
+		this.mockMvc.perform(MockMvcRequestBuilders.get(URI)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -74,7 +75,7 @@ public class ClientControllerTest {
 	@Test
 	public void testGetClientByIdSuccess() throws Exception{
 		when(clientServ.findClientById(testClient1.getClientId())).thenReturn(testClient1);
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/client/id/" + testClient1.getClientId())
+		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/id/" + testClient1.getClientId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -83,10 +84,10 @@ public class ClientControllerTest {
 	}
 	
 	@Test
-	public void testGetClientByIdUnsuccess() throws Exception{
+	public void testGetClientByIdFail() throws Exception{
 		int testId = 100;
 		when(clientServ.findClientById(testId)).thenReturn(null);
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/client/id/" + testId)
+		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/id/" + testId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
@@ -97,7 +98,7 @@ public class ClientControllerTest {
 	@Test
 	public void testGetClientByCompanyNameSuccess() throws Exception{
 		when(clientServ.findClientByCompanyName("Test1")).thenReturn(testClient1);
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/client/name/" + testClient1.getCompanyName())
+		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/name/" + testClient1.getCompanyName())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -106,10 +107,10 @@ public class ClientControllerTest {
 	}
 	
 	@Test
-	public void testGetClientByCompanyNameUnsuccess() throws Exception{
+	public void testGetClientByCompanyNameFail() throws Exception{
 		String testCompanyName = "TestFail";
 		when(clientServ.findClientByCompanyName(testCompanyName)).thenReturn(null);
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/client/name/" + testCompanyName)
+		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/name/" + testCompanyName)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
@@ -121,7 +122,7 @@ public class ClientControllerTest {
 	public void testCreateClientSuccess() throws Exception {
 		Client returnClient = new Client(2, "Test2");
 		when(clientServ.createClient(testClient2)).thenReturn(returnClient);
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/client")
+		this.mockMvc.perform(MockMvcRequestBuilders.post(URI)
 				.content(asJSONString(testClient2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
@@ -131,10 +132,9 @@ public class ClientControllerTest {
 	}
 	
 	@Test
-	public void testCreateClientUnsuccess() throws Exception {
-		Client returnClient = null;
-		when(clientServ.createClient(testClient1)).thenReturn(returnClient);
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/client")
+	public void testCreateClientFail() throws Exception {
+		when(clientServ.createClient(testClient1)).thenReturn(null);
+		this.mockMvc.perform(MockMvcRequestBuilders.post(URI)
 				.content(asJSONString(testClient1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
@@ -147,7 +147,7 @@ public class ClientControllerTest {
 	public void testEditClientSuccess() throws Exception {
 		Client returnClient = new Client(2, "TestEdit");
 		when(clientServ.editClient(testClient2)).thenReturn(returnClient);
-		this.mockMvc.perform(MockMvcRequestBuilders.put("/client")
+		this.mockMvc.perform(MockMvcRequestBuilders.put(URI)
 				.content(asJSONString(testClient2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
@@ -157,10 +157,9 @@ public class ClientControllerTest {
 	}
 	
 	@Test
-	public void testEditClientUnsuccess() throws Exception {
-		Client returnClient = null;
-		when(clientServ.editClient(testClient1)).thenReturn(returnClient);
-		this.mockMvc.perform(MockMvcRequestBuilders.put("/client")
+	public void testEditClientFail() throws Exception {
+		when(clientServ.editClient(testClient1)).thenReturn(null);
+		this.mockMvc.perform(MockMvcRequestBuilders.put(URI)
 				.content(asJSONString(testClient1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
@@ -172,7 +171,7 @@ public class ClientControllerTest {
 	@Test
 	public void testDeleteClientSuccess() throws Exception {
 		when(clientServ.deleteClient(testClient1)).thenReturn(true);
-		this.mockMvc.perform(MockMvcRequestBuilders.delete("/client")
+		this.mockMvc.perform(MockMvcRequestBuilders.delete(URI)
 				.content(asJSONString(testClient1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
@@ -182,9 +181,9 @@ public class ClientControllerTest {
 	}
 	
 	@Test
-	public void testDeleteClientUnsuccess() throws Exception {
+	public void testDeleteClientFail() throws Exception {
 		when(clientServ.deleteClient(testClient2)).thenReturn(false);
-		this.mockMvc.perform(MockMvcRequestBuilders.delete("/client")
+		this.mockMvc.perform(MockMvcRequestBuilders.delete(URI)
 				.content(asJSONString(testClient2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))

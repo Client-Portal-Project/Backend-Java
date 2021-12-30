@@ -11,16 +11,6 @@ pipeline {
     }
 
     stages {
-        stage('Unit Test') {
-            steps {
-                script{
-                    CURR = "Unit Testing"
-                    CMD = 'mvn test'
-                    sh (script: CMD)
-                }
-                discordSend description: ":memo: Successfully Passed Tests for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
-            }
-        }
         stage('Package') {
             steps {
                 script {
@@ -57,6 +47,16 @@ pipeline {
                         discordSend description: ":unlock: Passed Static Analysis of ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
                     }
                 }
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                script{
+                    CURR = "Unit Testing"
+                    CMD = 'mvn test > result'
+                    sh (script: CMD)
+                }
+                discordSend description: ":memo: Successfully Passed Tests for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
             }
         }
     }
