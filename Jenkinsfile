@@ -18,7 +18,7 @@ pipeline {
                     CMD = 'mvn test > result'
                     sh (script: CMD)
                 }
-                discordSend description: ":memo: Successfully Passed Tests for ${JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
+                discordSend description: ":memo: Successfully Passed Tests for ${JOB_NAME}", result: currentBuild.currentResult, webhookURL: WEBHO_JA
             }
         }
         stage('Package') {
@@ -28,7 +28,7 @@ pipeline {
                     CMD = 'mvn -DskipTests package > result'
                     sh (script: CMD)
                 }
-                discordSend description: ":package: Packaged .jar for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
+                discordSend description: ":package: Packaged .jar for ${JOB_NAME}", result: currentBuild.currentResult, webhookURL: WEBHO_JA
             }
         }
         stage('Static Analysis') {
@@ -54,7 +54,7 @@ pipeline {
                             writeFile(file: 'result', text: "https://sonarcloud.io/dashboard?id=Backend-Java")
                             error('Quality Gate Failed')
                         }
-                        discordSend description: ":unlock: Passed Static Analysis of ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
+                        discordSend description: ":unlock: Passed Static Analysis of ${JOB_NAME}", result: currentBuild.currentResult, webhookURL: WEBHO_JA
                     }
                 }
             }
