@@ -2,7 +2,7 @@ package com.projectx.controllers;
 
 import com.projectx.DTOs.ResponseFile;
 import com.projectx.models.File;
-import com.projectx.service.FileService;
+import com.projectx.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

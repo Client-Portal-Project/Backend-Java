@@ -1,4 +1,4 @@
-package com.projectx.service;
+package com.projectx.services;
 
 import java.io.IOException;
 import java.util.stream.Stream;

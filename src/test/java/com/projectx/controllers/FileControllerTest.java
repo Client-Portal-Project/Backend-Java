@@ -1,7 +1,7 @@
 package com.projectx.controllers;
 
 import com.projectx.models.File;
-import com.projectx.service.FileService;
+import com.projectx.services.FileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
