@@ -2,6 +2,7 @@ package com.projectx.controllers;
 
 import java.util.List;
 
+import com.projectx.Driver;
 import com.projectx.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,11 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.projectx.models.Client;
 import com.projectx.services.ClientService;
-import com.projectx.utility.CrossOriginUtil;
 
 @RestController
 @RequestMapping("client")
-@CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
+@CrossOrigin(value = Driver.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ClientController {
     @Autowired
     private ClientService clientServ;

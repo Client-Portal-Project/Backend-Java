@@ -4,9 +4,9 @@
  */
 package com.projectx.controllers;
 
+import com.projectx.Driver;
 import com.projectx.models.Applicant;
 import com.projectx.services.ApplicantService;
-import com.projectx.utility.CrossOriginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController("applicantController")
 @RequestMapping(value = "applicant")
-@CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
+@CrossOrigin(value = Driver.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ApplicantController {
     @Autowired
     private ApplicantService applicantService;

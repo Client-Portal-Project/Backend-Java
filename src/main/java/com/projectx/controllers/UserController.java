@@ -1,9 +1,9 @@
 package com.projectx.controllers;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.projectx.Driver;
 import com.projectx.models.User;
 import com.projectx.services.UserService;
-import com.projectx.utility.CrossOriginUtil;
 import com.projectx.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @RestController("userController")
 @RequestMapping("user")
-@CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
+@CrossOrigin(value = Driver.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class UserController {
     @Autowired
     private UserService userService;
