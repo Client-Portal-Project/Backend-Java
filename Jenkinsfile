@@ -76,7 +76,7 @@ pipeline {
             }
         }
         failure {
-            ERR = readFile('result')
+            script { ERR = readFile('result') }
             sh 'echo ${BUILD_URL}'
             discordSend title: "**:boom: ${env.JOB_NAME} Failure in ${CURR} Stage**",
                         description: "*${CMD}*\n\n${ERR}",
