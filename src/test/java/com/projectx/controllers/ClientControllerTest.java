@@ -49,13 +49,13 @@ public class ClientControllerTest {
 	}
 	
 	@BeforeEach
-	void setUp() throws Exception {
-		this.mockMvc = webAppContextSetup(context).build();
+	void setUp(){
+		mockMvc = webAppContextSetup(context).build();
 		
 		testClient1 = new Client(1, "Test1");
 		testClient2 = new Client(null, "Test2");
 		
-		testClientList = new ArrayList<Client>();
+		testClientList = new ArrayList<>();
 		testClientList.add(testClient1);
 		
 	}

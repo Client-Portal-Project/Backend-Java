@@ -58,9 +58,9 @@ pipeline {
                 }
                 timeout(time: 5, unit: 'MINUTES') {
                     script {
-                        ERR = readJSON text: "${waitForQualityGate()}"
+                        ERR = waitForQualityGate()
                         if (ERR.status != 'OK') {
-                            writeFile(file: 'result', text: "${ERR.conditions}")
+                            writeFile(file: 'result', text: "https://sonarcloud.io/dashboard?id=Backend-Java")
                             error('Quality Gate Failed')
                         }
                         discordSend description: ":unlock: Passed Static Analysis of ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
@@ -91,7 +91,7 @@ pipeline {
             discordSend title: "**:boom: ${env.JOB_NAME} Failure in ${CURR} Stage**",
                         description: "*${CMD}*\n\n${ERR}",
                         footer: "Follow title URL for full console output",
-                        link: env.BUILD_URL + "console", image: 'https://jenkins.io/images/logos/fire/256.png',
+                        link: BUILD_URL + "console", image: 'https://jenkins.io/images/logos/fire/256.png',
                         result: currentBuild.currentResult, webhookURL: WEBHO_JA
         }
     }
