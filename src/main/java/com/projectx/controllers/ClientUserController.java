@@ -41,7 +41,7 @@ public class ClientUserController {
 	// Currently, for testing purposes to see the User data in Postman
 	@GetMapping
 	public ResponseEntity<List<ClientUser>> getAllClientUsers() {
-		return new ResponseEntity<List<ClientUser>>(this.clientUserServ.findAllClientUsers(), HttpStatus.OK);
+		return new ResponseEntity<>(this.clientUserServ.findAllClientUsers(), HttpStatus.OK);
 	}
 	
 	//Getting ClientUser by ClientUser ID

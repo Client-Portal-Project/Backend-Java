@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script{
                     CURR = "Unit Testing"
-                    CMD = 'mvn test > result'
+                    CMD = 'mvn test'
                     sh (script: CMD)
                 }
                 discordSend description: ":memo: Successfully Passed Tests for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
