@@ -16,11 +16,7 @@ pipeline {
                 script{
                     CURR = "Unit Testing"
                     CMD = 'mvn test > result'
-                    if (sh(script: CMD, returnStatus: true) != 0) {
-                        ERR = readFile('result').trim()
-                        CMD = CMD.split(' > ')[0].trim()
-                        error('Failure')
-                    }
+                    sh (script: CMD)
                 }
                 discordSend description: ":memo: Successfully Passed Tests for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
             }
@@ -31,10 +27,7 @@ pipeline {
                 script {
                     CURR = 'Packaging'
                     CMD = 'mvn -DskipTests package > result'
-                    if (sh(script: CMD, returnStatus: true) != 0) {
-                            ERR = readFile('result').trim()
-                            error('Packaging Failure')
-                        }
+                    sh (script: CMD)
                 }
                 discordSend description: ":package: Packaged .jar for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
             }
@@ -76,7 +69,7 @@ pipeline {
             }
         }
         failure {
-            script { ERR = readFile('result') }
+            script { ERR = readFile('result').trim() }
             sh 'echo ${BUILD_URL}'
             discordSend title: "**:boom: ${env.JOB_NAME} Failure in ${CURR} Stage**",
                         description: "*${CMD}*\n\n${ERR}",
