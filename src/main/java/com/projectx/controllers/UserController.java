@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController("userController")
-@RequestMapping(value = "api")
+@RequestMapping("user")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class UserController {
     @Autowired
@@ -33,7 +33,7 @@ public class UserController {
      * @return http response with a string message in a {@link ResponseEntity} that contains a CREATED request if the
      * user is added, else a CONFLICT request.
      */
-    @PostMapping("user")
+    @PostMapping
     public ResponseEntity<String> createUser(@RequestBody User user) {
         ResponseEntity<String> response;
         User newUser = this.userService.createUser(user);
@@ -75,7 +75,7 @@ public class UserController {
      * @return http response with a list of user objects in a {@link ResponseEntity} that contains an ACCEPTED
      * request; this endpoint is intended for verifying users in the database via Postman, but may be deleted.
      */
-    @GetMapping("user")
+    @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(this.userService.findAllUsers(), HttpStatus.ACCEPTED);
     }
@@ -89,7 +89,7 @@ public class UserController {
      * @return http response with a user object in a {@link ResponseEntity} that contains an ACCEPTED request if the
      * user was updated, else response with a string message and an UNAUTHORIZED request.
      */
-    @PutMapping("user")
+    @PutMapping
     public ResponseEntity<?> editUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
         ResponseEntity<?> response;
         DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));
@@ -126,7 +126,7 @@ public class UserController {
      * @return http response with a string message in a {@link ResponseEntity} that contains an ACCEPTED request if the
      * user was updated, else an UNAUTHORIZED request.
      */
-    @DeleteMapping("user/{userId}")
+    @DeleteMapping("{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
         ResponseEntity<String> response;
         DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));

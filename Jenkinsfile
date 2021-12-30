@@ -21,7 +21,6 @@ pipeline {
                 discordSend description: ":memo: Successfully Passed Tests for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
             }
         }
-
         stage('Package') {
             steps {
                 script {
@@ -32,7 +31,6 @@ pipeline {
                 discordSend description: ":package: Packaged .jar for ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
             }
         }
-
         stage('Static Analysis') {
             environment {
                 SCAN = tool 'sonarcloud'
@@ -63,14 +61,11 @@ pipeline {
         }
     }
     post {
-        always {
-            script{
-                CMD = CMD.split(' > ')[0].trim()
-            }
-        }
         failure {
-            script { ERR = readFile('result').trim() }
-            sh 'echo ${BUILD_URL}'
+            script {
+                CMD = CMD.split(' > ')[0].trim()
+                ERR = readFile('result').trim()
+            }
             discordSend title: "**:boom: ${env.JOB_NAME} Failure in ${CURR} Stage**",
                         description: "*${CMD}*\n\n${ERR}",
                         footer: "Follow title URL for full console output",
