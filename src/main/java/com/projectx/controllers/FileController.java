@@ -28,7 +28,7 @@ public class FileController {
         this.storageService = storageService;
     }
 
-    @PostMapping
+    @PostMapping("{file}")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file){
         String message = "";
         try{
@@ -48,7 +48,7 @@ public class FileController {
         List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
-                    .path("/api/files/")
+                    .path("/files/")
                     .path(dbFile.getId())
                     .toUriString();
 

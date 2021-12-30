@@ -86,7 +86,7 @@ public class ClientUserControllerTest {
 		when(clientUserServ.findAllClientUsers()).thenReturn(testClientUserList);
 		mockMvcPerformHelper.mockPerform(mockMvc,
 					"GET",
-					"/clientUsers",
+					"/clientUser/all",
 					jsonHelper.asJSONString(testClientUserList),
 					status().isOk(),
 					null);

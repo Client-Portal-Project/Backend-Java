@@ -24,7 +24,7 @@ import com.projectx.utility.ClientUserRequestObject;
 import com.projectx.utility.CrossOriginUtil;
 
 @RestController("clientUserController")
-@RequestMapping("clientUsers")
+@RequestMapping("clientUser")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ClientUserController {
 
@@ -38,7 +38,7 @@ public class ClientUserController {
 	private UserService userServ;
 	
 	// Currently, for testing purposes to see the User data in Postman
-	@GetMapping("/clientUsers")
+	@GetMapping("/all")
 	public ResponseEntity<List<ClientUser>> getAllClientUsers() {
 		return new ResponseEntity<>(this.clientUserServ.findAllClientUsers(), HttpStatus.OK);
 	}
