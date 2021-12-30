@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Set;
 
-/*
-    Need class describes the needs for an application
-    given by a specific client
+/**
+ * Need class describes the needs for an application given by a specific client
  */
 
 @Data

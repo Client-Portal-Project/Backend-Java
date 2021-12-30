@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Set;
 
-/*
-    Will handle the list of skills that applicants can have
-    and clients can search for
+/**
+ * Will handle the list of skills that applicants can have and clients can search for
  */
 
 @Data

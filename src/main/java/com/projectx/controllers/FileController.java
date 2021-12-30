@@ -20,12 +20,8 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class FileController {
 
-    private final FileService fileService;
-
     @Autowired
-    public FileController(FileService fileService){
-        this.fileService = fileService;
-    }
+    private FileService fileService;
 
     @PostMapping("{file}")
     public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile file){
@@ -58,9 +54,7 @@ public class FileController {
 
     @GetMapping("{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable String id) {
-        System.out.println(id);
         File file = fileService.getFile(id);
-        System.out.println(file);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
                 .body(file.getData());

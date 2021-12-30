@@ -102,7 +102,6 @@ public class ApplicantController {
     @GetMapping("{id}")
     public ResponseEntity<Applicant> getAllApplicants(@PathVariable int id) {
         Applicant applicant = applicantService.getApplicant(id);
-        System.out.println(applicant);
         if (applicant == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
