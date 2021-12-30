@@ -62,7 +62,7 @@ public class ClientControllerTest {
 	@Test @SneakyThrows
 	public void testGetAllClients() {
 		when(clientServ.findAllClients()).thenReturn(testClientList);
-		this.mockMvc.perform(MockMvcRequestBuilders.get(URI)
+		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/all")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -97,7 +97,7 @@ public class ClientControllerTest {
 	@Test @SneakyThrows
 	public void testGetClientByCompanyNameSuccess() {
 		when(clientServ.findClientByCompanyName("Test1")).thenReturn(testClient1);
-		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/name/" + testClient1.getCompanyName())
+		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/company/" + testClient1.getCompanyName())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -109,7 +109,7 @@ public class ClientControllerTest {
 	public void testGetClientByCompanyNameFail() {
 		String testCompanyName = "TestFail";
 		when(clientServ.findClientByCompanyName(testCompanyName)).thenReturn(null);
-		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/name/" + testCompanyName)
+		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/company/" + testCompanyName)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())

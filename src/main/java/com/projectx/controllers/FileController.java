@@ -27,11 +27,11 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @PostMapping
-    public ResponseEntity uploadFile(@RequestParam("file") MultipartFile file){
+    @PostMapping("{file}")
+    public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile file){
         try{
             fileService.store(file);
-            return ResponseEntity.status(200).body(true);
+            return ResponseEntity.ok().body(true);
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(false);
         }

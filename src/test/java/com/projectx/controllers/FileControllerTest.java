@@ -41,7 +41,7 @@ public class FileControllerTest {
     void testUploadFile() throws Exception {
         MockMultipartFile viable = new MockMultipartFile("file", expected.getName(), expected.getType(),
                 expected.getData());
-        mvc.perform(MockMvcRequestBuilders.multipart("/file")
+        mvc.perform(MockMvcRequestBuilders.multipart("/file/"+viable)
                 .file(viable))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));

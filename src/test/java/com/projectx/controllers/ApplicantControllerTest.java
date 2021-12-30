@@ -4,6 +4,7 @@ import com.projectx.helper.JSONStringHelper;
 import com.projectx.models.Applicant;
 import com.projectx.models.User;
 import com.projectx.services.ApplicantService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 public class ApplicantControllerTest {
+    private static final String URI = "/applicant";
+
     private Applicant expected;
     private MockMvc mvc;
     private JSONStringHelper jsonHelper;
@@ -42,11 +45,11 @@ public class ApplicantControllerTest {
         expected = new Applicant(1, dummy, dummy, dummy, dummy, user);
     }
 
-    @Test
-    void testCreateApplicant() throws Exception {
+    @Test @SneakyThrows
+    void testCreateApplicant() {
         when(applicantService.createApplicant(expected)).thenReturn(expected);
 
-        mvc.perform(MockMvcRequestBuilders.post("/applicant")
+        mvc.perform(MockMvcRequestBuilders.post(URI)
                 .content(jsonHelper.asJSONString(expected))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -57,7 +60,7 @@ public class ApplicantControllerTest {
         wrong.setUser(null);
         when(applicantService.createApplicant(wrong)).thenReturn(null);
 
-        mvc.perform(MockMvcRequestBuilders.post("/applicant")
+        mvc.perform(MockMvcRequestBuilders.post(URI)
                         .content(jsonHelper.asJSONString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -65,11 +68,11 @@ public class ApplicantControllerTest {
                 .andExpect(content().string(""));
     }
 
-    @Test
-    void testUpdateApplicant() throws Exception {
+    @Test @SneakyThrows
+    void testUpdateApplicant() {
         when(applicantService.updateApplicant(expected)).thenReturn(expected);
 
-        mvc.perform(MockMvcRequestBuilders.put("/applicant")
+        mvc.perform(MockMvcRequestBuilders.put(URI)
                 .content(jsonHelper.asJSONString(expected))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -80,7 +83,7 @@ public class ApplicantControllerTest {
         Applicant wrong = new Applicant();
         when(applicantService.updateApplicant(wrong)).thenReturn(null);
 
-        mvc.perform(MockMvcRequestBuilders.put("/applicant")
+        mvc.perform(MockMvcRequestBuilders.put(URI)
                         .content(jsonHelper.asJSONString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -88,12 +91,11 @@ public class ApplicantControllerTest {
                 .andExpect(content().string(""));
     }
 
-    @Test
-    void testDeleteApplicant() throws Exception {
+    @Test @SneakyThrows
+    void testDeleteApplicant() {
         //expected is already in the database
         when(applicantService.getApplicant(expected.getApplicantId())).thenReturn(expected);
-
-        mvc.perform(MockMvcRequestBuilders.delete("/applicant")
+        mvc.perform(MockMvcRequestBuilders.delete(URI)
                         .content(jsonHelper.asJSONString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -105,7 +107,7 @@ public class ApplicantControllerTest {
         wrong.setApplicantId(0);
         when(applicantService.getApplicant(0)).thenReturn(null);
 
-        mvc.perform(MockMvcRequestBuilders.delete("/applicant")
+        mvc.perform(MockMvcRequestBuilders.delete(URI)
                         .content(jsonHelper.asJSONString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -113,11 +115,11 @@ public class ApplicantControllerTest {
                 .andExpect(content().string("false"));
     }
 
-    @Test
-    void testGetApplicant() throws Exception {
+    @Test @SneakyThrows
+    void testGetApplicant() {
         when(applicantService.getApplicant(expected.getUser().getUserId())).thenReturn(expected);
 
-        mvc.perform(MockMvcRequestBuilders.get("/applicant/{id}", 1)
+        mvc.perform(MockMvcRequestBuilders.get(URI + "/{id}", 1)
                         .param("id", "1"))
                 .andExpect(status().isFound())
                 .andExpect(content().json(jsonHelper.asJSONString(expected)));
@@ -125,18 +127,18 @@ public class ApplicantControllerTest {
         //no applicant with user id of 2 exists in database
         when(applicantService.getApplicant(2)).thenReturn(null);
 
-        mvc.perform(MockMvcRequestBuilders.get("/applicant/{id}", 2)
+        mvc.perform(MockMvcRequestBuilders.get(URI + "/{id}", 2)
                         .param("id", "2"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(""));
     }
 
-    @Test
-    void testGetAllApplicants() throws Exception {
-        List<Applicant> list = new ArrayList();
+    @Test @SneakyThrows
+    void testGetAllApplicants() {
+        List<Applicant> list = new ArrayList<>();
         list.add(expected);
         when(applicantService.getAllApplicants()).thenReturn(list);
-        mvc.perform(MockMvcRequestBuilders.get("/applicant"))
+        mvc.perform(MockMvcRequestBuilders.get(URI))
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonHelper.asJSONString(list)));
     }
