@@ -4,7 +4,6 @@ import com.projectx.models.File;
 import com.projectx.service.FileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,7 +41,7 @@ public class FileControllerTest {
     void testUploadFile() throws Exception {
         MockMultipartFile viable = new MockMultipartFile("file", expected.getName(), expected.getType(),
                 expected.getData());
-        mvc.perform(MockMvcRequestBuilders.multipart("/api/upload")
+        mvc.perform(MockMvcRequestBuilders.multipart("/file")
                 .file(viable))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
@@ -50,7 +49,7 @@ public class FileControllerTest {
 
     @Test
     void testGetListFiles() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/files"))
+        mvc.perform(MockMvcRequestBuilders.get("/file"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("[]"));
     }
@@ -58,7 +57,7 @@ public class FileControllerTest {
     @Test
     void testGetFile() throws Exception {
         when(fileService.getFile(expected.getId())).thenReturn(expected);
-        mvc.perform(MockMvcRequestBuilders.get("/api/files/{id}", expected.getId())
+        mvc.perform(MockMvcRequestBuilders.get("/file/{id}", expected.getId())
                 .param("id", expected.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())

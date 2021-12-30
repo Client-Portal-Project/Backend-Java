@@ -43,5 +43,5 @@ public class Need {
             name = "NeedSkill",
             joinColumns = @JoinColumn(name = "needId"),
             inverseJoinColumns = @JoinColumn(name = "skillId"))
-    Set<Skill> needSkills;
+    Set<Skill> skills;
 }

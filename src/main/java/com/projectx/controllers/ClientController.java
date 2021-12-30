@@ -91,7 +91,7 @@ public class ClientController {
     public ResponseEntity<User> getClientUser(@RequestBody Client client, @PathVariable int id) {
         User user = this.clientServ.findClientUser(client, id);
         if (user == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(user, HttpStatus.FOUND);
         }

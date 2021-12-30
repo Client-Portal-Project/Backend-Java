@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
+@Service("fileService")
 public class FileService {
 
     private FileDao fileRepository;

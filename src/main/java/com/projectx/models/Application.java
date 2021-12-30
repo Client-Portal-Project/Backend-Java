@@ -27,7 +27,7 @@ public class Application {
     @Column
     private Integer status;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Owner owner;
+    private Applicant applicant;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ApplicantOccupation applicantOccupation;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

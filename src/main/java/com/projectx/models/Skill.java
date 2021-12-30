@@ -26,6 +26,4 @@ public class Skill {
     private String skillName;
     @ManyToMany(mappedBy = "applicantSkills")
     Set<Applicant> applicants;
-    @ManyToMany(mappedBy = "needSkills")
-    Set<Need> needs;
 }

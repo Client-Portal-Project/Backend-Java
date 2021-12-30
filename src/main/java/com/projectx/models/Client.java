@@ -26,11 +26,16 @@ public class Client {
     @JoinTable(
             name = "ClientUser",
             joinColumns = @JoinColumn(name = "clientId"),
-            inverseJoinColumns = @JoinColumn(name = "applicantId"))
+            inverseJoinColumns = @JoinColumn(name = "userId"))
     Set<User> clientUser;
 
     public Client(Integer clientId, String companyName) {
         this.clientId=clientId;
+        this.companyName=companyName;
+        this.clientUser=new HashSet<>();
+    }
+
+    public Client(String companyName) {
         this.companyName=companyName;
         this.clientUser=new HashSet<>();
     }

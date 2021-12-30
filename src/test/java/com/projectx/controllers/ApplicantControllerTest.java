@@ -46,7 +46,7 @@ public class ApplicantControllerTest {
     void testCreateApplicant() throws Exception {
         when(applicantService.createApplicant(expected)).thenReturn(expected);
 
-        mvc.perform(MockMvcRequestBuilders.post("/api/applicant")
+        mvc.perform(MockMvcRequestBuilders.post("/applicant")
                 .content(jsonHelper.asJSONString(expected))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -57,7 +57,7 @@ public class ApplicantControllerTest {
         wrong.setUser(null);
         when(applicantService.createApplicant(wrong)).thenReturn(null);
 
-        mvc.perform(MockMvcRequestBuilders.post("/api/applicant")
+        mvc.perform(MockMvcRequestBuilders.post("/applicant")
                         .content(jsonHelper.asJSONString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -69,17 +69,19 @@ public class ApplicantControllerTest {
     void testUpdateApplicant() throws Exception {
         when(applicantService.updateApplicant(expected)).thenReturn(expected);
 
-        mvc.perform(MockMvcRequestBuilders.put("/api/applicant")
+        mvc.perform(MockMvcRequestBuilders.put("/applicant")
                 .content(jsonHelper.asJSONString(expected))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonHelper.asJSONString(expected)));
 
-        when(applicantService.updateApplicant(null)).thenReturn(null);
+        //try to update when applicant is not in the database
+        Applicant wrong = new Applicant();
+        when(applicantService.updateApplicant(wrong)).thenReturn(null);
 
-        mvc.perform(MockMvcRequestBuilders.put("/api/applicant")
-                        .content(jsonHelper.asJSONString(null))
+        mvc.perform(MockMvcRequestBuilders.put("/applicant")
+                        .content(jsonHelper.asJSONString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -91,7 +93,7 @@ public class ApplicantControllerTest {
         //expected is already in the database
         when(applicantService.getApplicant(expected.getApplicantId())).thenReturn(expected);
 
-        mvc.perform(MockMvcRequestBuilders.delete("/api/applicant")
+        mvc.perform(MockMvcRequestBuilders.delete("/applicant")
                         .content(jsonHelper.asJSONString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -103,7 +105,7 @@ public class ApplicantControllerTest {
         wrong.setApplicantId(0);
         when(applicantService.getApplicant(0)).thenReturn(null);
 
-        mvc.perform(MockMvcRequestBuilders.delete("/api/applicant")
+        mvc.perform(MockMvcRequestBuilders.delete("/applicant")
                         .content(jsonHelper.asJSONString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -115,7 +117,7 @@ public class ApplicantControllerTest {
     void testGetApplicant() throws Exception {
         when(applicantService.getApplicant(expected.getUser().getUserId())).thenReturn(expected);
 
-        mvc.perform(MockMvcRequestBuilders.get("/api/applicant/{id}", 1)
+        mvc.perform(MockMvcRequestBuilders.get("/applicant/{id}", 1)
                         .param("id", "1"))
                 .andExpect(status().isFound())
                 .andExpect(content().json(jsonHelper.asJSONString(expected)));
@@ -123,7 +125,7 @@ public class ApplicantControllerTest {
         //no applicant with user id of 2 exists in database
         when(applicantService.getApplicant(2)).thenReturn(null);
 
-        mvc.perform(MockMvcRequestBuilders.get("/api/applicant/{id}", 2)
+        mvc.perform(MockMvcRequestBuilders.get("/applicant/{id}", 2)
                         .param("id", "2"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(""));
@@ -134,7 +136,7 @@ public class ApplicantControllerTest {
         List<Applicant> list = new ArrayList();
         list.add(expected);
         when(applicantService.getAllApplicants()).thenReturn(list);
-        mvc.perform(MockMvcRequestBuilders.get("/api/applicant"))
+        mvc.perform(MockMvcRequestBuilders.get("/applicant"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonHelper.asJSONString(list)));
     }
