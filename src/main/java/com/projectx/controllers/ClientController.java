@@ -23,22 +23,18 @@ import com.projectx.utility.CrossOriginUtil;
 @RequestMapping("client")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ClientController {
-    private ClientService clientServ;
-
     @Autowired
-    public ClientController(ClientService clientServ) {
-        this.clientServ = clientServ;
-    }
+    private ClientService clientServ;
 
     // Currently, for testing purposes to see the User data in Postman
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
-    	return new ResponseEntity<List<Client>>(this.clientServ.findAllClients(), HttpStatus.OK);
+    	return new ResponseEntity<>(clientServ.findAllClients(), HttpStatus.OK);
     } 
 
-    @GetMapping("id/{clientId}")
+    @GetMapping("{clientId}")
     public ResponseEntity<?> getClientById(@PathVariable Integer clientId) {
-        Client client = this.clientServ.findClientById(clientId);
+        Client client = clientServ.findClientById(clientId);
         if(client != null) {
            return new ResponseEntity<Client>(client, HttpStatus.OK);
         } else {
@@ -46,9 +42,9 @@ public class ClientController {
         }
     }
 
-    @GetMapping("name/{companyName}")
+    @GetMapping("{companyName}")
     public ResponseEntity<?> getClientByCompanyName(@PathVariable String companyName) {
-        Client client = this.clientServ.findClientByCompanyName(companyName);
+        Client client = clientServ.findClientByCompanyName(companyName);
         if(client != null) {
         	return new ResponseEntity<Client>(client, HttpStatus.OK);
         } else {
@@ -58,7 +54,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<?> createClient(@RequestBody Client client) {
-        Client newClient = this.clientServ.createClient(client);
+        Client newClient = clientServ.createClient(client);
         if(newClient != null) {
         	return new ResponseEntity<Client>(newClient, HttpStatus.CREATED);
         } else {
@@ -68,7 +64,7 @@ public class ClientController {
     
     @PutMapping
     public ResponseEntity<?> editClient(@RequestBody Client client) {
-    	Client updateClient = this.clientServ.editClient(client);
+    	Client updateClient = clientServ.editClient(client);
     	if(updateClient == null) {
     		return new ResponseEntity<String>("Failed to find Client by Id: " + client.getClientId(), HttpStatus.NOT_FOUND);
     	}
@@ -76,8 +72,8 @@ public class ClientController {
     }
     
     @DeleteMapping
-    public ResponseEntity<String> deleteClioent(@RequestBody Client client) {	
-    	boolean deleted = this.clientServ.deleteClient(client);
+    public ResponseEntity<String> deleteClient(@RequestBody Client client) {
+    	boolean deleted = clientServ.deleteClient(client);
     	if(deleted) {
     		return new ResponseEntity<String>("Client: " + client + ", was deleted", HttpStatus.OK);
     	}
