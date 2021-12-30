@@ -63,7 +63,7 @@ public class ClientControllerTest {
 		
 	}
 	
-	@SneakyThrows @Test
+	@Test @SneakyThrows
 	public void testGetAllClients() {
 		when(clientServ.findAllClients()).thenReturn(testClientList);
 		this.mockMvc.perform(MockMvcRequestBuilders.get(URI)
@@ -74,7 +74,7 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClientList)));
 	}
 	
-	@SneakyThrows @Test
+	@Test @SneakyThrows
 	public void testGetClientByIdSuccess() {
 		when(clientServ.findClientById(testClient1.getClientId())).thenReturn(testClient1);
 		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/id/" + testClient1.getClientId())
@@ -85,8 +85,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClient1)));
 	}
 	
-	@Test
-	public void testGetClientByIdFail() throws Throwable {
+	@Test @SneakyThrows
+	public void testGetClientByIdFail() {
 		int testId = 100;
 		when(clientServ.findClientById(testId)).thenReturn(null);
 		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/id/" + testId)
@@ -97,8 +97,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by id: " + testId));
 	}
 	
-	@Test
-	public void testGetClientByCompanyNameSuccess() throws Throwable {
+	@Test @SneakyThrows
+	public void testGetClientByCompanyNameSuccess() {
 		when(clientServ.findClientByCompanyName("Test1")).thenReturn(testClient1);
 		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/name/" + testClient1.getCompanyName())
 				.contentType(MediaType.APPLICATION_JSON)
@@ -108,8 +108,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClient1)));
 	}
 	
-	@Test
-	public void testGetClientByCompanyNameFail() throws Throwable {
+	@Test @SneakyThrows
+	public void testGetClientByCompanyNameFail() {
 		String testCompanyName = "TestFail";
 		when(clientServ.findClientByCompanyName(testCompanyName)).thenReturn(null);
 		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/name/" + testCompanyName)
@@ -120,8 +120,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Company Name: " + testCompanyName));
 	}
 	
-	@Test
-	public void testCreateClientSuccess() throws Throwable {
+	@Test @SneakyThrows
+	public void testCreateClientSuccess() {
 		Client returnClient = new Client(2, "Test2");
 		when(clientServ.createClient(testClient2)).thenReturn(returnClient);
 		mockMvc.perform(MockMvcRequestBuilders.post(URI)
@@ -133,8 +133,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().json(asJSONString(returnClient)));
 	}
 	
-	@Test
-	public void testCreateClientFail() throws Throwable {
+	@Test @SneakyThrows
+	public void testCreateClientFail() {
 		when(clientServ.createClient(testClient1)).thenReturn(null);
 		mockMvc.perform(MockMvcRequestBuilders.post(URI)
 				.content(asJSONString(testClient1))
@@ -158,8 +158,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().json(asJSONString(returnClient)));
 	}
 	
-	@Test
-	public void testEditClientFail() throws Throwable {
+	@Test @SneakyThrows
+	public void testEditClientFail() throws {
 		when(clientServ.editClient(testClient1)).thenReturn(null);
 		this.mockMvc.perform(MockMvcRequestBuilders.put(URI)
 				.content(asJSONString(testClient1))
@@ -170,8 +170,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Id: " + testClient1.getClientId()));
 	}
 	
-	@Test
-	public void testDeleteClientSuccess() throws Throwable {
+	@Test @SneakyThrows
+	public void testDeleteClientSuccess() {
 		when(clientServ.deleteClient(testClient1)).thenReturn(true);
 		mockMvc.perform(MockMvcRequestBuilders.delete(URI)
 				.content(asJSONString(testClient1))
@@ -182,8 +182,8 @@ public class ClientControllerTest {
 				.andExpect(MockMvcResultMatchers.content().string("Client: " + testClient1 + ", was deleted"));
 	}
 	
-	@Test
-	public void testDeleteClientFail() throws Throwable {
+	@Test @SneakyThrows
+	public void testDeleteClientFail() {
 		when(clientServ.deleteClient(testClient2)).thenReturn(false);
 		mockMvc.perform(MockMvcRequestBuilders.delete(URI)
 				.content(asJSONString(testClient2))
