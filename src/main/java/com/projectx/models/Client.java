@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 // Will handle the Client's information and functionality
 
@@ -20,4 +22,21 @@ public class Client {
     private Integer clientId;
     @Column
     private String companyName;
+    @OneToMany
+    @JoinTable(
+            name = "ClientUser",
+            joinColumns = @JoinColumn(name = "clientId"),
+            inverseJoinColumns = @JoinColumn(name = "userId"))
+    Set<User> clientUser;
+
+    public Client(Integer clientId, String companyName) {
+        this.clientId=clientId;
+        this.companyName=companyName;
+        this.clientUser=new HashSet<>();
+    }
+
+    public Client(String companyName) {
+        this.companyName=companyName;
+        this.clientUser=new HashSet<>();
+    }
 }

@@ -17,15 +17,13 @@ public class ApplicantService {
     ApplicantDao applicantDao;
 
     /**
-     * Adds an applicant into the database
+     * Adds an applicant into the database. Before adding to the database, checks if the applicant
+     * already exists within the database.
      *
      * @param applicant  the applicant to be added in the database
      * @return the applicant that was successfully added, null otherwise
      */
     public Applicant createApplicant(Applicant applicant) {
-        if (applicant.getUser() == null) {
-            return null;
-        }
         return applicantDao.save(applicant);
     }
 

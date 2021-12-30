@@ -7,20 +7,19 @@ package com.projectx.controllers;
 import com.projectx.models.Applicant;
 import com.projectx.services.ApplicantService;
 import com.projectx.utility.CrossOriginUtil;
-import com.projectx.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController("applicantController")
-@RequestMapping("/applicant")
+@RequestMapping(value = "applicant")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ApplicantController {
     @Autowired
     private ApplicantService applicantService;
-    @Autowired
-    private JwtUtil jwtUtil;
 
     /**
      * Adds an applicant to the database
@@ -81,29 +80,33 @@ public class ApplicantController {
     }
 
     /**
-     * Returns an applicant with the given id in the path variable. If the path variable is empty, a list of
-     * applicant is returned instead.
+     * Returns a list of applicants in the database.
      *
-     * The path variable must be an integer, but it is not required.
+     * @return a http response with a list of applicants in
+     *          a {@link ResponseEntity} that contains an ok request.
+     */
+    @GetMapping
+    public ResponseEntity<List<Applicant>> getApplicant() {
+        return new ResponseEntity<>(applicantService.getAllApplicants(), HttpStatus.OK);
+    }
+
+    /**
+     * Returns an applicant with the given id in the path variable.
+     *
+     * The path variable must be an integer.
      *
      * @param id  not required String that is an id of an applicant
      * @return a http response with an applicant object in a {@link ResponseEntity} that contains an ok request if
-     *          the specific applicant is found, bad request otherwise. a http response with a list of applicants in
-     *          a {@link ResponseEntity} that contains an ok request if no id was given
+     *          the specific applicant is found, bad request otherwise.
      */
-    @GetMapping(value = {"/{id}", ""})
-    public ResponseEntity<?> getApplicant(@PathVariable(required = false) String id) {
-        if (id != null) {
-            int applicantId = Integer.parseInt(id);
-            Applicant applicant = applicantService.getApplicant(applicantId);
-            System.out.println(applicant);
-            if (applicant == null) {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            } else {
-                return new ResponseEntity<>(applicant, HttpStatus.FOUND);
-            }
+    @GetMapping("{id}")
+    public ResponseEntity<Applicant> getAllApplicants(@PathVariable int id) {
+        Applicant applicant = applicantService.getApplicant(id);
+        System.out.println(applicant);
+        if (applicant == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>(applicantService.getAllApplicants(), HttpStatus.OK);
+            return new ResponseEntity<>(applicant, HttpStatus.FOUND);
         }
     }
 }

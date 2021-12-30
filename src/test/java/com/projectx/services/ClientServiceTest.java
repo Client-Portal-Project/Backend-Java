@@ -3,22 +3,24 @@ package com.projectx.services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import com.projectx.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import com.projectx.models.Client;
 import com.projectx.repositories.ClientDao;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class ClientServiceTest {
 	@Mock
 	private ClientDao clientDao;
+	@Mock
+	private UserService userService;
 
 	@InjectMocks
 	private ClientService clientServ;
@@ -28,16 +30,23 @@ public class ClientServiceTest {
 	private Client testEditClient1;
 	private Client testClient2;
 	private List<Client> testClientList;
+	private User testUser;
+	private User testUserExtra;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
-		clientServ = new ClientService(clientDao);
-		
+
+		testUser = new User(1, "test1", "", "", "", true);
+		testUserExtra = new User(2, "test2", "", "", "", true);
 		testClient1 = new Client(1, "Test Company 1");
+		Set<User> expected = new HashSet<>();
+		expected.add(testUser);
+		testClient1.setClientUser(expected);
 		testClient1Optional = Optional.of(testClient1);
 		testClient2 = new Client(2, "Test Company 2");
 		testEditClient1 = new Client(1, "Test");
+		testEditClient1.setClientUser(expected);
 		
 		testClientList = new ArrayList<Client>();
 		testClientList.add(testClient1);
@@ -51,6 +60,10 @@ public class ClientServiceTest {
 		when(clientDao.findClientByCompanyName(testClient2.getCompanyName())).thenReturn(null);
 		when(clientDao.save(testClient2)).thenReturn(testClient2);
 		when(clientDao.save(testEditClient1)).thenReturn(testEditClient1);
+
+		when(userService.findUserById(testUser.getUserId())).thenReturn(testUser);
+		when(userService.findUserById(3)).thenReturn(null);
+		when(userService.findUserById(testUserExtra.getUserId())).thenReturn(testUserExtra);
 	}
 	
 	@Test
@@ -107,5 +120,29 @@ public class ClientServiceTest {
 	public void testDeleteClientUnsuccess() {
 		assertFalse(clientServ.deleteClient(testClient2));
 	}
-	
+
+	@Test
+	void testFindAllClientUsers() {
+		assertArrayEquals(clientServ.findAllClientUsers(testClient1).toArray(), testClient1.getClientUser().toArray()); //to not use array, need to override hashcode()
+	}
+
+	@Test
+	void testFindClientUser() {
+		assertNull(clientServ.findClientUser(testClient1, 3));
+		assertEquals(clientServ.findClientUser(testClient1, 1), testUser);
+	}
+
+	@Test
+	void testCreateClientUser() {
+		assertFalse(clientServ.createClientUser(testClient1, 3));
+		assertFalse(clientServ.createClientUser(testClient1, 1));
+		assertTrue(clientServ.createClientUser(testClient1, 2));
+	}
+
+	@Test
+	void testDeleteClientUser() {
+		assertFalse(clientServ.deleteClientUser(testClient1, 3));
+		assertTrue(clientServ.deleteClientUser(testClient1, 1));
+		assertFalse(clientServ.deleteClientUser(testClient1, 2));
+	}
 }

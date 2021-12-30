@@ -38,13 +38,6 @@ public class ApplicantServiceTest {
         when(applicantDao.save(expected)).thenReturn(expected);
         Applicant actual = applicantService.createApplicant(expected);
         assertEquals(actual, expected);
-
-        Applicant wrong = expected;
-        wrong.setUser(null);
-
-        actual = applicantService.createApplicant(wrong);
-        assertNull(actual);
-
     }
 
     @Test
@@ -73,7 +66,7 @@ public class ApplicantServiceTest {
     }
 
     @Test
-    void TestGetApplicant() {
+    void testGetApplicant() {
         when(applicantDao.findByUser_UserId(expected.getUser().getUserId())).thenReturn(expected);
         Applicant actual = applicantService.getApplicant(1);
 

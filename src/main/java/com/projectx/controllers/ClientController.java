@@ -2,6 +2,7 @@ package com.projectx.controllers;
 
 import java.util.List;
 
+import com.projectx.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("company/{companyName}")
+    @GetMapping("name/{companyName}")
     public ResponseEntity<?> getClientByCompanyName(@PathVariable String companyName) {
         Client client = clientServ.findClientByCompanyName(companyName);
         if(client != null) {
@@ -78,5 +79,41 @@ public class ClientController {
     		return new ResponseEntity<>("Client: " + client + ", was deleted", HttpStatus.OK);
     	}
     	return new ResponseEntity<>("Failed to find Client by Company Name: " + client.getCompanyName(), HttpStatus.NOT_FOUND);
+    }
+
+    //Returns a list of all the users in the client
+    @GetMapping("user")
+    public ResponseEntity<?> getAllClientUsers(@RequestBody Client client) {
+        return new ResponseEntity<>(this.clientServ.findAllClientUsers(client), HttpStatus.OK);
+    }
+
+    @GetMapping("user/{id}")
+    public ResponseEntity<User> getClientUser(@RequestBody Client client, @PathVariable int id) {
+        User user = this.clientServ.findClientUser(client, id);
+        if (user == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(user, HttpStatus.FOUND);
+        }
+    }
+
+    @PutMapping("user/{id}") //id is the userId
+    public ResponseEntity createClientUser(@RequestBody Client client, @PathVariable int id) {
+        Boolean check = this.clientServ.createClientUser(client, id);
+        if (check) {
+            return new ResponseEntity(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("user/{id}") //id is the userId
+    public ResponseEntity deleteClientUser(@RequestBody Client client, @PathVariable int id) {
+        Boolean check = this.clientServ.deleteClientUser(client, id);
+        if (check) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.ArrayList;
 import java.util.List;
 
+import com.projectx.helper.JSONStringHelper;
+import com.projectx.models.User;
 import lombok.SneakyThrows;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +24,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectx.models.Client;
 import com.projectx.services.ClientService;
 
@@ -31,6 +32,7 @@ import com.projectx.services.ClientService;
 public class ClientControllerTest {
 	
 	private MockMvc mockMvc;
+	private JSONStringHelper jsonHelper;
 	private static final String URI = "/client";
 	
 	@Autowired
@@ -42,25 +44,19 @@ public class ClientControllerTest {
 	private List<Client> testClientList;
 	private Client testClient1;
 	private Client testClient2;
-	
-	public static String asJSONString(Object obj) {
-	    try {
-	      return new ObjectMapper().writeValueAsString(obj);
-	    } catch (Exception e) {
-	      throw new RuntimeException(e);
-	    }
-	}
+	private User testUser;
 	
 	@BeforeEach
-	void setUp(){
-		mockMvc = webAppContextSetup(context).build();
+	void setUp() throws Exception {
+		this.mockMvc = webAppContextSetup(context).build();
+		this.jsonHelper = new JSONStringHelper();
 		
 		testClient1 = new Client(1, "Test1");
 		testClient2 = new Client(null, "Test2");
+		testUser = new User(null, "", "", "", "", false);
 		
 		testClientList = new ArrayList<>();
 		testClientList.add(testClient1);
-		
 	}
 	
 	@Test @SneakyThrows
@@ -71,7 +67,7 @@ public class ClientControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClientList)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(testClientList)));
 	}
 	
 	@Test @SneakyThrows
@@ -82,7 +78,7 @@ public class ClientControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClient1)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(testClient1)));
 	}
 	
 	@Test @SneakyThrows
@@ -94,7 +90,8 @@ public class ClientControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by id: " + testId));
+				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by id: "
+						+ testId));
 	}
 	
 	@Test @SneakyThrows
@@ -105,7 +102,7 @@ public class ClientControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(testClient1)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(testClient1)));
 	}
 	
 	@Test @SneakyThrows
@@ -117,7 +114,8 @@ public class ClientControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Company Name: " + testCompanyName));
+				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Company " +
+						"Name: " + testCompanyName));
 	}
 	
 	@Test @SneakyThrows
@@ -125,24 +123,26 @@ public class ClientControllerTest {
 		Client returnClient = new Client(2, "Test2");
 		when(clientServ.createClient(testClient2)).thenReturn(returnClient);
 		mockMvc.perform(MockMvcRequestBuilders.post(URI)
-				.content(asJSONString(testClient2))
+				.content(jsonHelper.asJSONString(testClient2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(returnClient)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(returnClient)));
 	}
 	
+
 	@Test @SneakyThrows
 	public void testCreateClientFail() {
 		when(clientServ.createClient(testClient1)).thenReturn(null);
 		mockMvc.perform(MockMvcRequestBuilders.post(URI)
-				.content(asJSONString(testClient1))
+				.content(jsonHelper.asJSONString(testClient1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isConflict())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().string("Failed to create: " + testClient1 + ", it is already exist"));
+				.andExpect(MockMvcResultMatchers.content().string("Failed to create: "
+						+ testClient1 + ", it is already exist"));
 	}
 	
 	@Test @SneakyThrows
@@ -150,47 +150,119 @@ public class ClientControllerTest {
 		Client returnClient = new Client(2, "TestEdit");
 		when(clientServ.editClient(testClient2)).thenReturn(returnClient);
 		mockMvc.perform(MockMvcRequestBuilders.put(URI)
-				.content(asJSONString(testClient2))
+				.content(jsonHelper.asJSONString(testClient2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().json(asJSONString(returnClient)));
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(returnClient)));
 	}
 	
+
 	@Test @SneakyThrows
 	public void testEditClientFail() {
 		when(clientServ.editClient(testClient1)).thenReturn(null);
 		this.mockMvc.perform(MockMvcRequestBuilders.put(URI)
-				.content(asJSONString(testClient1))
+				.content(jsonHelper.asJSONString(testClient1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Id: " + testClient1.getClientId()));
+				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Id: "
+						+ testClient1.getClientId()));
 	}
 	
 	@Test @SneakyThrows
 	public void testDeleteClientSuccess() {
 		when(clientServ.deleteClient(testClient1)).thenReturn(true);
 		mockMvc.perform(MockMvcRequestBuilders.delete(URI)
-				.content(asJSONString(testClient1))
+				.content(jsonHelper.asJSONString(testClient1))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().string("Client: " + testClient1 + ", was deleted"));
+				.andExpect(MockMvcResultMatchers.content().string("Client: " + testClient1
+						+ ", was deleted"));
 	}
 	
 	@Test @SneakyThrows
 	public void testDeleteClientFail() {
 		when(clientServ.deleteClient(testClient2)).thenReturn(false);
 		mockMvc.perform(MockMvcRequestBuilders.delete(URI)
-				.content(asJSONString(testClient2))
+				.content(jsonHelper.asJSONString(testClient2))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Company Name: " + testClient2.getCompanyName()));
+				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Company " +
+						"Name: " + testClient2.getCompanyName()));
+	}
+
+	@Test @SneakyThrows
+	void testGetAllClientUsers() {
+		List<User> list = new ArrayList<>();
+		list.add(testUser);
+		when(clientServ.findAllClientUsers(testClient1)).thenReturn(list);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/client/user")
+						.content(jsonHelper.asJSONString(testClient1))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(list)));
+	}
+
+	@Test @SneakyThrows
+	void testGetClientUser() {
+		when(clientServ.findClientUser(testClient1, 1)).thenReturn(testUser);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/client/user/1")
+						.content(jsonHelper.asJSONString(testClient1))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isFound())
+				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().json(jsonHelper.asJSONString(testUser)));
+
+		when(clientServ.findClientUser(testClient1, 2)).thenReturn(null);
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/client/user/2")
+						.content(jsonHelper.asJSONString(testClient1))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(MockMvcResultMatchers.content().string(""));
+	}
+
+	@Test @SneakyThrows
+	void testCreateClientUser(){
+		when(clientServ.createClientUser(testClient1, 1)).thenReturn(true);
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/client/user/1")
+						.content(jsonHelper.asJSONString(testClient1))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated());
+
+		when(clientServ.createClientUser(testClient2, 1)).thenReturn(false);
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/client/user/1")
+						.content(jsonHelper.asJSONString(testClient2))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test @SneakyThrows
+	void testDeleteClientUser() {
+		when(clientServ.deleteClientUser(testClient1, 1)).thenReturn(true);
+		this.mockMvc.perform(MockMvcRequestBuilders.delete("/client/user/1")
+						.content(jsonHelper.asJSONString(testClient1))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+		when(clientServ.deleteClientUser(testClient2, 1)).thenReturn(false);
+		this.mockMvc.perform(MockMvcRequestBuilders.delete("/client/user/1")
+						.content(jsonHelper.asJSONString(testClient2))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest());
 	}
 }

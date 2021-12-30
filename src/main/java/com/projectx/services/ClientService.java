@@ -1,7 +1,10 @@
 package com.projectx.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import com.projectx.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j //Using Self4j logger from lombok
 public class ClientService {
     private ClientDao clientDao;
+    private UserService userService;
 
     @Autowired
-    public ClientService(ClientDao clientDao) {
+    public ClientService(ClientDao clientDao, UserService userService) {
         this.clientDao = clientDao;
+        this.userService = userService;
     }
 
     // Currently, for testing purposes to see the User data in Postman
@@ -80,5 +85,47 @@ public class ClientService {
     	}
     }
 
+    public List<User> findAllClientUsers(Client client) {
+        Client temp = findClientById(client.getClientId()); //checks if client exists
+        List<User> list = new ArrayList<>(temp.getClientUser());
+        return list;
+    }
 
+    public User findClientUser(Client client, int id) {
+        List<User> list = findAllClientUsers(client); //findAllClientUsers already gets the list already
+        for (User u : list) { //checks for the user
+            if (u.getUserId() == id) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public Boolean createClientUser(Client client, int id) {
+        User user = userService.findUserById(id);
+        if (user == null) {
+            return false;
+        } else { //takes list from client from database and updates it
+            Client temp = findClientById(client.getClientId());
+            Set<User> list = temp.getClientUser();
+            Boolean result = list.add(user); //true if added, false if already a duplicate
+            temp.setClientUser(list);
+            clientDao.save(temp); //updates list in database
+            return result;
+        }
+    }
+
+    public Boolean deleteClientUser(Client client, int id) {
+        User user = userService.findUserById(id);
+        if (user == null) {
+            return false;
+        } else { //takes list from client from database and updates it
+            Client temp = findClientById(client.getClientId());
+            Set<User> list = temp.getClientUser();
+            Boolean result = list.remove(user); //true if deleted, false if it does not exist
+            temp.setClientUser(list);
+            clientDao.save(temp); //updates list in database
+            return result;
+        }
+    }
 }

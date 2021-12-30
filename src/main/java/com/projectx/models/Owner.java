@@ -18,6 +18,6 @@ public class Owner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Integer ownerId;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private User user;
 }

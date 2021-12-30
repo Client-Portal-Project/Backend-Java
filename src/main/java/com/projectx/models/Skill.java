@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /*
     Will handle the list of skills that applicants can have
@@ -23,4 +24,6 @@ public class Skill {
     private Integer skillId;
     @Column
     private String skillName;
+    @ManyToMany(mappedBy = "applicantSkills")
+    Set<Applicant> applicants;
 }
