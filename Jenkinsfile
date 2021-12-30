@@ -58,7 +58,7 @@ pipeline {
                 }
                 timeout(time: 5, unit: 'MINUTES') {
                     script {
-                        ERR = waitForQualityGate()
+                        ERR = waitForQualityGate abortPipeline: false
                         if (ERR.status != 'OK') {
                             writeFile(file: 'result', text: "https://sonarcloud.io/dashboard?id=Backend-Java")
                             error('Quality Gate Failed')
@@ -66,18 +66,6 @@ pipeline {
                         discordSend description: ":unlock: Passed Static Analysis of ${env.JOB_NAME}", result: currentBuild.currentResult, webhookURL: env.WEBHO_JA
                     }
                 }
-            }
-        }
-
-        stage('Deployment Preparation') {
-            steps {
-                sh 'echo todo'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                sh 'echo todo'
             }
         }
     }
@@ -88,6 +76,7 @@ pipeline {
             }
         }
         failure {
+            sh 'echo ${env.BUILD_URL}'
             discordSend title: "**:boom: ${env.JOB_NAME} Failure in ${CURR} Stage**",
                         description: "*${CMD}*\n\n${ERR}",
                         footer: "Follow title URL for full console output",
