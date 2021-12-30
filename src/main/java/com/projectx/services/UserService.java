@@ -9,13 +9,12 @@ import java.util.List;
 
 @Service("userService")
 public class UserService {
-    @Autowired
     UserDao userDao;
 
-//    @Autowired
-//    public UserService(UserDao userDao) {
-//        this.userDao = userDao;
-//    }
+    @Autowired
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     /**
      * Retrieves a user from the database based on their userId
@@ -115,13 +114,5 @@ public class UserService {
 
     public void deleteUser(User user) {
         this.userDao.delete(user);
-    }
-
-    /**
-     * @param id
-     * @return
-     */
-    public User getUserById(int id) {
-        return userDao.findById(id).orElse(null);
     }
 }

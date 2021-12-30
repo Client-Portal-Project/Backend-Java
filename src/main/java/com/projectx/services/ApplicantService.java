@@ -29,7 +29,7 @@ public class ApplicantService {
             return null;
         }
 
-        applicant.setUser(userService.getUserById(applicant.getUser().getUserId()));
+        applicant.setUser(userService.findUserById(applicant.getUser().getUserId()));
         if (applicant.getUser() == null) {
             return null;
         }

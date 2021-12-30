@@ -16,16 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 @Service("clientService")
 @Slf4j //Using Self4j logger from lombok
 public class ClientService {
-    @Autowired
     private ClientDao clientDao;
-    @Autowired
     private UserService userService;
 
-//    @Autowired
-//    public ClientService(ClientDao clientDao, UserService userService) {
-//        this.clientDao = clientDao;
-//        this.userService = userService;
-//    }
+    @Autowired
+    public ClientService(ClientDao clientDao, UserService userService) {
+        this.clientDao = clientDao;
+        this.userService = userService;
+    }
 
     // Currently, for testing purposes to see the User data in Postman
     public List<Client> findAllClients() {
@@ -104,7 +102,7 @@ public class ClientService {
     }
 
     public Boolean createClientUser(Client client, int id) {
-        User user = userService.getUserById(id);
+        User user = userService.findUserById(id);
         if (user == null) {
             return false;
         } else { //takes list from client from database and updates it
@@ -118,7 +116,7 @@ public class ClientService {
     }
 
     public Boolean deleteClientUser(Client client, int id) {
-        User user = userService.getUserById(id);
+        User user = userService.findUserById(id);
         if (user == null) {
             return false;
         } else { //takes list from client from database and updates it

@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import java.util.*;
 
 import com.projectx.models.User;
-import com.projectx.repositories.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -38,8 +37,8 @@ public class ClientServiceTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 
-		testUser = new User(1, "", "", "", "", true);
-		testUserExtra = new User(2, "", "", "", "", true);
+		testUser = new User(1, "test1", "", "", "", true);
+		testUserExtra = new User(2, "test2", "", "", "", true);
 		testClient1 = new Client(1, "Test Company 1");
 		Set<User> expected = new HashSet<>();
 		expected.add(testUser);
@@ -132,42 +131,18 @@ public class ClientServiceTest {
 		assertNull(clientServ.findClientUser(testClient1, 3));
 		assertEquals(clientServ.findClientUser(testClient1, 1), testUser);
 	}
-//	public Boolean createClientUser(Client client, int id) {
-//		User user = userService.getUserById(id);
-//		if (user == null) {
-//			return false;
-//		} else { //takes list from client from database and updates it
-//			Client temp = findClientById(client.getClientId());
-//			Set<User> list = temp.getClientUser();
-//			Boolean result = list.add(user); //true if added, false if already a duplicate
-//			temp.setClientUser(list);
-//			clientDao.save(temp); //updates list in database
-//			return result;
-//		}
-//	}
 
 	@Test
 	void testCreateClientUser() {
-		//assertFalse(clientServ.createClientUser(testClient1, 3));
-		//assertFalse(clientServ.createClientUser(testClient1, 1));
+		assertFalse(clientServ.createClientUser(testClient1, 3));
+		assertFalse(clientServ.createClientUser(testClient1, 1));
 		assertTrue(clientServ.createClientUser(testClient1, 2));
 	}
-//	public Boolean deleteClientUser(Client client, int id) {
-//		User user = userService.getUserById(id);
-//		if (user == null) {
-//			return false;
-//		} else { //takes list from client from database and updates it
-//			Client temp = findClientById(client.getClientId());
-//			Set<User> list = temp.getClientUser();
-//			Boolean result = list.remove(user); //true if deleted, false if it does not exist
-//			temp.setClientUser(list);
-//			clientDao.save(temp); //updates list in database
-//			return result;
-//		}
-//	}
 
 	@Test
 	void testDeleteClientUser() {
-
+		assertFalse(clientServ.deleteClientUser(testClient1, 3));
+		assertTrue(clientServ.deleteClientUser(testClient1, 1));
+		assertFalse(clientServ.deleteClientUser(testClient1, 2));
 	}
 }
