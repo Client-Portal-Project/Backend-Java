@@ -159,7 +159,7 @@ public class ClientControllerTest {
 	}
 	
 	@Test @SneakyThrows
-	public void testEditClientFail() throws {
+	public void testEditClientFail() {
 		when(clientServ.editClient(testClient1)).thenReturn(null);
 		this.mockMvc.perform(MockMvcRequestBuilders.put(URI)
 				.content(asJSONString(testClient1))
