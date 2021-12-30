@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController("fileController")
-@RequestMapping(value = "api")
+@RequestMapping("files")
+@CrossOrigin
 public class FileController {
 
     private final FileStorageService storageService;
@@ -27,8 +28,7 @@ public class FileController {
         this.storageService = storageService;
     }
 
-    @CrossOrigin
-    @PostMapping("/upload")
+    @PostMapping
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file){
         String message = "";
         try{
@@ -43,8 +43,7 @@ public class FileController {
 
     }
 
-    @CrossOrigin
-    @GetMapping("/files")
+    @GetMapping
     public ResponseEntity<List<ResponseFile>> getListFiles() {
         List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
@@ -63,8 +62,7 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
-    @CrossOrigin
-    @GetMapping("/files/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable String id) {
         FileDB fileDB = storageService.getFile(id);
 

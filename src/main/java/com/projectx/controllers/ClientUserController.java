@@ -24,7 +24,7 @@ import com.projectx.utility.ClientUserRequestObject;
 import com.projectx.utility.CrossOriginUtil;
 
 @RestController("clientUserController")
-@RequestMapping(value = "api")
+@RequestMapping("clientUsers")
 @CrossOrigin(value = CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ClientUserController {
 	private ClientUserService clientUserServ;
@@ -39,57 +39,57 @@ public class ClientUserController {
 	}
 	
 	// Currently, for testing purposes to see the User data in Postman
-	@GetMapping("clientUsers")
+	@GetMapping
 	public ResponseEntity<List<ClientUser>> getAllClientUsers() {
 		return new ResponseEntity<List<ClientUser>>(this.clientUserServ.findAllClientUsers(), HttpStatus.OK);
 	}
 	
 	//Getting ClientUser by ClientUser ID
-	@GetMapping("clientUser/id/{clientUserId}")
+	@GetMapping("id/{clientUserId}")
 	public ResponseEntity<?> getClientUserById(@PathVariable Integer clientUserId) {
 		ClientUser clientUser = this.clientUserServ.findClientUserById(clientUserId);
-		if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client User by id: " + clientUserId, HttpStatus.NOT_FOUND);
+		if(clientUser != null) return new ResponseEntity<>(clientUser, HttpStatus.OK);
+		return new ResponseEntity<>("Failed to find Client User by id: " + clientUserId, HttpStatus.NOT_FOUND);
 	}
 	
 	//Getting ClientUser by User ID
-	@GetMapping("clientUser/user/id/{userId}")
+	@GetMapping("user/id/{userId}")
 	public ResponseEntity<?> getClientUserByUserId(@PathVariable Integer userId) {
 		User user = this.userServ.findUserById(userId);
 		ClientUser clientUser = this.clientUserServ.findClientUserByUser(user);
-		if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client User by User Id: " + userId, HttpStatus.NOT_FOUND);
+		if(clientUser != null) return new ResponseEntity<>(clientUser, HttpStatus.OK);
+		return new ResponseEntity<>("Failed to find Client User by User Id: " + userId, HttpStatus.NOT_FOUND);
 	}
 	
 	//Getting List of ClientUser by Client ID
-	@GetMapping("clientUser/client/id/{clientId}")
+	@GetMapping("client/id/{clientId}")
 	public ResponseEntity<?> getClientUserByClientId(@PathVariable Integer clientId) {
 		Client client = this.clientServ.findClientById(clientId);
 		List<ClientUser> clientUser = this.clientUserServ.findClientUserByClient(client);
 		if(clientUser.size() != 0) return new ResponseEntity<List<ClientUser>>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client Users by Client Id: " + clientId, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>("Failed to find Client Users by Client Id: " + clientId, HttpStatus.NOT_FOUND);
 	}
 	
 	//Getting ClientUser by User Email
-	@GetMapping("clientUser/user/email/{userEmail}")
+	@GetMapping("user/email/{userEmail}")
 	public ResponseEntity<?> getClientUserByUserEmail(@PathVariable String userEmail) {
 		User user = this.userServ.findUserByEmail(userEmail);
 		ClientUser clientUser = this.clientUserServ.findClientUserByUser(user);
-		if(clientUser != null) return new ResponseEntity<ClientUser>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client User by User Email: " + userEmail, HttpStatus.NOT_FOUND);
+		if(clientUser != null) return new ResponseEntity<>(clientUser, HttpStatus.OK);
+		return new ResponseEntity<>("Failed to find Client User by User Email: " + userEmail, HttpStatus.NOT_FOUND);
 	}
 	
 	//Getting List of ClientUser by Client Company Name
-	@GetMapping("clientUser/client/name/{companyName}")
+	@GetMapping("client/name/{companyName}")
 	public ResponseEntity<?> getClientUserByCompanyName(@PathVariable String companyName) {
 		Client client = this.clientServ.findClientByCompanyName(companyName);
 		List<ClientUser> clientUser = this.clientUserServ.findClientUserByClient(client);
-		if(clientUser.size() != 0) return new ResponseEntity<List<ClientUser>>(clientUser, HttpStatus.OK);
-		return new ResponseEntity<String>("Failed to find Client Users by Company Name: " + companyName, HttpStatus.NOT_FOUND);
+		if(clientUser.size() != 0) return new ResponseEntity<>(clientUser, HttpStatus.OK);
+		return new ResponseEntity<>("Failed to find Client Users by Company Name: " + companyName, HttpStatus.NOT_FOUND);
 	}
 	
 	//Creating ClientUser by using ClientUser entity
-	@PostMapping("clientUser")
+	@PostMapping
 	public ResponseEntity<?> createClientUser(@RequestBody ClientUser clientUser) {
 		//Consistency check
 		String companyName = clientUser.getClient().getCompanyName();
@@ -100,15 +100,15 @@ public class ClientUserController {
 			if(user != null) {
 				ClientUser newClientUser = this.clientUserServ.createClientUser(client, user);
 				if(newClientUser != null) return new ResponseEntity<ClientUser>(newClientUser, HttpStatus.CREATED);
-				return new ResponseEntity<String> ("Failed to create Client User: client user'" + clientUser + "', already exist.",HttpStatus.CONFLICT);
+				return new ResponseEntity<> ("Failed to create Client User: client user'" + clientUser + "', already exist.",HttpStatus.CONFLICT);
 			}
-			return new ResponseEntity<String>("Failed to create Client User: user with email '" + email + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Failed to create Client User: user with email '" + email + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<String>("Failed to create Client User: Company Name '" + companyName + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>("Failed to create Client User: Company Name '" + companyName + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 	}
 	
 	//Creating ClientUser by using clientUserRequestObject {"email", "companyName"} entity
-	@PostMapping("clientUser/request")
+	@PostMapping("request")
 	public ResponseEntity<?> createClientUserByRequestObject(@RequestBody ClientUserRequestObject clientUserRequestObject) {
 		//Consistency check
 		Client client = this.clientServ.findClientByCompanyName(clientUserRequestObject.getCompanyName());
@@ -116,22 +116,22 @@ public class ClientUserController {
 			User user = this.userServ.findUserByEmail(clientUserRequestObject.getEmail());
 			if(user != null) {
 				ClientUser newClientUser = this.clientUserServ.createClientUser(client, user);
-				if(newClientUser != null) return new ResponseEntity<ClientUser>(newClientUser, HttpStatus.CREATED);
-				return new ResponseEntity<String> ("Failed to create Client User: client user with user email'" + clientUserRequestObject.getEmail() + "', already exist.",HttpStatus.CONFLICT);
+				if(newClientUser != null) return new ResponseEntity<>(newClientUser, HttpStatus.CREATED);
+				return new ResponseEntity<> ("Failed to create Client User: client user with user email'" + clientUserRequestObject.getEmail() + "', already exist.",HttpStatus.CONFLICT);
 			}
-			return new ResponseEntity<String>("Failed to create Client User: user with email '" + clientUserRequestObject.getEmail() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Failed to create Client User: user with email '" + clientUserRequestObject.getEmail() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<String>("Failed to create Client User: Company Name '" + clientUserRequestObject.getCompanyName() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>("Failed to create Client User: Company Name '" + clientUserRequestObject.getCompanyName() + "', doesn't exist in the system",HttpStatus.NOT_FOUND);
 	}
 	
 	//Delete ClientUser by using ClientUser entity
-	@DeleteMapping("clientUser")
+	@DeleteMapping
 	public ResponseEntity<String> deleteClientUser(@RequestBody ClientUser clientUser) {
 		boolean deleted = this.clientUserServ.deleteClientUser(clientUser);
 		if(deleted) {
-			return new ResponseEntity<String>("Client User: " + clientUser + ", was deleted", HttpStatus.OK);
+			return new ResponseEntity<>("Client User: " + clientUser + ", was deleted", HttpStatus.OK);
 		}
-		return new ResponseEntity<String>("Failed to find Client User with ID: " + clientUser.getClientUserId(), HttpStatus.NOT_FOUND); 
+		return new ResponseEntity<>("Failed to find Client User with ID: " + clientUser.getClientUserId(), HttpStatus.NOT_FOUND);
 	}
 
 }
