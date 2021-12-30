@@ -98,22 +98,22 @@ public class ClientController {
     }
 
     @PutMapping("user/{id}") //id is the userId
-    public ResponseEntity createClientUser(@RequestBody Client client, @PathVariable int id) {
-        Boolean check = this.clientServ.createClientUser(client, id);
+    public ResponseEntity<?> createClientUser(@RequestBody Client client, @PathVariable int id) {
+        boolean check = clientServ.createClientUser(client, id);
         if (check) {
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("user/{id}") //id is the userId
-    public ResponseEntity deleteClientUser(@RequestBody Client client, @PathVariable int id) {
-        Boolean check = this.clientServ.deleteClientUser(client, id);
+    public ResponseEntity<?> deleteClientUser(@RequestBody Client client, @PathVariable int id) {
+        boolean check = clientServ.deleteClientUser(client, id);
         if (check) {
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
