@@ -8,10 +8,13 @@ import com.projectx.utility.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +26,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
-    UserController userController;
-    @Mock
+    @MockBean
     UserService userService;
     @Mock
     JwtUtil jwtUtil;
 
+    @InjectMocks
+    UserController userController;
+
     @BeforeEach
     void setUp() {
-        userController = new UserController(userService, jwtUtil);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

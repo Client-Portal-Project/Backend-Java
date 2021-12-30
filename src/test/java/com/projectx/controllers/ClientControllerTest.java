@@ -47,12 +47,13 @@ public class ClientControllerTest {
 	void setUp() throws Exception {
 		this.mockMvc = webAppContextSetup(context).build();
 		this.jsonHelper = new JSONStringHelper();
+		mockMvc = webAppContextSetup(context).build();
 		
 		testClient1 = new Client(1, "Test1");
 		testClient2 = new Client(null, "Test2");
 		testUser = new User(null, "", "", "", "", false);
 		
-		testClientList = new ArrayList<Client>();
+		testClientList = new ArrayList<>();
 		testClientList.add(testClient1);
 	}
 	

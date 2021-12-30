@@ -33,7 +33,7 @@ public class ClientController {
     	return new ResponseEntity<>(clientServ.findAllClients(), HttpStatus.OK);
     } 
 
-    @GetMapping("{clientId}")
+    @GetMapping("id/{clientId}")
     public ResponseEntity<?> getClientById(@PathVariable Integer clientId) {
         Client client = clientServ.findClientById(clientId);
         if(client != null) {
@@ -43,7 +43,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("{companyName}")
+    @GetMapping("company/{companyName}")
     public ResponseEntity<?> getClientByCompanyName(@PathVariable String companyName) {
         Client client = clientServ.findClientByCompanyName(companyName);
         if(client != null) {
