@@ -41,7 +41,7 @@ public class ApplicantController {
     }
 
     /**
-     * Updates the applicant in the database
+     * Updates the applicant in the database.
      *
      * The request body must contain an applicant
      *
