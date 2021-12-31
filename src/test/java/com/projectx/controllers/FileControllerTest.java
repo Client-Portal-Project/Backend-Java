@@ -2,6 +2,7 @@ package com.projectx.controllers;
 
 import com.projectx.models.File;
 import com.projectx.services.FileService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @SpringBootTest
 public class FileControllerTest {
     private File expected;
-    private MockMvc mvc;
+    private MockMvc mockMvc;
 
     @Autowired
     private WebApplicationContext context;
@@ -32,32 +33,32 @@ public class FileControllerTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        this.mvc = webAppContextSetup(context).build();
+        mockMvc = webAppContextSetup(context).build();
         expected = new File("aaa", "test", "test", ("test").getBytes(), null);
     }
 
     //need to test throwing an exception to get bad request and false!!!!!
-    @Test
-    void testUploadFile() throws Exception {
+    @Test @SneakyThrows
+    void testUploadFile() {
         MockMultipartFile viable = new MockMultipartFile("file", expected.getName(), expected.getType(),
                 expected.getData());
-        mvc.perform(MockMvcRequestBuilders.multipart("/file/"+viable)
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/file/"+viable)
                 .file(viable))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
 
-    @Test
-    void testGetListFiles() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/file"))
+    @Test @SneakyThrows
+    void testGetListFiles() {
+        mockMvc.perform(MockMvcRequestBuilders.get("/file"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("[]"));
     }
 
-    @Test
-    void testGetFile() throws Exception {
+    @Test @SneakyThrows
+    void testGetFile() {
         when(fileService.getFile(expected.getId())).thenReturn(expected);
-        mvc.perform(MockMvcRequestBuilders.get("/file/{id}", expected.getId())
+        mockMvc.perform(MockMvcRequestBuilders.get("/file/{id}", expected.getId())
                 .param("id", expected.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())

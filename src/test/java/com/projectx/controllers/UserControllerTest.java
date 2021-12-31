@@ -34,6 +34,8 @@ class UserControllerTest {
     @InjectMocks
     UserController userController;
 
+    private User user = new User(1, "testuser@test.com", "password", "test", "user", null);
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -42,8 +44,6 @@ class UserControllerTest {
     @Test
     void createUser() {
         //Assign
-        User user = new User(1, "testuser@test.com",
-                "password", "test", "user", null);
         Mockito.when(userService.createUser(user)).thenReturn(user);
         ResponseEntity<String> expectedResult = new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
 
@@ -57,8 +57,6 @@ class UserControllerTest {
     @Test
     void createUserWhenEmailExists() {
         //Assign
-        User user = new User(1, "testuser@test.com",
-                "password", "test", "user", null);
         Mockito.when(userService.createUser(user)).thenReturn(null);
         ResponseEntity<String> expectedResult = new ResponseEntity<>("Email entered already exists", HttpStatus.CONFLICT);
 
@@ -74,7 +72,6 @@ class UserControllerTest {
         //Assign
         String email = "testuser@test.com";
         String password = "password";
-        User user = new User(1, "testuser@test.com", "password", "test", "user", null);
         Mockito.when(userService.getUserByEmailAndPassword(email, password)).thenReturn(user);
         String token = "JWT";
         Mockito.when(jwtUtil.generateToken(user.getUserId())).thenReturn(token);
@@ -142,7 +139,6 @@ class UserControllerTest {
     @Test
     void editUserWhenTokenIsInvalid() {
         //Assign
-        User user = new User(1, "testuser@test.com", "password", "test", "user", null);
         Map<String, String> headers = new HashMap<>();
         // lacks key-pair of 'authorization' and encoded token
         ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
@@ -156,7 +152,6 @@ class UserControllerTest {
     @Test
     void editUserWhenUserTokenMismatch() {
         //Assign
-        User user = new User(1, "testuser@test.com", "password", "test", "user", null);
         Map<String, String> headers = new HashMap<>();
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
@@ -174,8 +169,7 @@ class UserControllerTest {
     @Test
     void editUserWhenPasswordLengthLessThenEight() {
         //Assign
-        User user = new User(-1, "testuser@test.com",
-                "pass", "test", "user", null);
+        User user = new User(-1, "testuser@test.com", "pass", "test", "user", null);
         Map<String, String> headers = new HashMap<>();
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
@@ -194,8 +188,7 @@ class UserControllerTest {
     @Test
     void editUserWhenUserIsNull() {
         //Assign
-        User user = new User(-1, "testuser@test.com",
-                "password", "test", "user", null);
+        User user = new User(-1, "testuser@test.com", "password", "test", "user", null);
         Map<String, String> headers = new HashMap<>();
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
