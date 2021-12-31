@@ -48,7 +48,7 @@ class UserControllerTest {
         ResponseEntity<String> expectedResult = new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
 
         //Act
-        ResponseEntity<String> actualResult = this.userController.createUser(user);
+        ResponseEntity<String> actualResult = userController.createUser(user);
 
         //Assert
         assertEquals(expectedResult, actualResult);
@@ -63,7 +63,7 @@ class UserControllerTest {
         ResponseEntity<String> expectedResult = new ResponseEntity<>("Email entered already exists", HttpStatus.CONFLICT);
 
         //Act
-        ResponseEntity<String> actualResult = this.userController.createUser(user);
+        ResponseEntity<String> actualResult = userController.createUser(user);
 
         //Assert
         assertEquals(expectedResult, actualResult);
@@ -84,7 +84,7 @@ class UserControllerTest {
         ResponseEntity<User> expectedResult = new ResponseEntity<>(user, responseHeaders, HttpStatus.CREATED);
 
         //Act
-        ResponseEntity<User> actualResult = this.userController.login(user);
+        ResponseEntity<User> actualResult = userController.login(user);
 
         //Assert
         assertEquals(expectedResult, actualResult);

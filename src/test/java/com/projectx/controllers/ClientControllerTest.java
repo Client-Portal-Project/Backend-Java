@@ -27,26 +27,26 @@ import com.projectx.models.Client;
 import com.projectx.services.ClientService;
 
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
 public class ClientControllerTest {
 	
 	private MockMvc mockMvc;
-	private ObjectMapper objectMapper;
-	private static final String URI = "/client";
 	
 	@Autowired
 	private WebApplicationContext context;
 	
 	@MockBean
 	private ClientService clientServ;
-	
+
+	private ObjectMapper objectMapper;
 	private List<Client> testClientList;
 	private Client testClient1;
 	private Client testClient2;
 	private User testUser;
+
+	private static final String URI = "/client";
 	
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
 		this.mockMvc = webAppContextSetup(context).build();
 		this.objectMapper = new ObjectMapper();
 		
@@ -61,22 +61,22 @@ public class ClientControllerTest {
 	@Test @SneakyThrows
 	public void testGetAllClients() {
 		when(clientServ.findAllClients()).thenReturn(testClientList);
-		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/all")
+		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/all")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(testClientList)));
 	}
 	
 	@Test @SneakyThrows
 	public void testGetClientByIdSuccess() {
 		when(clientServ.findClientById(testClient1.getClientId())).thenReturn(testClient1);
-		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/id/" + testClient1.getClientId())
+		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/id/" + testClient1.getClientId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(testClient1)));
 	}
 	
@@ -84,11 +84,11 @@ public class ClientControllerTest {
 	public void testGetClientByIdFail() {
 		int testId = 100;
 		when(clientServ.findClientById(testId)).thenReturn(null);
-		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/id/" + testId)
+		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/id/" + testId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by id: "
 						+ testId));
 	}
@@ -100,7 +100,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(testClient1)));
 	}
 	
@@ -112,7 +112,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Company " +
 						"Name: " + testCompanyName));
 	}
@@ -126,7 +126,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(returnClient)));
 	}
 	
@@ -139,7 +139,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isConflict())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().string("Failed to create: "
 						+ testClient1 + ", it is already exist"));
 	}
@@ -153,7 +153,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(returnClient)));
 	}
 	
@@ -166,7 +166,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Id: "
 						+ testClient1.getClientId()));
 	}
@@ -179,7 +179,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().string("Client: " + testClient1
 						+ ", was deleted"));
 	}
@@ -192,7 +192,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Company " +
 						"Name: " + testClient2.getCompanyName()));
 	}
@@ -202,31 +202,31 @@ public class ClientControllerTest {
 		List<User> list = new ArrayList<>();
 		list.add(testUser);
 		when(clientServ.findAllClientUsers(testClient1)).thenReturn(list);
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/client/user")
-						.content(objectMapper.writeValueAsString(testClient1))
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/user")
+				.content(objectMapper.writeValueAsString(testClient1))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(list)));
 	}
 
 	@Test @SneakyThrows
 	void testGetClientUser() {
 		when(clientServ.findClientUser(testClient1, 1)).thenReturn(testUser);
-		this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/user/1")
-						.content(objectMapper.writeValueAsString(testClient1))
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/user/1")
+				.content(objectMapper.writeValueAsString(testClient1))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isFound())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(testUser)));
 
 		when(clientServ.findClientUser(testClient1, 2)).thenReturn(null);
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/client/user/2")
-						.content(objectMapper.writeValueAsString(testClient1))
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(MockMvcRequestBuilders.get(URI + "/user/2")
+				.content(objectMapper.writeValueAsString(testClient1))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(MockMvcResultMatchers.content().string(""));
 	}
@@ -234,34 +234,34 @@ public class ClientControllerTest {
 	@Test @SneakyThrows
 	void testCreateClientUser(){
 		when(clientServ.createClientUser(testClient1, 1)).thenReturn(true);
-		this.mockMvc.perform(MockMvcRequestBuilders.put(URI + "/user/1")
-						.content(objectMapper.writeValueAsString(testClient1))
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(MockMvcRequestBuilders.put(URI + "/user/1")
+				.content(objectMapper.writeValueAsString(testClient1))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated());
 
 		when(clientServ.createClientUser(testClient2, 1)).thenReturn(false);
-		this.mockMvc.perform(MockMvcRequestBuilders.put(URI + "/user/1")
-						.content(objectMapper.writeValueAsString(testClient2))
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(MockMvcRequestBuilders.put(URI + "/user/1")
+				.content(objectMapper.writeValueAsString(testClient2))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest());
 	}
 
 	@Test @SneakyThrows
 	void testDeleteClientUser() {
 		when(clientServ.deleteClientUser(testClient1, 1)).thenReturn(true);
-		this.mockMvc.perform(MockMvcRequestBuilders.delete(URI + "/user/1")
-						.content(objectMapper.writeValueAsString(testClient1))
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(MockMvcRequestBuilders.delete(URI + "/user/1")
+				.content(objectMapper.writeValueAsString(testClient1))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 
 		when(clientServ.deleteClientUser(testClient2, 1)).thenReturn(false);
-		this.mockMvc.perform(MockMvcRequestBuilders.delete(URI + "/user/1")
-						.content(objectMapper.writeValueAsString(testClient2))
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(MockMvcRequestBuilders.delete(URI + "/user/1")
+				.content(objectMapper.writeValueAsString(testClient2))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest());
 	}
 }

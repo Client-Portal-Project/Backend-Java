@@ -39,7 +39,7 @@ public class ApplicantControllerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         mvc = MockMvcBuilders.standaloneSetup(applicantController).build();
-        this.objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper();
         String dummy = "";
         User user = new User(1, dummy, dummy, dummy, dummy, true);
         expected = new Applicant(1, dummy, dummy, dummy, dummy, user);
