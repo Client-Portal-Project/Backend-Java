@@ -31,14 +31,13 @@ public class ClientServiceTest {
 	private Client testClient2;
 	private List<Client> testClientList;
 	private User testUser;
-	private User testUserExtra;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 
 		testUser = new User(1, "test1", "", "", "", true);
-		testUserExtra = new User(2, "test2", "", "", "", true);
+		User testUserExtra = new User(2, "test2", "", "", "", true);
 		testClient1 = new Client(1, "Test Company 1");
 		Set<User> expected = new HashSet<>();
 		expected.add(testUser);
@@ -63,7 +62,7 @@ public class ClientServiceTest {
 
 		when(userService.findUserById(testUser.getUserId())).thenReturn(testUser);
 		when(userService.findUserById(3)).thenReturn(null);
-		when(userService.findUserById(testUserExtra.getUserId())).thenReturn(testUserExtra);
+		when(userService.findUserById(2)).thenReturn(testUserExtra);
 	}
 	
 	@Test
