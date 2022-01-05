@@ -190,18 +190,18 @@ class UserControllerTest {
     @Test
     void editUserWhenUserIsNull() {
         //Assign
-        User user = new User(-1, EMAIL, PASS, "test", "user", null);
+        User temp = new User(-1, EMAIL, PASS, "test", "user", null);
         Map<String, String> headers = new HashMap<>();
         // encoded token generated using JWT's debugger, token's userId is -1
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDAxMzM2ODksInVzZXJJZCI6LTF9.yvafM2l901ou-GetgqI6nNcDh3E_1eQ4sbvxVwYmQZs";
         headers.put("authorization", token);
         Mockito.when(jwtUtil.verify(headers.get("authorization"))).thenReturn(JWT.decode(token));
-        Mockito.when(userService.editUser(user)).thenReturn(null);
+        Mockito.when(userService.editUser(temp)).thenReturn(null);
         ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (4), user does not exist",
                 HttpStatus.UNAUTHORIZED);
 
         //Act
-        ResponseEntity<?> actualResult = this.userController.editUser(user, headers);
+        ResponseEntity<?> actualResult = this.userController.editUser(temp, headers);
 
         //Assert
         assertEquals(expectedResult, actualResult);
