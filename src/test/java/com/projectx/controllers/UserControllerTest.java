@@ -32,8 +32,9 @@ class UserControllerTest {
     @InjectMocks
     UserController userController;
 
-    private User user = new User(1, "testuser@test.com", "password", "test",
-            "user", null);
+    private static final String EMAIL = "testuser@test.com";
+    private static final String PASS = "password";
+    private User user = new User(1, EMAIL, PASS, "test", "user", null);
 
     @BeforeEach
     void setUp() {
@@ -66,8 +67,8 @@ class UserControllerTest {
     @Test
     void login() {
         //Assign
-        String email = "testuser@test.com";
-        String password = "password";
+        String email = EMAIL;
+        String password = PASS;
         Mockito.when(userService.getUserByEmailAndPassword(email, password)).thenReturn(user);
         String token = "JWT";
         Mockito.when(jwtUtil.generateToken(user.getUserId())).thenReturn(token);
@@ -84,13 +85,13 @@ class UserControllerTest {
     @Test
     void loginWhenEmailOrPasswordIsInvalid() {
         //Assign
-        User user = new User();
-        user.setEmail("testusr@test.co");
-        user.setPassword("password");
-        Mockito.when(userService.getUserByEmailAndPassword(user.getEmail(), user.getPassword())).thenReturn(null);
+        User temp = new User();
+        temp.setEmail("testusr@test.co");
+        temp.setPassword(PASS);
+        Mockito.when(userService.getUserByEmailAndPassword(temp.getEmail(), temp.getPassword())).thenReturn(null);
         ResponseEntity<User> expectedResult = new ResponseEntity<>(null, HttpStatus.CONFLICT);
         //Act
-        ResponseEntity<User> actualResult = this.userController.login(user);
+        ResponseEntity<User> actualResult = this.userController.login(temp);
         //Assert
         assertEquals(expectedResult, actualResult);
     }
@@ -109,9 +110,9 @@ class UserControllerTest {
     @Test
     void editUser() {
         //Assign
-        User before = new User(-1, "testuser@test.com", "password", "test",
+        User before = new User(-1, EMAIL, PASS, "test",
                 "user", null);
-        User after = new User(-1, "testuser@test.com", null, "test-1",
+        User after = new User(-1, EMAIL, null, "test-1",
                 "user-1", null);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute("userId", -1);
@@ -139,14 +140,14 @@ class UserControllerTest {
     @Test
     void editUserWhenPasswordLengthLessThenEight() {
         //Assign
-        User user = new User(-1, "testuser@test.com", "pass", "test",
+        User temp = new User(-1, EMAIL, "pass", "test",
                 "user", null);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute("userId", -1);
         ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (2), invalid password",
                 HttpStatus.UNAUTHORIZED);
         //Act
-        ResponseEntity<?> actualResult = this.userController.editUser(user, headers);
+        ResponseEntity<?> actualResult = this.userController.editUser(temp, headers);
         //Assert
         assertEquals(expectedResult, actualResult);
     }
@@ -154,7 +155,7 @@ class UserControllerTest {
     @Test
     void editUserWhenUserIsNull() {
         //Assign
-        User user = new User(-1, "testuser@test.com", "password", "test",
+        User temp = new User(-1, EMAIL, PASS, "test",
                 "user", null);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute("userId", -1);
@@ -162,7 +163,7 @@ class UserControllerTest {
                 HttpStatus.UNAUTHORIZED);
         Mockito.when(userService.editUser(user)).thenReturn(null);
         //Act
-        ResponseEntity<?> actualResult = this.userController.editUser(user, headers);
+        ResponseEntity<?> actualResult = this.userController.editUser(temp, headers);
         //Assert
         assertEquals(expectedResult, actualResult);
     }
@@ -171,17 +172,16 @@ class UserControllerTest {
     void deleteUser() {
         //Assign
         Integer userId = -1;
-        User user = new User(-1, "testuser@test.com", "password", "test", "user", null);
+        User temp = new User(-1, EMAIL, PASS, "test", "user", null);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute("userId", -1);
-        Mockito.when(userService.findUserById(userId)).thenReturn(user);
-
+        Mockito.when(userService.findUserById(userId)).thenReturn(temp);
         ResponseEntity<?> expectedResult = new ResponseEntity<>("Valid token, user deleted", HttpStatus.ACCEPTED);
         //Act
         ResponseEntity<?> actualResult = this.userController.deleteUser(userId, headers);
         //Assert
         assertEquals(expectedResult, actualResult);
-        Mockito.verify(userService, Mockito.times(1)).deleteUser(user);
+        Mockito.verify(userService, Mockito.times(1)).deleteUser(temp);
     }
 
     @Test
