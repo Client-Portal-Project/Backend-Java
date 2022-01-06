@@ -1,7 +1,7 @@
 package com.projectx.controllers;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.projectx.Driver;
+import com.projectx.aspects.annotations.NoAuth;
 import com.projectx.models.User;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @RestController("userController")
@@ -33,6 +33,7 @@ public class UserController {
      * @return http response with a string message in a {@link ResponseEntity} that contains a CREATED request if the
      * user is added, else a CONFLICT request.
      */
+    @NoAuth
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody User user) {
         ResponseEntity<String> response;
@@ -52,6 +53,7 @@ public class UserController {
      * @return http response with a user object in a {@link ResponseEntity} that contains a CREATED request if the
      * user exists; thus, generating a token, else a CONFLICT request.
      */
+    @NoAuth
     @PostMapping("login")
     public ResponseEntity<User> login(@RequestBody User user) {
         ResponseEntity<User> response;
@@ -75,6 +77,7 @@ public class UserController {
      * @return http response with a list of user objects in a {@link ResponseEntity} that contains an ACCEPTED
      * request; this endpoint is intended for verifying users in the database via Postman, but may be deleted.
      */
+    @NoAuth
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(this.userService.findAllUsers(), HttpStatus.ACCEPTED);
@@ -90,30 +93,27 @@ public class UserController {
      * user was updated, else response with a string message and an UNAUTHORIZED request.
      */
     @PutMapping
-    public ResponseEntity<?> editUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
+    public ResponseEntity<?> editUser(@RequestBody User user, HttpServletRequest headers) {
         ResponseEntity<?> response;
-        DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));
-        if(decodedJWT == null) {
-            response = new ResponseEntity<>("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
-        } else {
-            if(Objects.equals(decodedJWT.getClaims().get("userId").asInt(), user.getUserId())) {
-                if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
-                    // Password encryption goes here
-                    User updatedUser = this.userService.editUser(user);
-                    if(updatedUser == null) {
-                        response = new ResponseEntity<>("Invalid token (4), user does not exist", HttpStatus.UNAUTHORIZED);
-                    } else {
-                        updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
-                        response = new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
-                    }
+        System.out.println(headers.getAttribute("userId") +"\t"+user.getUserId());
+        if(Objects.equals(headers.getAttribute("userId"), user.getUserId())) {
+            if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
+                // Password encryption goes here
+                User updatedUser = this.userService.editUser(user);
+                if(updatedUser == null) {
+                    response = new ResponseEntity<>("Invalid token (3), user does not exist",
+                            HttpStatus.UNAUTHORIZED);
                 } else {
-                    response = new ResponseEntity<>("Invalid token (3), invalid password", HttpStatus.UNAUTHORIZED);
+                    updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
+                    response = new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
                 }
-
             } else {
-                response = new ResponseEntity<>("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
+                response = new ResponseEntity<>("Invalid token (2), invalid password", HttpStatus.UNAUTHORIZED);
             }
+        } else {
+            response = new ResponseEntity<>("Invalid token (1), user mismatch", HttpStatus.UNAUTHORIZED);
         }
+
         return response;
     }
 
@@ -127,21 +127,18 @@ public class UserController {
      * user was updated, else an UNAUTHORIZED request.
      */
     @DeleteMapping("{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
+    public ResponseEntity<String> deleteUser(@PathVariable Integer userId, HttpServletRequest headers) {
         ResponseEntity<String> response;
-        DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));
-        if(decodedJWT == null) {
-            response = new ResponseEntity<>("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
-        } else {
-            if(Objects.equals(decodedJWT.getClaims().get("userId").asInt(), userId)) {
-                User user = userService.findUserById(userId);
-                userService.deleteUser(user);
-                response = new ResponseEntity<>("Valid token, user deleted", HttpStatus.ACCEPTED);
-            }
-            else {
-                response = new ResponseEntity<>("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
-            }
+
+        if(Objects.equals(headers.getAttribute("userId"), userId)) {
+            User user = userService.findUserById(userId);
+            userService.deleteUser(user);
+            response = new ResponseEntity<>("Valid token, user deleted", HttpStatus.ACCEPTED);
         }
+        else {
+            response = new ResponseEntity<>("Invalid token, user mismatch", HttpStatus.UNAUTHORIZED);
+        }
+
         return response;
     }
 }

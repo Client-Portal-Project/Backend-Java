@@ -19,7 +19,6 @@ public class LoggerAspect {
 
     @Before("within(com.projectx.controllers.*)")
     public void logHit(final JoinPoint joinPoint) {
-        System.out.println("");
         log.info(joinPoint.getSignature().toShortString() + " successfully hit.");
     }
 
