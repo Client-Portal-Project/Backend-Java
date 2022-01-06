@@ -58,12 +58,12 @@ public class FileServiceTest {
 
     @Test
     void testGetAllFiles() {
-        List<File> list = new ArrayList();
+        List<File> list = new ArrayList<>();
         list.add(expected);
         when(fileDao.findAll()).thenReturn(list);
-        List<File> actual = fileService.getAllFiles().map(dbFile -> {
-            return new File(dbFile.getName(), dbFile.getType(), dbFile.getData());
-        }).collect(Collectors.toList());
+        List<File> actual = fileService.getAllFiles().map(dbFile ->
+                new File(dbFile.getName(), dbFile.getType(), dbFile.getData())
+        ).collect(Collectors.toList());
 
         assertEquals(actual, list);
     }

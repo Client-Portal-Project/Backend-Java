@@ -1,6 +1,6 @@
 package com.projectx.controllers;
 
-import com.projectx.DTOs.ResponseFile;
+import com.projectx.dtos.ResponseFile;
 import com.projectx.models.File;
 import com.projectx.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;

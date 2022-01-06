@@ -101,13 +101,15 @@ public class UserController {
                     // Password encryption goes here
                     User updatedUser = this.userService.editUser(user);
                     if(updatedUser == null) {
-                        response = new ResponseEntity<>("Invalid token (4), user does not exist", HttpStatus.UNAUTHORIZED);
+                        response = new ResponseEntity<>("Invalid token (4), user does not exist",
+                                HttpStatus.UNAUTHORIZED);
                     } else {
                         updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
                         response = new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
                     }
                 } else {
-                    response = new ResponseEntity<>("Invalid token (3), invalid password", HttpStatus.UNAUTHORIZED);
+                    response = new ResponseEntity<>("Invalid token (3), invalid password",
+                            HttpStatus.UNAUTHORIZED);
                 }
 
             } else {
