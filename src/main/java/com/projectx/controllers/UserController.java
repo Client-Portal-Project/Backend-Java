@@ -112,7 +112,6 @@ public class UserController {
         } else {
             response = new ResponseEntity<>("Invalid token (1), user mismatch", HttpStatus.UNAUTHORIZED);
         }
-
         return response;
     }
 

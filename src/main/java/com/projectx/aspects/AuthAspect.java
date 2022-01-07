@@ -41,12 +41,11 @@ public class AuthAspect {
                 response = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
                 log.info("Received Valid Token");
-                request.setAttribute("userId", decodedJWT.getClaims().get("userId").asInt());
+                request.setAttribute("userId", decodedJWT.getClaims().get("userId"));
                 try {
                     response = (ResponseEntity<?>) pjp.proceed();
                 } catch (Throwable e) {
-                    log.error("Unable to Proceed from Previous Join Point");
-                    e.printStackTrace();
+                    log.error("Unable to Proceed from Previous Join Point: "+e.getMessage());
                 }
             }
         }
