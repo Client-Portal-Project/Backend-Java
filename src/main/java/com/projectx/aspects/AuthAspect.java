@@ -23,6 +23,7 @@ public class AuthAspect {
     @Autowired
     private JwtUtil jwtUtil;
 
+
     @Around("execution(* com.projectx.controllers.UserController.*(..))" +
             "&& !@annotation(com.projectx.aspects.annotations.NoAuth)")
     public ResponseEntity<?> authenticateToken(final ProceedingJoinPoint pjp) {
@@ -41,7 +42,6 @@ public class AuthAspect {
             } else {
                 log.info("Received Valid Token");
                 request.setAttribute("userId", decodedJWT.getClaims().get("userId").asInt());
-                System.out.println(decodedJWT.getClaims().get("userId"));
                 try {
                     response = (ResponseEntity<?>) pjp.proceed();
                 } catch (Throwable e) {
