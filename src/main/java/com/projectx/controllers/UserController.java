@@ -95,7 +95,6 @@ public class UserController {
     @PutMapping
     public ResponseEntity<?> editUser(@RequestBody User user, HttpServletRequest headers) {
         ResponseEntity<?> response;
-        System.out.println(headers.getAttribute("userId") +"\t"+user.getUserId());
         if(Objects.equals(headers.getAttribute("userId"), user.getUserId())) {
             if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
                 // Password encryption goes here
@@ -113,7 +112,6 @@ public class UserController {
         } else {
             response = new ResponseEntity<>("Invalid token (1), user mismatch", HttpStatus.UNAUTHORIZED);
         }
-
         return response;
     }
 
@@ -129,7 +127,6 @@ public class UserController {
     @DeleteMapping("{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer userId, HttpServletRequest headers) {
         ResponseEntity<String> response;
-
         if(Objects.equals(headers.getAttribute("userId"), userId)) {
             User user = userService.findUserById(userId);
             userService.deleteUser(user);

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ public class ApplicantServiceTest {
 
     @Test
     void testGetAllApplicant() {
-        List<Applicant> list = new ArrayList();
+        List<Applicant> list = new ArrayList<>();
         list.add(expected);
 
         when(applicantDao.findAll()).thenReturn(list);

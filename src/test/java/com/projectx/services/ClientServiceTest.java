@@ -33,7 +33,7 @@ public class ClientServiceTest {
 	private User testUser;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp() {
 		MockitoAnnotations.openMocks(this);
 
 		testUser = new User(1, "test1", "", "", "", true);
@@ -47,7 +47,7 @@ public class ClientServiceTest {
 		testEditClient1 = new Client(1, "Test");
 		testEditClient1.setClientUser(expected);
 		
-		testClientList = new ArrayList<Client>();
+		testClientList = new ArrayList<>();
 		testClientList.add(testClient1);
 		testClientList.add(testClient2);
 		
