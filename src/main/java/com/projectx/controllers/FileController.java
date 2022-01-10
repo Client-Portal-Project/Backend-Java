@@ -1,6 +1,6 @@
 package com.projectx.controllers;
 
-import com.projectx.dtos.ResponseFile;
+import com.projectx.models.Applicant;
 import com.projectx.models.File;
 import com.projectx.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController("fileController")
 @RequestMapping("file")
@@ -23,10 +21,11 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
-    @PostMapping("{file}")
-    public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile file){
+    @PostMapping
+    public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile file,
+                                              @RequestBody Applicant applicant){
         try{
-            fileService.store(file);
+            fileService.store(file, applicant);
             return ResponseEntity.ok().body(true);
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(false);
@@ -34,26 +33,13 @@ public class FileController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseFile>> getListFiles() {
-        List<ResponseFile> files = fileService.getAllFiles().map(dbFile -> {
-            String fileDownloadUri = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/file")
-                    .path(dbFile.getId())
-                    .toUriString();
-
-            return new ResponseFile(
-                    dbFile.getName(),
-                    fileDownloadUri,
-                    dbFile.getType(),
-                    dbFile.getData().length);
-        }).collect(Collectors.toList());
-
+    public ResponseEntity<List<File>> getListFiles(@RequestBody Applicant applicant) {
+        List<File> files = fileService.getAllFiles(applicant);
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable String id) {
+    public ResponseEntity<byte[]> getFile(@PathVariable Integer id) {
         File file = fileService.getFile(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")

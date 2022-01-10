@@ -1,7 +1,7 @@
 package com.projectx.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.projectx.dtos.ResponseFile;
+import com.projectx.models.Applicant;
 import com.projectx.models.File;
 import com.projectx.services.FileService;
 import lombok.SneakyThrows;
@@ -19,7 +19,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -32,6 +31,7 @@ public class FileControllerTest {
     private File expected;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
+    private Applicant applicant;
 
     @Autowired
     private WebApplicationContext context;
@@ -42,7 +42,8 @@ public class FileControllerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         mockMvc = webAppContextSetup(context).build();
-        expected = new File("aaa", "test", "test", ("test").getBytes(), null);
+        applicant = new Applicant(1, "", "", "", "", null, null);
+        expected = new File(1, "test", "test", ("test").getBytes(), null);
         objectMapper = new ObjectMapper();
     }
 
@@ -58,7 +59,7 @@ public class FileControllerTest {
 
         MockMultipartFile unviable = new MockMultipartFile("file", "something wrong here",
                 "not viable type", new byte[0]);
-        when(fileService.store(unviable)).thenThrow(new IOException());
+        when(fileService.store(unviable, applicant)).thenThrow(new IOException());
         mockMvc.perform(MockMvcRequestBuilders.multipart("/file/"+unviable)
                         .file(unviable))
                 .andExpect(status().isBadRequest())
@@ -69,21 +70,17 @@ public class FileControllerTest {
     void testGetListFiles() {
         List<File> list = new ArrayList<>();
         list.add(expected);
-        Stream<File> stream = list.stream();
-
-        ResponseFile result = new ResponseFile(expected.getName(), "http://localhost/fileaaa",
-                expected.getType(), 4);
-        when(fileService.getAllFiles()).thenReturn(stream);
+        when(fileService.getAllFiles(applicant)).thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders.get("/file"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("["+objectMapper.writeValueAsString(result)+"]"));
+                .andExpect(content().json(objectMapper.writeValueAsString(list)));
     }
 
     @Test @SneakyThrows
     void testGetFile() {
         when(fileService.getFile(expected.getId())).thenReturn(expected);
         mockMvc.perform(MockMvcRequestBuilders.get("/file/{id}", expected.getId())
-                .param("id", expected.getId()))
+                .param("id", String.valueOf(expected.getId())))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(new String(expected.getData())));
