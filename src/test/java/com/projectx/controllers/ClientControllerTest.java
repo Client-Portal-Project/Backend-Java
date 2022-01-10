@@ -86,9 +86,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by id: "
-						+ testId));
+				.andExpect(MockMvcResultMatchers.content().string(""));
 	}
 	
 	@Test @SneakyThrows
@@ -110,9 +108,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Company " +
-						"Name: " + testCompanyName));
+				.andExpect(MockMvcResultMatchers.content().string(""));
 	}
 	
 	@Test @SneakyThrows
@@ -137,9 +133,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isConflict())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.content().string("Failed to create: "
-						+ testClient1 + ", it is already exist"));
+				.andExpect(MockMvcResultMatchers.content().string(""));
 	}
 	
 	@Test @SneakyThrows
@@ -164,9 +158,7 @@ public class ClientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.content().string("Failed to find Client by Id: "
-						+ testClient1.getClientId()));
+				.andExpect(MockMvcResultMatchers.content().string(""));
 	}
 	
 	@Test @SneakyThrows

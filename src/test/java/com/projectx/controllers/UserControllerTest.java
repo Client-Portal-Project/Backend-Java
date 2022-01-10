@@ -132,8 +132,8 @@ class UserControllerTest {
         //Assign
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
-        ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (1), user mismatch",
-                HttpStatus.UNAUTHORIZED);
+        ResponseEntity<User> expectedResult = new ResponseEntity<>(null,
+                HttpStatus.BAD_REQUEST);
         //Act
         ResponseEntity<?> actualResult = this.userController.editUser(user, headers);
         //Assert
@@ -147,7 +147,7 @@ class UserControllerTest {
                 "user", null);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
-        ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (2), invalid password",
+        ResponseEntity<User> expectedResult = new ResponseEntity<>(null,
                 HttpStatus.UNAUTHORIZED);
         //Act
         ResponseEntity<?> actualResult = this.userController.editUser(temp, headers);
@@ -162,8 +162,8 @@ class UserControllerTest {
                 "user", null);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
-        ResponseEntity<?> expectedResult = new ResponseEntity<>("Invalid token (3), user does not exist",
-                HttpStatus.UNAUTHORIZED);
+        ResponseEntity<User> expectedResult = new ResponseEntity<>(null,
+                HttpStatus.NOT_FOUND);
         Mockito.when(userService.editUser(user)).thenReturn(null);
         //Act
         ResponseEntity<?> actualResult = this.userController.editUser(temp, headers);

@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class UserServiceTest {
-    private final String EMAIL = "testuser@test.com";
-    private final String PASSWORD = "password";
+    private static final String EMAIL = "testuser@test.com";
+    private static final String PASSWORD = "password";
     @Mock
     private UserDao userDao;
 

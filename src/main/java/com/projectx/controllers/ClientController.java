@@ -34,40 +34,40 @@ public class ClientController {
     } 
 
     @GetMapping("id/{clientId}")
-    public ResponseEntity<?> getClientById(@PathVariable Integer clientId) {
+    public ResponseEntity<Client> getClientById(@PathVariable Integer clientId) {
         Client client = clientServ.findClientById(clientId);
         if(client != null) {
            return new ResponseEntity<>(client, HttpStatus.OK);
         } else {
-           return new ResponseEntity<>("Failed to find Client by id: " + clientId, HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("name/{companyName}")
-    public ResponseEntity<?> getClientByCompanyName(@PathVariable String companyName) {
+    public ResponseEntity<Client> getClientByCompanyName(@PathVariable String companyName) {
         Client client = clientServ.findClientByCompanyName(companyName);
         if(client != null) {
         	return new ResponseEntity<>(client, HttpStatus.OK);
         } else {
-        	return new ResponseEntity<>("Failed to find Client by Company Name: " + companyName, HttpStatus.NOT_FOUND);
+        	return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> createClient(@RequestBody Client client) {
+    public ResponseEntity<Client> createClient(@RequestBody Client client) {
         Client newClient = clientServ.createClient(client);
         if(newClient != null) {
         	return new ResponseEntity<>(newClient, HttpStatus.CREATED);
         } else {
-        	return new ResponseEntity<>("Failed to create: " + client + ", it is already exist", HttpStatus.CONFLICT);
+        	return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
     }
     
     @PutMapping
-    public ResponseEntity<?> editClient(@RequestBody Client client) {
+    public ResponseEntity<Client> editClient(@RequestBody Client client) {
     	Client updateClient = clientServ.editClient(client);
     	if(updateClient == null) {
-    		return new ResponseEntity<>("Failed to find Client by Id: " + client.getClientId(), HttpStatus.NOT_FOUND);
+    		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     	}
     	return new ResponseEntity<>(updateClient, HttpStatus.OK);
     }
@@ -83,7 +83,7 @@ public class ClientController {
 
     //Returns a list of all the users in the client
     @GetMapping("user")
-    public ResponseEntity<?> getAllClientUsers(@RequestBody Client client) {
+    public ResponseEntity<List<User>> getAllClientUsers(@RequestBody Client client) {
         return new ResponseEntity<>(this.clientServ.findAllClientUsers(client), HttpStatus.OK);
     }
 
@@ -98,7 +98,7 @@ public class ClientController {
     }
 
     @PutMapping("user/{id}") //id is the userId
-    public ResponseEntity<?> createClientUser(@RequestBody Client client, @PathVariable int id) {
+    public ResponseEntity<Void> createClientUser(@RequestBody Client client, @PathVariable int id) {
         boolean check = clientServ.createClientUser(client, id);
         if (check) {
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -108,7 +108,7 @@ public class ClientController {
     }
 
     @DeleteMapping("user/{id}") //id is the userId
-    public ResponseEntity<?> deleteClientUser(@RequestBody Client client, @PathVariable int id) {
+    public ResponseEntity<Void> deleteClientUser(@RequestBody Client client, @PathVariable int id) {
         boolean check = clientServ.deleteClientUser(client, id);
         if (check) {
             return new ResponseEntity<>(HttpStatus.OK);
