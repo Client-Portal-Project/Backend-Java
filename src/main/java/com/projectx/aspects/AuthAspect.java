@@ -41,7 +41,7 @@ public class AuthAspect {
                 response = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
                 log.info("Received Valid Token");
-                request.setAttribute("userId", decodedJWT.getClaims().get("userId"));
+                request.setAttribute("userId", decodedJWT.getClaims().get("userId").asInt());
                 try {
                     response = (ResponseEntity<?>) pjp.proceed();
                 } catch (Throwable e) {

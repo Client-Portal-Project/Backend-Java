@@ -35,7 +35,7 @@ class UserControllerTest {
     private static final String EMAIL = "testuser@test.com";
     private static final String PASS = "password";
     private static final String AUTH = "authorization";
-    private static final String ID = "userID";
+    private static final String ID = "userId";
 
     private User user = new User(1, EMAIL, PASS, "test", "user", null);
 
