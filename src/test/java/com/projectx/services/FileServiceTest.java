@@ -35,8 +35,9 @@ public class FileServiceTest {
     void initMock() {
         MockitoAnnotations.openMocks(this);
         String dummy = "";
+        Long size = null;
         applicant = new Applicant(1, dummy, dummy, dummy, dummy, null, null);
-        expected = new File(dummy, dummy, null, applicant);
+        expected = new File(dummy, dummy, size, applicant);
     }
 
     @Test
@@ -62,7 +63,7 @@ public class FileServiceTest {
     void testGetAllFiles() {
         List<File> list = new ArrayList<>();
         list.add(expected);
-        when(fileDao.findByApplicant_ApplicantId(applicant.getApplicantId()));
+        when(fileDao.findByApplicant_ApplicantId(applicant.getApplicantId())).thenReturn(list);
         List<File> actual = fileService.getAllFiles(applicant);
         assertEquals(actual, list);
     }

@@ -33,6 +33,6 @@ public class FileService {
     }
 
     public List<File> getAllFiles(Applicant applicant) {
-        return fileRepository.findByApplicant(applicant.getApplicantId());
+        return fileRepository.findByApplicant_ApplicantId(applicant.getApplicantId());
     }
 }

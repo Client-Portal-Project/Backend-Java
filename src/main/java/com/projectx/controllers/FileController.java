@@ -2,6 +2,7 @@ package com.projectx.controllers;
 
 import com.projectx.models.Applicant;
 import com.projectx.models.File;
+import com.projectx.services.ApplicantService;
 import com.projectx.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,8 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
+    @Autowired
+    private ApplicantService applicantService;
 
     @PostMapping
     public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile file,
@@ -35,6 +38,10 @@ public class FileController {
     @GetMapping
     public ResponseEntity<List<File>> getListFiles(@RequestBody Applicant applicant) {
         List<File> files = fileService.getAllFiles(applicant);
+        files.stream().forEach(f -> {
+                f.setSize((long) f.getData().length);
+                f.setData(null);
+            });
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 

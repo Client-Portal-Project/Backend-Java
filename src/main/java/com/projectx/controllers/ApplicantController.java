@@ -86,7 +86,7 @@ public class ApplicantController {
      *          a {@link ResponseEntity} that contains an ok request.
      */
     @GetMapping
-    public ResponseEntity<List<Applicant>> getApplicant() {
+    public ResponseEntity<List<Applicant>> getAllApplicants() {
         return new ResponseEntity<>(applicantService.getAllApplicants(), HttpStatus.OK);
     }
 
@@ -100,7 +100,7 @@ public class ApplicantController {
      *          the specific applicant is found, bad request otherwise.
      */
     @GetMapping("{id}")
-    public ResponseEntity<Applicant> getAllApplicants(@PathVariable int id) {
+    public ResponseEntity<Applicant> getApplicant(@PathVariable int id) {
         Applicant applicant = applicantService.getApplicant(id);
         if (applicant == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

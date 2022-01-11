@@ -25,6 +25,8 @@ public class File {
     @Lob
     @Column(name = "file_data")
     private byte[] data;
+    @Transient
+    private Long size;
     @ManyToOne(cascade = CascadeType.ALL)
     private Applicant applicant;
 
@@ -33,5 +35,14 @@ public class File {
         this.type = type;
         this.data = data;
         this.applicant = applicant;
+        this.size = null;
+    }
+
+    public File(String name, String type, Long size, Applicant applicant) {
+        this.name = name;
+        this.type = type;
+        this.data = null;
+        this.applicant = applicant;
+        this.size = size;
     }
 }
