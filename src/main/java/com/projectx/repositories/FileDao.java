@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface FileDao extends JpaRepository<File, Integer> {
-    List<File> findByApplicant_ApplicantId (int applicant_id);
+    List<File> findByApplicant_ApplicantId (int applicantId);
 }
