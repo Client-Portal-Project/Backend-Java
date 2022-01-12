@@ -38,7 +38,8 @@ public class Applicant {
             inverseJoinColumns = @JoinColumn(name = "skillId"))
     Set<Skill> applicantSkills;
 
-    public Applicant(int applicantId, String aboutMe, String educationLevel, String educationField, String employmentStatus, User user) {
+    public Applicant(int applicantId, String aboutMe, String educationLevel, String educationField,
+                     String employmentStatus, User user) {
         this.applicantId = applicantId;
         this.aboutMe = aboutMe;
         this.educationLevel = educationLevel;
@@ -48,7 +49,8 @@ public class Applicant {
         this.applicantSkills = new HashSet<>();
     }
 
-    public Applicant(String aboutMe, String educationLevel, String educationField, String employmentStatus, User user) {
+    public Applicant(String aboutMe, String educationLevel, String educationField, String employmentStatus,
+                     User user) {
         this.aboutMe = aboutMe;
         this.educationLevel = educationLevel;
         this.educationField = educationField;
