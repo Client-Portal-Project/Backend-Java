@@ -15,9 +15,9 @@ import javax.persistence.*;
 public class File {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "file_id")
+    private int id;
     @Column(name = "file_name")
     private String name;
     @Column(name = "file_type")
@@ -25,12 +25,24 @@ public class File {
     @Lob
     @Column(name = "file_data")
     private byte[] data;
+    @Transient
+    private Long size;
     @ManyToOne(cascade = CascadeType.ALL)
     private Applicant applicant;
 
-    public File(String name, String type, byte[] data) {
+    public File(String name, String type, byte[] data, Applicant applicant) {
         this.name = name;
         this.type = type;
         this.data = data;
+        this.applicant = applicant;
+        this.size = null;
+    }
+
+    public File(String name, String type, Long size, Applicant applicant) {
+        this.name = name;
+        this.type = type;
+        this.data = null;
+        this.applicant = applicant;
+        this.size = size;
     }
 }

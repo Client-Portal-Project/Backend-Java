@@ -3,8 +3,8 @@ package com.projectx.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import com.projectx.models.Applicant;
 import com.projectx.models.File;
 import com.projectx.repositories.FileDao;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class FileServiceTest {
     private File expected;
+    private Applicant applicant;
     @Mock
     FileDao fileDao;
     @InjectMocks
@@ -34,24 +35,26 @@ public class FileServiceTest {
     void initMock() {
         MockitoAnnotations.openMocks(this);
         String dummy = "";
-        expected = new File(dummy, dummy, null);
+        Long size = null;
+        applicant = new Applicant(1, dummy, dummy, dummy, dummy, null, null);
+        expected = new File(dummy, dummy, size, applicant);
     }
 
     @Test
     void testStore() throws IOException {
         MultipartFile input = new MockMultipartFile("aaa", "", "", (byte[]) null);
         File outputFile = new File(StringUtils.cleanPath(input.getOriginalFilename()), input.getContentType(),
-                input.getBytes());
+                input.getBytes(), applicant);
         when(fileDao.save(outputFile)).thenReturn(expected);
-        File actual = fileService.store(input);
+        File actual = fileService.store(input, applicant);
 
         assertEquals(actual, expected);
     }
 
     @Test
     void testGetFile() {
-        when(fileDao.findById("aaa")).thenReturn(Optional.of(expected));
-        File actual = fileService.getFile("aaa");
+        when(fileDao.findById(1)).thenReturn(Optional.of(expected));
+        File actual = fileService.getFile(1);
 
         assertEquals(actual, expected);
     }
@@ -60,11 +63,8 @@ public class FileServiceTest {
     void testGetAllFiles() {
         List<File> list = new ArrayList<>();
         list.add(expected);
-        when(fileDao.findAll()).thenReturn(list);
-        List<File> actual = fileService.getAllFiles().map(dbFile ->
-                new File(dbFile.getName(), dbFile.getType(), dbFile.getData())
-        ).collect(Collectors.toList());
-
+        when(fileDao.findByApplicant_ApplicantId(applicant.getApplicantId())).thenReturn(list);
+        List<File> actual = fileService.getAllFiles(applicant);
         assertEquals(actual, list);
     }
 }

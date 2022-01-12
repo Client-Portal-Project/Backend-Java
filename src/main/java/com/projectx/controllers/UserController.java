@@ -90,27 +90,27 @@ public class UserController {
      *
      * @param user - the user to be updated in the database
      * @return http response with a user object in a {@link ResponseEntity} that contains an ACCEPTED request if the
-     * user was updated, else response with a string message and an UNAUTHORIZED request.
+     * user was updated, else response with no object and an UNAUTHORIZED if password does not match the criteria,
+     * NOT_FOUND if the User is not in the database, or BAD_REQUEST request if the user ids don't match.
      */
     @PutMapping
-    public ResponseEntity<?> editUser(@RequestBody User user, HttpServletRequest headers) {
-        ResponseEntity<?> response;
+    public ResponseEntity<User> editUser(@RequestBody User user, HttpServletRequest headers) {
+        ResponseEntity<User> response;
         if(Objects.equals(headers.getAttribute("userId"), user.getUserId())) {
             if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
                 // Password encryption goes here
                 User updatedUser = this.userService.editUser(user);
                 if(updatedUser == null) {
-                    response = new ResponseEntity<>("Invalid token (3), user does not exist",
-                            HttpStatus.UNAUTHORIZED);
+                    response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
                 } else {
                     updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
                     response = new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
                 }
             } else {
-                response = new ResponseEntity<>("Invalid token (2), invalid password", HttpStatus.UNAUTHORIZED);
+                response = new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             }
         } else {
-            response = new ResponseEntity<>("Invalid token (1), user mismatch", HttpStatus.UNAUTHORIZED);
+            response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         return response;
     }
