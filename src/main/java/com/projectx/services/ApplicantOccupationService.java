@@ -1,5 +1,6 @@
 package com.projectx.services;
 
+import com.projectx.models.Applicant;
 import com.projectx.models.ApplicantOccupation;
 import com.projectx.repositories.ApplicantOccupationDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ApplicantOccupationService {
         return applicantOccupationDao.getById(id);
     }
 
-    public List<ApplicantOccupation> getAllApplicantOccupation() {
-        return applicantOccupationDao.findAll();
+    public List<ApplicantOccupation> getAllApplicantOccupation(Applicant applicant) {
+        return applicantOccupationDao.findByApplicant_ApplicantId(applicant.getApplicantId());
     }
 }

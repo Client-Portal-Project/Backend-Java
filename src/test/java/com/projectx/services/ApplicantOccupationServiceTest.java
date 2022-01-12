@@ -59,8 +59,10 @@ public class ApplicantOccupationServiceTest {
     void testGetAllApplicantOccupation() {
         List<ApplicantOccupation> list = new ArrayList<>();
         list.add(expected);
-        when(applicantOccupationDao.findAll()).thenReturn(list);
-        List<ApplicantOccupation> actual = applicantOccupationService.getAllApplicantOccupation();
+        when(applicantOccupationDao.findByApplicant_ApplicantId(expected.getApplicant()
+                .getApplicantId())).thenReturn(list);
+        List<ApplicantOccupation> actual = applicantOccupationService
+                .getAllApplicantOccupation(expected.getApplicant());
 
         assertEquals(list, actual);
     }
