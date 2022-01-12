@@ -12,16 +12,23 @@ import java.util.Date;
 
 @Component("jwtUtil")
 public class JwtUtil {
+
+    /*
+     * Resources:
+     * https://jwt.io/introduction
+     * https://github.com/auth0/node-jsonwebtoken
+     * */
+
     public static final String SECRET = "Project-X";
     public static final Algorithm algorithm = Algorithm.HMAC256(SECRET);
     public static final JWTVerifier jwtVerifier = JWT.require(algorithm).build();
     // 1000 milliseconds (1 second), 60 seconds (1 minute), 60 minutes (1 hour)
-    public static final Integer time = 1000 * 60 * 60;
+    public static final Integer TIME = 1000 * 60 * 60;
 
     public String generateToken(Integer userId) {
         try {
             return JWT.create().withClaim("userId", userId)
-                    .withExpiresAt(new Date(System.currentTimeMillis() + time))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + TIME))
                     .sign(algorithm);
         } catch(JWTCreationException exception) {
             exception.printStackTrace();
