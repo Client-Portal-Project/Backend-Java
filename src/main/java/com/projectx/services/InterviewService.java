@@ -20,7 +20,7 @@ public class InterviewService {
 		this.interviewDao = interviewDao;
 	}
 
-	public Interview findInterviewById(Integer id)
+	public Interview findInterviewById(int id)
 	{
 		return this.interviewDao.findById(id).orElse(null);
 	}
@@ -35,5 +35,9 @@ public class InterviewService {
 	public List<Interview> findByDate(Date when)
 	{
 		return this.interviewDao.findInterviewByDate(when);
+	}
+	public Interview createInterview(Interview interview)
+	{
+		return this.interviewDao.save(interview);
 	}
 }
