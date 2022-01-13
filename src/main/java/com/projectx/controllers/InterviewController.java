@@ -20,7 +20,7 @@ import com.projectx.models.Application;
 import com.projectx.models.Interview;
 
 @RestController("interviewController")
-@RequestMapping(value = "api")
+@RequestMapping(value = "interview")
 @CrossOrigin(value = Driver.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class InterviewController {
 	@Autowired
