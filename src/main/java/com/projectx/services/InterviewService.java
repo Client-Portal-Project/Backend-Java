@@ -2,6 +2,7 @@ package com.projectx.services;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import com.projectx.repositories.InterviewDao;
 
 @Service("interviewService")
 public class InterviewService {
-	InterviewDao interviewDao;
+	private InterviewDao interviewDao;
 	
 	@Autowired
 	public InterviewService(InterviewDao interviewDao)
@@ -39,5 +40,31 @@ public class InterviewService {
 	public Interview createInterview(Interview interview)
 	{
 		return this.interviewDao.save(interview);
+	}
+	public boolean deleteInterview(Interview interview)
+	{
+		this.interviewDao.delete(interview);
+		if(this.interviewDao.findById(interview.getInterviewId()) == null ||
+				!this.interviewDao.findById(interview.getInterviewId()).equals(Optional.of(interview)))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public Interview editInterview(Interview interview)
+	{
+		Interview temp = this.interviewDao.findById(interview.getInterviewId()).orElse(null);
+		if(temp == null)
+		{
+			return null;
+		}
+		else
+		{
+			//to do
+			return temp;
+		}
 	}
 }
