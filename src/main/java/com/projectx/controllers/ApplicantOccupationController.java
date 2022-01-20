@@ -20,7 +20,7 @@ public class ApplicantOccupationController {
                                                                                      applicantOccupation) {
         ApplicantOccupation check = applicantOccupationService
                 .getApplicantOccupation(applicantOccupation.getApplicantOccupationalId());
-        if (check == null) {
+        if (check != null) {
             return new ResponseEntity<>(applicantOccupationService
                     .saveApplicantOccupation(applicantOccupation), HttpStatus.CREATED);
         } else {
