@@ -16,6 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,7 +47,8 @@ public class ApplicantOccupationControllerTest {
 
     @Test @SneakyThrows
     void testCreateApplicantOccupationSuccess() {
-        when(applicantOccupationService.getApplicantOccupation(expected.getApplicantOccupationalId())).thenReturn(expected);
+        when(applicantOccupationService.getApplicantOccupation(expected.getApplicantOccupationalId()))
+                .thenReturn(null);
         when(applicantOccupationService.saveApplicantOccupation(expected)).thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders.post(URI)
@@ -57,7 +61,8 @@ public class ApplicantOccupationControllerTest {
 
     @Test @SneakyThrows
     void testCreateApplicantOccupationFail() {
-        when(applicantOccupationService.getApplicantOccupation(expected.getApplicantOccupationalId())).thenReturn(null);
+        when(applicantOccupationService.getApplicantOccupation(expected.getApplicantOccupationalId()))
+                .thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders.post(URI)
                         .content(objectMapper.writeValueAsString(expected))
@@ -65,5 +70,91 @@ public class ApplicantOccupationControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(""));
+    }
+
+    @Test @SneakyThrows
+    void testUpdateApplicantOccupationSuccess() {
+        when(applicantOccupationService.getApplicantOccupation(expected.getApplicantOccupationalId()))
+                .thenReturn(expected);
+        when(applicantOccupationService.saveApplicantOccupation(expected)).thenReturn(expected);
+
+        mvc.perform(MockMvcRequestBuilders.put(URI)
+                        .content(objectMapper.writeValueAsString(expected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+
+    }
+
+    @Test @SneakyThrows
+    void testUpdateApplicantOccupationFail() {
+        when(applicantOccupationService.getApplicantOccupation(expected.getApplicantOccupationalId()))
+                .thenReturn(null);
+
+        mvc.perform(MockMvcRequestBuilders.put(URI)
+                        .content(objectMapper.writeValueAsString(expected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
+    }
+
+    @Test @SneakyThrows
+    void testDeleteApplicantOccupation() {
+        when(applicantOccupationService.getApplicantOccupation(expected.getApplicantOccupationalId()))
+                .thenReturn(expected);
+
+        mvc.perform(MockMvcRequestBuilders.delete(URI)
+                        .content(objectMapper.writeValueAsString(expected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+
+        ApplicantOccupation temp = expected;
+        temp.setApplicantOccupationalId(2);
+        when(applicantOccupationService.getApplicantOccupation(expected.getApplicantOccupationalId()))
+                .thenReturn(null);
+
+        mvc.perform(MockMvcRequestBuilders.delete(URI)
+                        .content(objectMapper.writeValueAsString(expected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("false"));
+    }
+
+    @Test @SneakyThrows
+    void testGetApplicantOccupation() {
+        when(applicantOccupationService.getApplicantOccupation(1)).thenReturn(expected);
+        when(applicantOccupationService.getApplicantOccupation(2)).thenReturn(null);
+
+        mvc.perform(MockMvcRequestBuilders.get(URI+"/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isFound())
+                .andExpect(content().json(objectMapper.writeValueAsString(expected)));
+
+        mvc.perform(MockMvcRequestBuilders.get(URI+"/2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""));
+    }
+
+    @Test @SneakyThrows
+    void testGetAllApplicantOccupation() {
+        List<ApplicantOccupation> list = new ArrayList<>();
+        list.add(expected);
+
+        when(applicantOccupationService.getAllApplicantOccupation(expected.getApplicant())).thenReturn(list);
+
+        mvc.perform(MockMvcRequestBuilders.get(URI)
+                        .content(objectMapper.writeValueAsString(expected.getApplicant()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(list)));
     }
 }
