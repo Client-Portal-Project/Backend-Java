@@ -136,9 +136,9 @@ public class UserServiceTest {
     void editUser() {
         // Assign
         User before = new User(1, EMAIL, PASSWORD,
-                "test", "user", false);
+                "test", "user", true);
         User after = new User(1, EMAIL, PASSWORD,
-                "test1", "user1", null);
+                "test1", "user1", true);
         Mockito.when(userDao.findById(after.getUserId())).thenReturn(Optional.of(before));
         Mockito.when(userDao.save(before)).thenReturn(after);
         User expectedResult = after;
