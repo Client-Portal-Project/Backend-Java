@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface NeedDao extends JpaRepository<Need, Integer> {
-    List<Need> findByNeed_ClientId (int clientId);
+    List<Need> findByClient_ClientId (int clientId);
 }
