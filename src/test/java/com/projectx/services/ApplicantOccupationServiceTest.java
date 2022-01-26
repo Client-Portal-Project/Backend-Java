@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -48,7 +49,7 @@ public class ApplicantOccupationServiceTest {
 
     @Test
     void testGetApplicantOccupation() {
-        when(applicantOccupationDao.getById(expected.getApplicantOccupationalId())).thenReturn(expected);
+        when(applicantOccupationDao.findById(expected.getApplicantOccupationalId())).thenReturn(Optional.of(expected));
         ApplicantOccupation actual = applicantOccupationService
                 .getApplicantOccupation(expected.getApplicantOccupationalId());
 

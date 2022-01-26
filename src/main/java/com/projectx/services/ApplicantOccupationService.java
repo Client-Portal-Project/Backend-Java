@@ -22,7 +22,7 @@ public class ApplicantOccupationService {
     }
 
     public ApplicantOccupation getApplicantOccupation(int id) {
-        return applicantOccupationDao.getById(id);
+        return applicantOccupationDao.findById(id).orElse(null);
     }
 
     public List<ApplicantOccupation> getAllApplicantOccupation(Applicant applicant) {
