@@ -24,6 +24,15 @@ public class AuthAspect {
     private JwtUtil jwtUtil;
 
 
+    /**
+     * Catches the method execution of a method within the UserController that does not have a
+     * {@link com.projectx.aspects.annotations.NoAuth} annotation and sends back a ResponseEntity
+     * depending on what's within the join point.
+     *
+     * @param pjp the ProceedingJoinPoint
+     * @return a {@link ResponseEntity} that Unauthorized http status if the token within the join
+     * point is invalid or not found, otherwise, proceed the join point if valid.
+     */
     @Around("execution(* com.projectx.controllers.UserController.*(..))" +
             "&& !@annotation(com.projectx.aspects.annotations.NoAuth)")
     public ResponseEntity<?> authenticateToken(final ProceedingJoinPoint pjp) {
