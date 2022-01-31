@@ -17,6 +17,10 @@ public class NeedController {
     @Autowired
     NeedService needService;
 
+    /**
+     * @param need
+     * @return
+     */
     @PostMapping
     public ResponseEntity<Need> createNeed(@RequestBody Need need) {
         Need check = needService.getNeed(need.getNeedId());
@@ -27,6 +31,10 @@ public class NeedController {
         }
     }
 
+    /**
+     * @param need
+     * @return
+     */
     @PutMapping
     public ResponseEntity<Need> editNeed(@RequestBody Need need) {
         Need check = needService.getNeed(need.getNeedId());
@@ -37,6 +45,10 @@ public class NeedController {
         }
     }
 
+    /**
+     * @param need
+     * @return
+     */
     @DeleteMapping
     public ResponseEntity<Boolean> deleteNeed(@RequestBody Need need) {
         Need check = needService.getNeed(need.getNeedId());
@@ -48,6 +60,10 @@ public class NeedController {
         }
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
     public ResponseEntity<Need> getNeed(@PathVariable int id) {
         Need need = needService.getNeed(id);
@@ -58,6 +74,10 @@ public class NeedController {
         }
     }
 
+    /**
+     * @param client
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<Need>> getNeedsByClient(@RequestBody Client client) {
         return new ResponseEntity<>(needService.getAllNeeds(client), HttpStatus.OK);

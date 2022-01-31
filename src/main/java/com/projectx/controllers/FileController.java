@@ -24,6 +24,11 @@ public class FileController {
     @Autowired
     private ApplicantService applicantService;
 
+    /**
+     * @param file
+     * @param applicant
+     * @return
+     */
     @PostMapping
     public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile file,
                                               @RequestBody Applicant applicant){
@@ -35,6 +40,10 @@ public class FileController {
         }
     }
 
+    /**
+     * @param applicant
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<File>> getListFiles(@RequestBody Applicant applicant) {
         List<File> files = fileService.getAllFiles(applicant);
@@ -45,6 +54,10 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Integer id) {
         File file = fileService.getFile(id);
