@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -43,4 +44,16 @@ public class Need {
             joinColumns = @JoinColumn(name = "needId"),
             inverseJoinColumns = @JoinColumn(name = "skillId"))
     Set<Skill> skills;
+
+    public Need (Integer amountNeeded, Integer amountFulfilled, String educationField, Integer yearsExperience,
+                 String extraExperience, String jobTitle, Client client) {
+        this.amountNeeded = amountNeeded;
+        this.amountFulfilled = amountFulfilled;
+        this.educationField = educationField;
+        this.yearsExperience = yearsExperience;
+        this.extraDescription = extraExperience;
+        this.jobTitle = jobTitle;
+        this.client = client;
+        this.skills = new HashSet<>();
+    }
 }

@@ -1,4 +1,18 @@
 # Client Portal Project
+
+<br />
+<p align="center">
+<img alt="Sonar Cloud" src="https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg" />
+</p>
+<p align="center">
+<img alt="Quality Gate" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=alert_status" />
+<img alt="Security" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=security_rating" />
+<br/>
+<img alt="Bugs" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=bugs" />
+<img alt="Line of Code" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=ncloc" />
+<img alt="Vulnerabilities" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=vulnerabilities" />
+</p>
+
 ## Project Description
 This application is designed to match clients' needs with applicants' qualifications; 
 so that clients may have the personnel needed for their goals, and applicants may

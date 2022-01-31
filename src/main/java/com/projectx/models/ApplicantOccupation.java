@@ -29,4 +29,11 @@ public class ApplicantOccupation {
     private Boolean openMarket;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Applicant applicant;
+
+    public ApplicantOccupation(String jobTitle, int yeasExperience, Boolean openMarket, Applicant applicant) {
+        this.jobTitle = jobTitle;
+        this.yearsExperience = yeasExperience;
+        this.openMarket = openMarket;
+        this.applicant = applicant;
+    }
 }
