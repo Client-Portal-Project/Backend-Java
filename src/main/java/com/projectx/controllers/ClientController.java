@@ -137,9 +137,12 @@ public class ClientController {
     }
 
     /**
-     * @param client
-     * @param id
-     * @return
+     * Gets a specific user by its id in the client
+     *
+     * @param client client object in the request body
+     * @param id id of the user in the path variable
+     * @return a http response with a user object in a {@link ResponseEntity} that
+     *      contains a found request, otherwise sends a null object and a bad request status code
      */
     @GetMapping("user/{id}")
     public ResponseEntity<User> getClientUser(@RequestBody Client client, @PathVariable int id) {
@@ -152,9 +155,12 @@ public class ClientController {
     }
 
     /**
-     * @param client
-     * @param id
-     * @return
+     * Creates a new user in the client by having the user's id and the client object
+     *
+     * @param client client object in the request body
+     * @param id id of the user in the path variable
+     * @return a http response in a {@link ResponseEntity} that contains a created request, otherwise a
+     *      bad request status code
      */
     @PutMapping("user/{id}") //id is the userId
     public ResponseEntity<Void> createClientUser(@RequestBody Client client, @PathVariable int id) {
@@ -167,9 +173,12 @@ public class ClientController {
     }
 
     /**
-     * @param client
-     * @param id
-     * @return
+     * Deletes the user in the client object by using the user's id
+     *
+     * @param client client object in the request body
+     * @param id id of the user in the path variable
+     * @return a http response in a {@link ResponseEntity} that contains an ok request, otherwise a bad
+     *      request status code
      */
     @DeleteMapping("user/{id}") //id is the userId
     public ResponseEntity<Void> deleteClientUser(@RequestBody Client client, @PathVariable int id) {
