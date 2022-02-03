@@ -12,6 +12,9 @@ import org.mockito.MockitoAnnotations;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 public class SkillServiceTest {
     private Skill expected;
     @Mock
@@ -30,6 +33,20 @@ public class SkillServiceTest {
 
     @Test
     void testSaveSkill() {
+        when(skillDao.save(expected)).thenReturn(expected);
+        Skill actual = skillService.saveSkill(expected);
+
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    void testDeleteSkill() {
+        skillService.deleteSkill(expected);
+        verify(skillDao, times(1)).delete(expected);
+    }
+
+    @Test
+    void testGetSkill() {
         
     }
 }
