@@ -17,6 +17,13 @@ public class NeedController {
     @Autowired
     NeedService needService;
 
+    /**
+     * Creates a new need in the database through the need service class
+     *
+     * @param need need object in the request body
+     * @return a http response with a need object in a {@link ResponseEntity} that
+     *      contains a created request, otherwise a null object with a bad request status code
+     */
     @PostMapping
     public ResponseEntity<Need> createNeed(@RequestBody Need need) {
         Need check = needService.getNeed(need.getNeedId());
@@ -27,6 +34,13 @@ public class NeedController {
         }
     }
 
+    /**
+     * Edits the need object in the database through the need service class
+     *
+     * @param need need object in the request body
+     * @return a http response with a need object in a {@link ResponseEntity} that
+     *      contains an ok request, otherwise a null object with a bad request status code
+     */
     @PutMapping
     public ResponseEntity<Need> editNeed(@RequestBody Need need) {
         Need check = needService.getNeed(need.getNeedId());
@@ -37,6 +51,13 @@ public class NeedController {
         }
     }
 
+    /**
+     * Deletes the need object in the database through the need service class
+     *
+     * @param need need object in the request body
+     * @return a http response with a boolean object in a {@link ResponseEntity} that
+     *      contains an ok request and true, otherwise false with a bad request status code
+     */
     @DeleteMapping
     public ResponseEntity<Boolean> deleteNeed(@RequestBody Need need) {
         Need check = needService.getNeed(need.getNeedId());
@@ -48,6 +69,13 @@ public class NeedController {
         }
     }
 
+    /**
+     * Gets a need with its own id
+     *
+     * @param id id of the need in the path variable
+     * @return a http response with a need object in a {@link ResponseEntity} that
+     *      contains a found request, otherwise a null object with a bad request status code
+     */
     @GetMapping("{id}")
     public ResponseEntity<Need> getNeed(@PathVariable int id) {
         Need need = needService.getNeed(id);
@@ -58,6 +86,13 @@ public class NeedController {
         }
     }
 
+    /**
+     * Gets a list of need objects that are connected to a client object
+     *
+     * @param client client object in the request body
+     * @return a http response with a List of need objects in a {@link ResponseEntity} that
+     *     contains a ok request
+     */
     @GetMapping
     public ResponseEntity<List<Need>> getNeedsByClient(@RequestBody Client client) {
         return new ResponseEntity<>(needService.getAllNeeds(client), HttpStatus.OK);
