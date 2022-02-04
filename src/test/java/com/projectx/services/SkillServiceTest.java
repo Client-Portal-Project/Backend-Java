@@ -9,8 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -26,7 +25,8 @@ public class SkillServiceTest {
     void initMock() {
         MockitoAnnotations.openMocks(this);
         Set<Applicant> set = new HashSet<>();
-        Applicant applicant = new Applicant();
+        String dummy = "";
+        Applicant applicant = new Applicant(1, dummy, dummy, dummy, dummy, null);
         set.add(applicant);
         expected = new Skill(1, null, set);
     }
@@ -47,6 +47,20 @@ public class SkillServiceTest {
 
     @Test
     void testGetSkill() {
-        
+        when(skillDao.findById(1)).thenReturn(Optional.of(expected));
+        Skill actual = skillService.getSkill(expected.getSkillId());
+
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    void testGetAllSkills() {
+        List<Skill> list = new ArrayList<>();
+        list.add(expected);
+        when(skillDao.findByApplicant_ApplicantId(1)).thenReturn(list);
+        Applicant[] array = expected.getApplicants().toArray(new Applicant[expected.getApplicants().size()]);
+        List<Skill> actual = skillService.getAllSkills(array[0]);
+
+        assertEquals(actual, list);
     }
 }
