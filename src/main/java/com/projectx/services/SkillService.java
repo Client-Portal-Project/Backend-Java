@@ -11,7 +11,7 @@ import java.util.List;
 @Service("skillService")
 public class SkillService {
     @Autowired
-    SkillDao skillDao;
+    private SkillDao skillDao;
 
     /**
      * Saves a skill object to the database for creating a new skill or updating an existing one
