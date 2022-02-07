@@ -18,8 +18,12 @@ public class SkillController {
     private SkillService skillService;
 
     /**
-     * @param skill
-     * @return
+     * Checks if the skill exist in the database and then creates a skill for the database
+     * through the service if it does not exist.
+     *
+     * @param skill skill object in the request body
+     * @return a http response with a skill object in a {@link ResponseEntity} that contains a created request if
+     *      skill does not exist, otherwise sends back a null object and a bad request status code
      */
     @PostMapping
     public ResponseEntity<Skill> createSkill(@RequestBody Skill skill) {
@@ -32,8 +36,12 @@ public class SkillController {
     }
 
     /**
-     * @param skill
-     * @return
+     * Checks if the skill exist in the database and then updates a skill for the database
+     * through the service if it does exist.
+     *
+     * @param skill skill object in the request body
+     * @return a http response with a skill object in a {@link ResponseEntity} that contains an ok request if
+     *      skill does exist, otherwise sends back a null object and a bad request status code
      */
     @PutMapping
     public ResponseEntity<Skill> editSkill(@RequestBody Skill skill) {
@@ -46,8 +54,11 @@ public class SkillController {
     }
 
     /**
-     * @param skill
-     * @return
+     * Checks if the skill exists in the database and then deletes it if it does exist through the service
+     *
+     * @param skill skill object in the request body
+     * @return a http response in a {@link ResponseEntity} that contains an ok request if
+     *      skill is deleted, otherwise sends back a bad request status code
      */
     @DeleteMapping
     public ResponseEntity<Void> deleteSkill(@RequestBody Skill skill) {
@@ -61,8 +72,11 @@ public class SkillController {
     }
 
     /**
-     * @param id
-     * @return
+     * Gets a skill by using the id of that skill in the path variable
+     *
+     * @param id id of the skill in the path variable
+     * @return a http response with a skill object in a {@link ResponseEntity} that contains a found request if
+     *      skill is found, otherwise sends back null object and a not found status code
      */
     @GetMapping("{id}")
     public ResponseEntity<Skill> getSkill(@PathVariable int id) {
@@ -75,8 +89,11 @@ public class SkillController {
     }
 
     /**
-     * @param applicant
-     * @return
+     * Gets a List of skill objects associated with an applicant that was sent in the request body
+     *
+     * @param applicant applicant object in the request body
+     * @return a http response with a List of skill objects in a {@link ResponseEntity} that
+     *      contains an ok request
      */
     @GetMapping
     public ResponseEntity<List<Skill>> getAllSkills(@RequestBody Applicant applicant) {
