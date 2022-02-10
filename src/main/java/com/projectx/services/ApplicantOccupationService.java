@@ -11,7 +11,7 @@ import java.util.List;
 @Service("applicantOccupationService")
 public class ApplicantOccupationService {
     @Autowired
-    ApplicantOccupationDao applicantOccupationDao;
+    private ApplicantOccupationDao applicantOccupationDao;
 
     /**
      * Saves a ApplicantOccupation in the database for posting or updating
