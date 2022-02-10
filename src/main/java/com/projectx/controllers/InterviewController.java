@@ -2,6 +2,7 @@ package com.projectx.controllers;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.projectx.services.InterviewService;
 import com.projectx.Driver;
 import com.projectx.models.Application;
+import com.projectx.models.Client;
 import com.projectx.models.Interview;
+import com.projectx.models.Need;
+import com.projectx.models.Skill;
 
 @RestController("interviewController")
 @RequestMapping(value = "interview")
@@ -110,5 +115,54 @@ public class InterviewController {
 		{
 			return new ResponseEntity<>(view, HttpStatus.FOUND);
 		}
+	}
+	@GetMapping
+	public ResponseEntity<List<Interview>> getByClient(@RequestBody Set<Client> clients)
+	{
+		List<Interview> view = this.interviewService.findInterviewbyClient(clients);
+		if(view.size() == 0)
+		{
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		else
+		{
+			return new ResponseEntity<>(view, HttpStatus.FOUND);
+		}
+	}
+	@GetMapping
+	public ResponseEntity<List<Interview>> getBySkill(@RequestBody Set<Skill> skills)
+	{
+		List<Interview> view = this.interviewService.findInterviewBySkill(skills);
+		if(view.size() == 0)
+		{
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		else
+		{
+			return new ResponseEntity<>(view, HttpStatus.FOUND);
+		}
+	}
+	@GetMapping
+	public ResponseEntity<List<Interview>> findByNeed(@RequestBody Need need)
+	{
+		List<Interview> view = this.interviewService.findInterviewByNeed(need);
+		if(view.size() == 0)
+		{
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		else
+		{
+			return new ResponseEntity<>(view, HttpStatus.FOUND);
+		}
+	}
+	@PutMapping
+	public ResponseEntity<Interview> editInterview(@RequestBody Interview interview)
+	{
+		Interview view = this.interviewService.editInterview(interview);
+		if(view == null)
+		{
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    	}
+    	return new ResponseEntity<>(view, HttpStatus.OK);
 	}
 }

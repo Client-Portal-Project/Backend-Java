@@ -3,12 +3,16 @@ package com.projectx.services;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projectx.models.Application;
+import com.projectx.models.Client;
 import com.projectx.models.Interview;
+import com.projectx.models.Need;
+import com.projectx.models.Skill;
 import com.projectx.repositories.InterviewDao;
 
 @Service("interviewService")
@@ -64,7 +68,19 @@ public class InterviewService {
 		else
 		{
 			//to do
-			return temp;
+			return this.interviewDao.save(interview);
 		}
+	}
+	public List<Interview> findInterviewbyClient(Set<Client> clients)
+	{
+		return this.interviewDao.findInterviewsByClient(clients);
+	}
+	public List<Interview> findInterviewBySkill(Set<Skill> skills)
+	{
+		return this.interviewDao.findInterviewBySkill(skills);
+	}
+	public List<Interview> findInterviewByNeed(Need need)
+	{
+		return this.interviewDao.findInterviewByNeed(need);
 	}
 }
