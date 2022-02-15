@@ -11,7 +11,7 @@ import java.util.List;
 @Service("needService")
 public class NeedService {
     @Autowired
-    NeedDao needDao;
+    private NeedDao needDao;
 
     /**
      * Creates of updates a need object in the database

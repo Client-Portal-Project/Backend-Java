@@ -16,7 +16,7 @@ import java.util.List;
 @CrossOrigin(value = Driver.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ApplicantOccupationController {
     @Autowired
-    ApplicantOccupationService applicantOccupationService;
+    private ApplicantOccupationService applicantOccupationService;
 
     /**
      * Checks to see if the applicant occupation already exists. if not, makes a new applicant occupation.
