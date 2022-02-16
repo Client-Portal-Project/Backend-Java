@@ -57,7 +57,7 @@ public class SkillServiceTest {
     void testGetAllSkills() {
         List<Skill> list = new ArrayList<>();
         list.add(expected);
-        when(skillDao.findByApplicant_ApplicantId(1)).thenReturn(list);
+        when(skillDao.findByApplicants_ApplicantId(1)).thenReturn(list);
         Applicant[] array = expected.getApplicants().toArray(new Applicant[expected.getApplicants().size()]);
         List<Skill> actual = skillService.getAllSkills(array[0]);
 

@@ -49,6 +49,6 @@ public class SkillService {
      * @return a List of skill objects
      */
     public List<Skill> getAllSkills(Applicant applicant) {
-        return skillDao.findByApplicant_ApplicantId(applicant.getApplicantId());
+        return skillDao.findByApplicants_ApplicantId(applicant.getApplicantId());
     }
 }
