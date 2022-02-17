@@ -3,6 +3,7 @@ package com.projectx.controllers;
 import com.projectx.models.User;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -199,5 +200,10 @@ class UserControllerTest {
         ResponseEntity<?> actualResult = this.userController.deleteUser(userId, headers);
         //Assert
         assertEquals(expectedResult, actualResult);
+    }
+
+    @Test @SneakyThrows
+    void testGetUser() {
+
     }
 }

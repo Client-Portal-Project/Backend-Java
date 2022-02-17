@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController("userController")
@@ -137,5 +138,24 @@ public class UserController {
         }
 
         return response;
+    }
+
+    /**
+     * Gets a user from the database through the service by using an email and password
+     *
+     * @param body a map of two strings for the email and password
+     * @return http response with a user object in a {@link ResponseEntity} that contains a found request if the
+     *      user was found, else a not found request and null object.
+     */
+    @GetMapping ("login")
+    public ResponseEntity<User> getUser(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+        User user = userService.getUserByEmailAndPassword(email, password);
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.FOUND);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 }
