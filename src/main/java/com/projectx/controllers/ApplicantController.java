@@ -6,6 +6,7 @@ package com.projectx.controllers;
 
 import com.projectx.Driver;
 import com.projectx.models.Applicant;
+import com.projectx.models.Skill;
 import com.projectx.services.ApplicantService;
 import org.hibernate.hql.internal.ast.tree.ResolvableNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +123,17 @@ public class ApplicantController {
              */
 
         } else {
+            return new ResponseEntity<>(applicants, HttpStatus.FOUND);
+        }
+    }
+
+    @GetMapping("skill/{skill}")
+    public ResponseEntity<List<Applicant>> getApplicantBySkillsIsContaining(@PathVariable Skill skill){
+        List<Applicant> applicants = applicantService.getApplicantSkillsIsContaining(skill);
+        if (applicants == null){
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+        else {
             return new ResponseEntity<>(applicants, HttpStatus.FOUND);
         }
     }

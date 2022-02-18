@@ -3,6 +3,7 @@ package com.projectx.repositories;
 
 
 import com.projectx.models.Applicant;
+import com.projectx.models.Skill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,9 @@ public interface ApplicantDao extends JpaRepository<Applicant, Integer> {
 
     @Nullable
     List<Applicant> findByEmploymentStatus(String employmentStatus);
+
+    @Nullable
+    List<Applicant> findByApplicantSkillsIsContaining(Skill skill);
 
 
 

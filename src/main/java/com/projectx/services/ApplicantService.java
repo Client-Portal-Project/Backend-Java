@@ -5,6 +5,7 @@
 package com.projectx.services;
 
 import com.projectx.models.Applicant;
+import com.projectx.models.Skill;
 import com.projectx.repositories.ApplicantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,5 +71,13 @@ public class ApplicantService {
      * @param employmentStatus
      * @return a List of applicants with requested employment status
      */
-    public List<Applicant> getApplicantByEmploymentStatus(String employmentStatus){ return applicantDao.findByEmploymentStatus(employmentStatus); }
+    public List<Applicant> getApplicantByEmploymentStatus(String employmentStatus) { return applicantDao.findByEmploymentStatus(employmentStatus); }
+
+    /**
+     * Returns a list of applicants with requested skill
+     *
+     * @param skill
+     * @return a list of applicants with requested skill
+     */
+    public List<Applicant> getApplicantSkillsIsContaining(Skill skill) { return applicantDao.findByApplicantSkillsIsContaining(skill); }
 }
