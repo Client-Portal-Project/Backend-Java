@@ -71,4 +71,16 @@ public class ApplicantServiceTest {
 
         assertEquals(actual, expected);
     }
+
+    @Test
+    void testGetApplicantByEmploymentStatus() {
+        List<Applicant> list = new ArrayList<>();
+        list.add(expected);
+
+        when(applicantDao.findByEmploymentStatus(expected.getEmploymentStatus())).thenReturn(list);
+        List<Applicant> actual = applicantService.getApplicantByEmploymentStatus(expected.getEmploymentStatus());
+
+        assertEquals(actual, list);
+        assertEquals(actual.getClass(), list.getClass());
+    }
 }

@@ -64,4 +64,11 @@ public class ApplicantService {
     public Applicant getApplicant(int id) {
         return applicantDao.findByUser_UserId(id);
     }
+
+    /**
+     * Returns a list of applicants with requested employment status
+     * @param employmentStatus
+     * @return a List of applicants with requested employment status
+     */
+    public List<Applicant> getApplicantByEmploymentStatus(String employmentStatus){ return applicantDao.findByEmploymentStatus(employmentStatus); }
 }

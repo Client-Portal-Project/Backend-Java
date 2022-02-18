@@ -7,6 +7,7 @@ package com.projectx.controllers;
 import com.projectx.Driver;
 import com.projectx.models.Applicant;
 import com.projectx.services.ApplicantService;
+import org.hibernate.hql.internal.ast.tree.ResolvableNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -106,6 +107,22 @@ public class ApplicantController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(applicant, HttpStatus.FOUND);
+        }
+    }
+
+   @GetMapping("status/{employmentStatus}")
+    public ResponseEntity<List<Applicant>> getApplicantByEmploymentStatus(@PathVariable String employmentStatus){
+        List<Applicant> applicants = applicantService.getApplicantByEmploymentStatus(employmentStatus);
+        if (applicants == null){
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            /*
+                Are we blanket using 400 for null results?
+
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+             */
+
+        } else {
+            return new ResponseEntity<>(applicants, HttpStatus.FOUND);
         }
     }
 }
