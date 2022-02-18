@@ -14,7 +14,7 @@ import java.util.List;
 @Service("applicantService")
 public class ApplicantService {
     @Autowired
-    ApplicantDao applicantDao;
+    private ApplicantDao applicantDao;
 
     /**
      * Adds an applicant into the database. Before adding to the database, checks if the applicant

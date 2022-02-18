@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 public class NeedController {
     @Autowired
-    NeedService needService;
+    private NeedService needService;
 
     /**
      * Creates a new need in the database through the need service class
