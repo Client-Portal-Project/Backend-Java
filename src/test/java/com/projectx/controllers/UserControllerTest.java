@@ -1,5 +1,6 @@
 package com.projectx.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectx.models.User;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
@@ -16,12 +17,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -38,11 +46,13 @@ class UserControllerTest {
     private static final String AUTH = "authorization";
     private static final String ID = "userId";
 
+    private MockMvc mvc;
     private User user = new User(1, EMAIL, PASS, "test", "user", null);
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        mvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
 
     @Test
@@ -204,6 +214,27 @@ class UserControllerTest {
 
     @Test @SneakyThrows
     void testGetUser() {
+        Mockito.when(userService.getUserByEmailAndPassword(user.getEmail(), user.getPassword())).thenReturn(user);
+        Map<String, String> requestBody1 = new HashMap<>();
+        requestBody1.put("email", user.getEmail());
+        requestBody1.put("password", user.getPassword());
 
+        mvc.perform(MockMvcRequestBuilders.get("/user/login")
+                        .content(new ObjectMapper().writeValueAsString(requestBody1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isFound())
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(user)));
+
+        Map<String, String> requestBody2 = new HashMap<>();
+        requestBody2.put("email", "hello");
+        requestBody2.put("password", "world");
+
+        mvc.perform(MockMvcRequestBuilders.get("/user/login")
+                        .content(new ObjectMapper().writeValueAsString(requestBody2))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""));
     }
 }
