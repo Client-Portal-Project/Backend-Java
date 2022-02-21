@@ -25,26 +25,53 @@ public class InterviewService {
 		this.interviewDao = interviewDao;
 	}
 
+	/**
+	 * @param id
+	 * @return
+	 */
 	public Interview findInterviewById(int id)
 	{
 		return this.interviewDao.findById(id).orElse(null);
 	}
+
+	/**
+	 * @return
+	 */
 	public List<Interview> findAllInterviews()
 	{
 		return this.interviewDao.findAll();
 	}
-	public List<Interview> findByApplication(Application app)
-	{
-		return this.interviewDao.findInterviewByApp(app);
+
+	/**
+	 * @param app
+	 * @return
+	 */
+	public List<Interview> findByApplication(Application app) {
+		return this.interviewDao.findInterviewByApplication(app);
 	}
+
+	/**
+	 * @param when
+	 * @return
+	 */
 	public List<Interview> findByDate(Date when)
 	{
 		return this.interviewDao.findInterviewByDate(when);
 	}
+
+	/**
+	 * @param interview
+	 * @return
+	 */
 	public Interview createInterview(Interview interview)
 	{
 		return this.interviewDao.save(interview);
 	}
+
+	/**
+	 * @param interview
+	 * @return
+	 */
 	public boolean deleteInterview(Interview interview)
 	{
 		this.interviewDao.delete(interview);
@@ -58,6 +85,11 @@ public class InterviewService {
 			return false;
 		}
 	}
+
+	/**
+	 * @param interview
+	 * @return
+	 */
 	public Interview editInterview(Interview interview)
 	{
 		Interview temp = this.interviewDao.findById(interview.getInterviewId()).orElse(null);
@@ -71,14 +103,27 @@ public class InterviewService {
 			return this.interviewDao.save(interview);
 		}
 	}
-	public List<Interview> findInterviewbyClient(Set<Client> clients)
-	{
+
+	/**
+	 * @param clients
+	 * @return
+	 */
+	public List<Interview> findInterviewbyClient(Set<Client> clients) {
 		return this.interviewDao.findInterviewsByClient(clients);
 	}
-	public List<Interview> findInterviewBySkill(Set<Skill> skills)
-	{
+
+	/**
+	 * @param skills
+	 * @return
+	 */
+	public List<Interview> findInterviewBySkill(Set<Skill> skills) {
 		return this.interviewDao.findInterviewBySkill(skills);
 	}
+
+	/**
+	 * @param need
+	 * @return
+	 */
 	public List<Interview> findInterviewByNeed(Need need)
 	{
 		return this.interviewDao.findInterviewByNeed(need);
