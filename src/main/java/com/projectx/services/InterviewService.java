@@ -105,19 +105,19 @@ public class InterviewService {
 	}
 
 	/**
-	 * @param clients
+	 * @param client
 	 * @return
 	 */
-	public List<Interview> findInterviewbyClient(Set<Client> clients) {
-		return this.interviewDao.findInterviewsByClient(clients);
+	public List<Interview> findInterviewByClient(Client client) {
+		return this.interviewDao.findInterviewsByClient(client);
 	}
 
 	/**
-	 * @param skills
+	 * @param skill
 	 * @return
 	 */
-	public List<Interview> findInterviewBySkill(Set<Skill> skills) {
-		return this.interviewDao.findInterviewBySkill(skills);
+	public List<Interview> findInterviewBySkill(Skill skill) {
+		return this.interviewDao.findInterviewBySkill(skill);
 	}
 
 	/**

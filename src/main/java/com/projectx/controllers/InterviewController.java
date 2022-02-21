@@ -84,7 +84,7 @@ public class InterviewController {
 	 * 
 	 * @return response containing a list of all interviews with given application
 	 */
-	@GetMapping
+	@GetMapping("application")
 	public ResponseEntity<List<Interview>> getByApplication(@RequestBody Application app)
 	{
 		List<Interview> view = this.interviewService.findByApplication(app);
@@ -100,13 +100,13 @@ public class InterviewController {
 	/**
 	 * read descriptions of the 3 methods above
 	 * 
-	 * @param when date searched
+	 * @param date date searched
 	 * @return response containing list of all interviews on specified day, hopefully
 	 */
-	@GetMapping
-	public ResponseEntity<List<Interview>> getByDate(@RequestBody Date when)
+	@GetMapping("date")
+	public ResponseEntity<List<Interview>> getByDate(@RequestBody Date date)
 	{
-		List<Interview> view = this.interviewService.findByDate(when);
+		List<Interview> view = this.interviewService.findByDate(date);
 		if(view.size() == 0)
 		{
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -116,10 +116,10 @@ public class InterviewController {
 			return new ResponseEntity<>(view, HttpStatus.FOUND);
 		}
 	}
-	@GetMapping
-	public ResponseEntity<List<Interview>> getByClient(@RequestBody Set<Client> clients)
+	@GetMapping("client")
+	public ResponseEntity<List<Interview>> getByClient(@RequestBody Client client)
 	{
-		List<Interview> view = this.interviewService.findInterviewbyClient(clients);
+		List<Interview> view = this.interviewService.findInterviewByClient(client);
 		if(view.size() == 0)
 		{
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -129,10 +129,10 @@ public class InterviewController {
 			return new ResponseEntity<>(view, HttpStatus.FOUND);
 		}
 	}
-	@GetMapping
-	public ResponseEntity<List<Interview>> getBySkill(@RequestBody Set<Skill> skills)
+	@GetMapping("skill")
+	public ResponseEntity<List<Interview>> getBySkill(@RequestBody Skill skill)
 	{
-		List<Interview> view = this.interviewService.findInterviewBySkill(skills);
+		List<Interview> view = this.interviewService.findInterviewBySkill(skill);
 		if(view.size() == 0)
 		{
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -142,7 +142,7 @@ public class InterviewController {
 			return new ResponseEntity<>(view, HttpStatus.FOUND);
 		}
 	}
-	@GetMapping
+	@GetMapping("need")
 	public ResponseEntity<List<Interview>> findByNeed(@RequestBody Need need)
 	{
 		List<Interview> view = this.interviewService.findInterviewByNeed(need);
@@ -155,7 +155,7 @@ public class InterviewController {
 			return new ResponseEntity<>(view, HttpStatus.FOUND);
 		}
 	}
-	@PutMapping
+	@PutMapping("interview")
 	public ResponseEntity<Interview> editInterview(@RequestBody Interview interview)
 	{
 		Interview view = this.interviewService.editInterview(interview);
