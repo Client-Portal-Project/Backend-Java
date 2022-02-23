@@ -40,7 +40,7 @@ public class NeedControllerTest {
         objectMapper = new ObjectMapper();
         Client client = new Client(1, null);
         expected = new Need(1, null, null, null,
-                null, null, null, null, client, null);
+                null, null, null, null, client, null, null);
     }
 
     @Test @SneakyThrows

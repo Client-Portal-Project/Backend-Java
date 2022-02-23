@@ -23,6 +23,8 @@ public class Skill {
     private Integer skillId;
     @Column
     private String skillName;
+
+    // Redundant? Available through Applicant.skills
     @ManyToMany(mappedBy = "applicantSkills")
     Set<Applicant> applicants;
 }

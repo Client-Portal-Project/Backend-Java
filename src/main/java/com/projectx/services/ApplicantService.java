@@ -1,6 +1,7 @@
 /**
- * @author April Weaver
+ * @authors April Weaver, Steven Hanley
  * @since  2021-12-21
+ * @lastupdate 2022-02-23
  */
 package com.projectx.services;
 
@@ -71,13 +72,16 @@ public class ApplicantService {
      * @param employmentStatus
      * @return a List of applicants with requested employment status
      */
+    // May not be needed
     public List<Applicant> getApplicantByEmploymentStatus(String employmentStatus) { return applicantDao.findByEmploymentStatus(employmentStatus); }
 
     /**
      * Returns a list of applicants with requested skill
-     *
      * @param skill
      * @return a list of applicants with requested skill
      */
+    // May not be needed
     public List<Applicant> getApplicantSkillsIsContaining(Skill skill) { return applicantDao.findByApplicantSkillsIsContaining(skill); }
+
+
 }

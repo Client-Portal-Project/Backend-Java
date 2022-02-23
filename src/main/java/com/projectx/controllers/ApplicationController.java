@@ -1,3 +1,9 @@
+/**
+ * @authors  Steven Hanley
+ * @since  2022-02-18
+ * @lastupdate 2022-02-23
+ */
+
 package com.projectx.controllers;
 
 import com.projectx.Driver;
@@ -6,6 +12,7 @@ import com.projectx.models.ApplicantOccupation;
 import com.projectx.models.Application;
 import com.projectx.models.Need;
 import com.projectx.services.ApplicationService;
+import org.apache.tomcat.util.descriptor.web.ApplicationParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -116,6 +123,7 @@ public class ApplicationController {
     @GetMapping("occupation")
     public ResponseEntity<List<Application>> getApplicationByOccupation(@RequestBody ApplicantOccupation
                                                                                     applicantOccupation) {
+
         return new ResponseEntity<>(applicationService
                 .getAllApplicationsByApplicantOccupation(applicantOccupation), HttpStatus.OK);
     }
@@ -131,5 +139,37 @@ public class ApplicationController {
     @GetMapping("need")
     public ResponseEntity<List<Application>> getApplicationByNeed(@RequestBody Need need) {
         return new ResponseEntity<>(applicationService.getAllApplicationsByNeed(need), HttpStatus.OK);
+    }
+
+    /**
+     * Gets a List of application objects associated with a client and a certain applicant employment status.
+     * @param employmentStatus That status to be matched with applicants
+     * @param clientId The client to be matched with applications
+     * @return http response with the list of application objects in a {@Link ResponseEntity} or NOT_FOUND response
+     */
+    @GetMapping
+    public ResponseEntity<List<Application>> getApplicationByEmploymentStatusAndClient(@RequestParam String employmentStatus,
+                                                                                       @RequestParam int clientId){
+
+        List<Application> applications = applicationService.getApplicationByEmploymentStatusAndClient(employmentStatus, clientId);
+
+        if (applications.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); // null pointer exception from isEmpty()?
+        else return new ResponseEntity<>(applications, HttpStatus.FOUND);
+    }
+
+    /**
+     * Gets a List of application objects associated with a need and a certain applicant employment status.
+     * @param employmentStatus That status to be matched with applicants
+     * @param clientId The need to be matched with applications
+     * @return http response with the list of application objects in a {@Link ResponseEntity} or NOT_FOUND response
+     */
+    @GetMapping
+    public ResponseEntity<List<Application>> getApplicationsByEmploymentStatusAndNeed(@RequestParam int needId,
+                                                                                     @RequestParam String employmentStatus){
+
+        List<Application> applications = applicationService.getApplicationByEmploymentStatusAndNeed(employmentStatus, needId);
+        if (applications.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); // null pointer exception from isEmpty()?
+        else return new ResponseEntity<>(applications, HttpStatus.FOUND);
+
     }
 }

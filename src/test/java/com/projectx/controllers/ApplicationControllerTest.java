@@ -42,7 +42,7 @@ public class ApplicationControllerTest {
         Applicant applicant = new Applicant();
         ApplicantOccupation occupation = new ApplicantOccupation();
         Need need = new Need();
-        expected = new Application(1, null, null, applicant, occupation, need);
+        expected = new Application(1, applicant, occupation, need);
 
         list = new ArrayList<>();
         list.add(expected);

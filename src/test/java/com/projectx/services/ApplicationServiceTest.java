@@ -31,8 +31,9 @@ public class ApplicationServiceTest {
         ApplicantOccupation applicantOccupation = new ApplicantOccupation();
         applicantOccupation.setApplicantOccupationalId(1);
         Need need =  new Need();
+        Client client = new Client(1);
         need.setNeedId(1);
-        expected = new Application(1, null, 0, applicant, applicantOccupation, need);
+        expected = new Application(1, 0, applicant, applicantOccupation, need, client);
         list = new ArrayList<>();
         list.add(expected);
     }
@@ -81,6 +82,28 @@ public class ApplicationServiceTest {
     void testGetApplicationByNeed() {
         when(applicationDao.findByNeed_NeedId(expected.getNeed().getNeedId())).thenReturn(list);
         List<Application> actual = applicationService.getAllApplicationsByNeed(expected.getNeed());
+
+        assertEquals(actual, list);
+    }
+
+    @Test
+    void testGetApplicationByEmploymentStatusAndNeed(){
+        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(expected.getApplicant().getEmploymentStatus()
+                , expected.getNeed().getNeedId()))
+                .thenReturn(list);
+        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
+                , expected.getNeed().getNeedId());
+
+        assertEquals(actual, list);
+    }
+
+    @Test
+    void testGetApplicationByEmploymentStatusAndClient(){
+        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(expected.getApplicant().getEmploymentStatus()
+                , expected.getClient().getClientId()))
+                .thenReturn(list);
+        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
+                , expected.getClient().getClientId());
 
         assertEquals(actual, list);
     }

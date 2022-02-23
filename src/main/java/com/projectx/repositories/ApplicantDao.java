@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository("applicantDao")
 @Transactional
@@ -23,6 +24,8 @@ public interface ApplicantDao extends JpaRepository<Applicant, Integer> {
     @Nullable
     List<Applicant> findByApplicantSkillsIsContaining(Skill skill);
 
+    @Nullable
+    List<Applicant> findApplicantByEmploymentStatusAndApplicantSkillsIsContaining(String employmentStatus, Set<Skill> skills);
 
 
 

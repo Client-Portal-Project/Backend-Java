@@ -1,6 +1,7 @@
 /**
- * @author April Weaver
+ * @authors April Weaver, Steven Hanley
  * @since  2021-12-21
+ * @lastupdate 2022-02-23
  */
 package com.projectx.controllers;
 
@@ -111,24 +112,32 @@ public class ApplicantController {
         }
     }
 
-   @GetMapping("status/{employmentStatus}")
-    public ResponseEntity<List<Applicant>> getApplicantByEmploymentStatus(@PathVariable String employmentStatus){
-        List<Applicant> applicants = applicantService.getApplicantByEmploymentStatus(employmentStatus);
-        if (applicants == null){
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-            /*
-                Are we blanket using 400 for null results?
+   @GetMapping("status")
+   //public ResponseEntity<List<Applicant>> getApplicantByEmploymentStatus(@RequestParam String employmentStatus,
+   //                                                                        @RequestParam(required = false) int clientId){
+   public ResponseEntity<List<Applicant>> getApplicantByEmploymentStatus(@RequestParam String employmentStatus){
+     //  if (clientId == null){
+            List<Applicant> applicants = applicantService.getApplicantByEmploymentStatus(employmentStatus);
 
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-             */
+            if (applicants == null) {
+                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                /*
+                    Are we blanket using 400 for null results?
 
-        } else {
-            return new ResponseEntity<>(applicants, HttpStatus.FOUND);
-        }
+                    return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                */
+
+            } else {
+                return new ResponseEntity<>(applicants, HttpStatus.FOUND);
+            }
+
     }
 
-    @GetMapping("skill/{skill}")
-    public ResponseEntity<List<Applicant>> getApplicantBySkillsIsContaining(@PathVariable Skill skill){
+
+
+
+    @GetMapping("skills")
+    public ResponseEntity<List<Applicant>> getApplicantBySkillsIsContaining(@RequestParam Skill skill){
         List<Applicant> applicants = applicantService.getApplicantSkillsIsContaining(skill);
         if (applicants == null){
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);

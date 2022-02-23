@@ -1,3 +1,9 @@
+/**
+ * @authors  Steven Hanley
+ * @since  2022-02-18
+ * @lastupdate 2022-02-23
+ */
+
 package com.projectx.services;
 
 import com.projectx.models.Applicant;
@@ -73,5 +79,13 @@ public class ApplicationService {
      */
     public List<Application> getAllApplicationsByNeed(Need need) {
         return applicationDao.findByNeed_NeedId(need.getNeedId());
+    }
+
+    public List<Application> getApplicationByEmploymentStatusAndClient(String employmentStatus, int clientId){
+        return applicationDao.findApplicationsByApplicant_EmploymentStatusAndClient_ClientId(employmentStatus, clientId);
+    }
+
+    public List<Application> getApplicationByEmploymentStatusAndNeed(String employmentStatus, int needId){
+        return applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(employmentStatus, needId);
     }
 }

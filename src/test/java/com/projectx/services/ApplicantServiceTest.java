@@ -84,7 +84,7 @@ public class ApplicantServiceTest {
         assertEquals(actual, list);
     }
 
-    // Not sure if I like the new skill check. Need to look into set retrieval to get/mock an actual skill from mocked applicant
+    // Not sure if I like the new Skill() check. Need to look into set retrieval to get/mock an actual skill from mocked applicant
     @Test
     void testGetApplicantBySkillsIsContaining() {
         List<Applicant> list = new ArrayList<>();
