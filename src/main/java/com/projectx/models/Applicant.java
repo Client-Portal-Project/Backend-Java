@@ -16,7 +16,7 @@ import java.util.Set;
 public class Applicant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "applicant_id")
+    @Column
     private Integer applicantId;
     @Column
     private String aboutMe;
@@ -27,7 +27,7 @@ public class Applicant {
     @Column
     private String employmentStatus;
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     private User user;
     @ManyToMany
     @JoinTable(

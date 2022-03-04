@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class ApplicationServiceTest {
@@ -55,56 +56,61 @@ public class ApplicationServiceTest {
     @Test
     void testGetApplication() {
         when(applicationDao.findById(expected.getApplicationId())).thenReturn(Optional.of(expected));
-        Application actual = applicationService.getApplication(1);
-
-        assertEquals(actual, expected);
+        Optional<Application> actual = applicationService.findById(1);
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get(), expected);
     }
 
     @Test
     void testGetApplicationByApplicant() {
-        when(applicationDao.findByApplicant_ApplicantId(expected.getApplicant().getApplicantId())).thenReturn(list);
-        List<Application> actual = applicationService.getAllApplicationsByApplicant(expected.getApplicant());
+        when(applicationDao.findByApplicant_ApplicantId(expected.getApplicant().getApplicantId())).thenReturn(Optional.ofNullable(list));
+        Optional<List<Application>> actual = applicationService.getAllApplicationsByApplicant(expected.getApplicant());
 
-        assertEquals(actual, list);
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get(), list);
     }
 
     @Test
     void testGetApplicationByApplicantOccupation() {
         when(applicationDao.findByApplicantOccupation_ApplicantOccupationalId(expected
-                .getApplicantOccupation().getApplicantOccupationalId())).thenReturn(list);
-        List<Application> actual = applicationService
+                .getApplicantOccupation().getApplicantOccupationalId())).thenReturn(Optional.ofNullable(list));
+        Optional<List<Application>> actual = applicationService
                 .getAllApplicationsByApplicantOccupation(expected.getApplicantOccupation());
 
-        assertEquals(actual, list);
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get(), list);
     }
 
     @Test
     void testGetApplicationByNeed() {
-        when(applicationDao.findByNeed_NeedId(expected.getNeed().getNeedId())).thenReturn(list);
-        List<Application> actual = applicationService.getAllApplicationsByNeed(expected.getNeed());
+        when(applicationDao.findByNeed_NeedId(expected.getNeed().getNeedId())).thenReturn(Optional.ofNullable(list));
+        Optional<List<Application>> actual = applicationService.getAllApplicationsByNeed(expected.getNeed());
 
-        assertEquals(actual, list);
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get(), list);
     }
 
     @Test
     void testGetApplicationByEmploymentStatusAndNeed(){
         when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(expected.getApplicant().getEmploymentStatus()
                 , expected.getNeed().getNeedId()))
-                .thenReturn(list);
-        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
+                .thenReturn(Optional.ofNullable(list));
+        Optional<List<Application>> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
                 , expected.getNeed().getNeedId());
 
-        assertEquals(actual, list);
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get(), list);
     }
 
     @Test
     void testGetApplicationByEmploymentStatusAndClient(){
         when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(expected.getApplicant().getEmploymentStatus()
                 , expected.getClient().getClientId()))
-                .thenReturn(list);
-        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
+                .thenReturn(Optional.ofNullable(list));
+        Optional<List<Application>> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
                 , expected.getClient().getClientId());
 
-        assertEquals(actual, list);
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get(), list);
     }
 }

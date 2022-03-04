@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -63,7 +64,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testCreateApplicationFail() {
-        when(applicationService.getApplication(expected.getApplicationId())).thenReturn(expected);
+        when(applicationService.findById(expected.getApplicationId())).thenReturn(Optional.ofNullable(expected));
         when(applicationService.saveApplication(expected)).thenReturn(expected);
         mvc.perform(MockMvcRequestBuilders.post(URI)
                         .content(objectMapper.writeValueAsString(expected))
@@ -76,7 +77,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testUpdateApplicationSuccess() {
-        when(applicationService.getApplication(expected.getApplicationId())).thenReturn(expected);
+        when(applicationService.findById(expected.getApplicationId())).thenReturn(Optional.ofNullable(expected));
         when(applicationService.saveApplication(expected)).thenReturn(expected);
         mvc.perform(MockMvcRequestBuilders.put(URI)
                         .content(objectMapper.writeValueAsString(expected))
@@ -89,7 +90,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testUpdateApplicationFail() {
-        when(applicationService.getApplication(expected.getApplicationId())).thenReturn(null);
+        when(applicationService.findById(expected.getApplicationId())).thenReturn(null);
         mvc.perform(MockMvcRequestBuilders.put(URI)
                         .content(objectMapper.writeValueAsString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -101,7 +102,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testDeleteApplicationSuccess() {
-        when(applicationService.getApplication(expected.getApplicationId())).thenReturn(expected);
+        when(applicationService.findById(expected.getApplicationId())).thenReturn(Optional.ofNullable(expected));
         mvc.perform(MockMvcRequestBuilders.delete(URI)
                         .content(objectMapper.writeValueAsString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +113,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testDeleteApplicationFail() {
-        when(applicationService.getApplication(expected.getApplicationId())).thenReturn(null);
+        when(applicationService.findById(expected.getApplicationId())).thenReturn(null);
         mvc.perform(MockMvcRequestBuilders.delete(URI)
                         .content(objectMapper.writeValueAsString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -123,7 +124,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testGetApplicationSuccess() {
-        when(applicationService.getApplication(expected.getApplicationId())).thenReturn(expected);
+        when(applicationService.findById(expected.getApplicationId())).thenReturn(Optional.ofNullable(expected));
         mvc.perform(MockMvcRequestBuilders.get(URI+"/1")
                         .content(objectMapper.writeValueAsString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +136,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testGetApplicationFail() {
-        when(applicationService.getApplication(expected.getApplicationId())).thenReturn(null);
+        when(applicationService.findById(expected.getApplicationId())).thenReturn(null);
         mvc.perform(MockMvcRequestBuilders.get(URI+"/1")
                         .content(objectMapper.writeValueAsString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -147,7 +148,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testGetApplicationByApplicant() {
-        when(applicationService.getAllApplicationsByApplicant(expected.getApplicant())).thenReturn(list);
+        when(applicationService.getAllApplicationsByApplicant(expected.getApplicant())).thenReturn(Optional.ofNullable(list));
         mvc.perform(MockMvcRequestBuilders.get(URI+"/applicant")
                         .content(objectMapper.writeValueAsString(expected.getApplicant()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -160,7 +161,7 @@ public class ApplicationControllerTest {
     @SneakyThrows
     void testGetApplicationByOccupation() {
         when(applicationService.getAllApplicationsByApplicantOccupation(expected
-                .getApplicantOccupation())).thenReturn(list);
+                .getApplicantOccupation())).thenReturn(Optional.ofNullable(list));
         mvc.perform(MockMvcRequestBuilders.get(URI+"/occupation")
                         .content(objectMapper.writeValueAsString(expected.getApplicantOccupation()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -172,7 +173,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testGetApplicationByNeed() {
-        when(applicationService.getAllApplicationsByNeed(expected.getNeed())).thenReturn(list);
+        when(applicationService.getAllApplicationsByNeed(expected.getNeed())).thenReturn(Optional.ofNullable(list));
         mvc.perform(MockMvcRequestBuilders.get(URI+"/need")
                         .content(objectMapper.writeValueAsString(expected.getNeed()))
                         .contentType(MediaType.APPLICATION_JSON)

@@ -35,7 +35,7 @@ public class InterviewService {
 	}
 	public List<Interview> findByApplication(Application app)
 	{
-		return this.interviewDao.findInterviewByApp(app);
+		return this.interviewDao.findInterviewByApplication(app);
 	}
 	public List<Interview> findByDate(Date when)
 	{
@@ -71,14 +71,16 @@ public class InterviewService {
 			return this.interviewDao.save(interview);
 		}
 	}
-	public List<Interview> findInterviewbyClient(Set<Client> clients)
+	public List<Interview> findInterviewsbyClient(Client client)
 	{
-		return this.interviewDao.findInterviewsByClient(clients);
+		return this.interviewDao.findInterviewsByClient(client);
 	}
-	public List<Interview> findInterviewBySkill(Set<Skill> skills)
+	
+	/*public List<Interview> findInterviewBySkill(Set<Skill> skills)
 	{
 		return this.interviewDao.findInterviewBySkill(skills);
-	}
+	}*/
+	
 	public List<Interview> findInterviewByNeed(Need need)
 	{
 		return this.interviewDao.findInterviewByNeed(need);

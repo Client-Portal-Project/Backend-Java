@@ -1,12 +1,14 @@
+package com.projectx.controllers;
+
 /**
  * @authors  Steven Hanley
  * @since  2022-02-18
  * @lastupdate 2022-02-23
  */
 
-package com.projectx.controllers;
-
 import com.projectx.Driver;
+import com.projectx.exception.ApplicantRequestException;
+import com.projectx.exception.ApplicationRequestException;
 import com.projectx.models.Applicant;
 import com.projectx.models.ApplicantOccupation;
 import com.projectx.models.Application;
@@ -14,11 +16,14 @@ import com.projectx.models.Need;
 import com.projectx.services.ApplicationService;
 import org.apache.tomcat.util.descriptor.web.ApplicationParameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.channels.AcceptPendingException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController("applicationController")
 @RequestMapping(value = "application")
@@ -32,16 +37,16 @@ public class ApplicationController {
      * not exist
      *
      * @param application application object in the request body
-     * @return a http response with an application object in a {@link ResponseEntity} that contains a created request if
-     *      the application is added, bad request and null otherwise
+     * @return a http response with an application object in a {@link ResponseEntity} with a created status
+     * @throws ApplicationRequestException when application already exists
      */
     @PostMapping
-    public ResponseEntity<Application> createApplication(@RequestBody Application application) {
-        Application check = applicationService.getApplication(application.getApplicationId());
-        if (check == null) {
+    public ResponseEntity<Application> createApplication(@RequestBody Application application) throws ApplicationRequestException {
+        Optional<Application> check = applicationService.findById(application.getApplicationId());
+        if (check.isPresent()) {
             return new ResponseEntity<>(applicationService.saveApplication(application), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            throw new ApplicationRequestException("Application already exists.");
         }
     }
 
@@ -50,16 +55,16 @@ public class ApplicationController {
      * exist
      *
      * @param application application object in the request body
-     * @return a http response with an application object in a {@link ResponseEntity} that contains an ok request if
-     *      the application is updated, bad request and null otherwise
+     * @return a http response with an application object in a {@link ResponseEntity} with an accepted status
+     * @throws ApplicationRequestException when application could not be found to be updated
      */
     @PutMapping
-    public ResponseEntity<Application> updateApplication(@RequestBody Application application) {
-        Application check = applicationService.getApplication(application.getApplicationId());
-        if (check != null) {
-            return new ResponseEntity<>(applicationService.saveApplication(application), HttpStatus.OK);
+    public ResponseEntity<Application> updateApplication(@RequestBody Application application) throws ApplicationRequestException{
+        Optional<Application> check = applicationService.findById(application.getApplicationId());
+        if (check.isPresent()) {
+            return new ResponseEntity<>(applicationService.saveApplication(application), HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            throw new ApplicationRequestException("Could not update application with applicationId "+ application.getApplicationId());
         }
     }
 
@@ -68,17 +73,17 @@ public class ApplicationController {
      * exist
      *
      * @param application application object in the request body
-     * @return a http response in a {@link ResponseEntity} that contains a ok request if
-     *      the application is deleted, bad request otherwise
+     * @return a http response in a {@link ResponseEntity} with an accepted status
+     * @throws ApplicationRequestException when application could not be found to be deleted
      */
     @DeleteMapping
-    public ResponseEntity<Void> deleteApplication(@RequestBody Application application) {
-        Application check = applicationService.getApplication(application.getApplicationId());
-        if (check != null) {
+    public ResponseEntity<Void> deleteApplication(@RequestBody Application application) throws ApplicationRequestException{
+        Optional<Application> check = applicationService.findById(application.getApplicationId());
+        if (!check.isPresent()) {
             applicationService.deleteApplication(application);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ApplicationRequestException("Could not delete application with applicationId " + application.getApplicationId());
         }
     }
 
@@ -86,16 +91,16 @@ public class ApplicationController {
      * Gets an application object from the database through the service with an id
      *
      * @param id id of an application object in the path variable
-     * @return a http response with an application object in a {@link ResponseEntity} that contains a found request if
-     *      the application is found, not found request and null otherwise
+     * @return a http response with an application object in a {@link ResponseEntity} with a found status
+     * @throws ApplicationRequestException when no matching applications found
      */
-    @GetMapping("{id}")
-    public ResponseEntity<Application> getApplication(@PathVariable int id) {
-        Application temp = applicationService.getApplication(id);
-        if (temp != null) {
-            return new ResponseEntity<>(temp, HttpStatus.FOUND);
+    @GetMapping("id/{id}")
+    public ResponseEntity<Application> getApplication(@PathVariable int id) throws ApplicationRequestException{
+        Optional<Application> application = applicationService.findById(id);
+        if (application.isPresent()){
+            return new ResponseEntity<>(application.get(), HttpStatus.FOUND);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            throw new ApplicationRequestException("Could not find application with applicationId " + id);
         }
     }
 
@@ -104,12 +109,18 @@ public class ApplicationController {
      * the applicant object
      *
      * @param applicant applicant object in the request body
-     * @return a http response with a List of application objects in a {@link ResponseEntity} that contains an ok
-     *      request
+     * @return a http response with a List of application objects in a {@link ResponseEntity} with a found status
+     * @throws ApplicationRequestException when no matching applications found
      */
     @GetMapping("applicant")
-    public ResponseEntity<List<Application>> getApplicationByApplicant(@RequestBody Applicant applicant) {
-        return new ResponseEntity<>(applicationService.getAllApplicationsByApplicant(applicant), HttpStatus.OK);
+    public ResponseEntity<List<Application>> getApplicationByApplicant(@RequestBody Applicant applicant) throws ApplicationRequestException{
+        Optional<List<Application>> applications = applicationService.getAllApplicationsByApplicant(applicant);
+        if(applications.isPresent()) {
+            return new ResponseEntity(applications.get(), HttpStatus.FOUND);
+        } else {
+            throw new ApplicantRequestException("Could not locate any applications for applicant " + applicant.getUser().getFirstName()
+                    + " " + applicant.getUser().getLastName());
+        }
     }
 
     /**
@@ -117,15 +128,20 @@ public class ApplicationController {
      * the applicantOccupation object
      *
      * @param applicantOccupation applicantOccupation object in the request body
-     * @return a http response with a List of application objects in a {@link ResponseEntity} that contains an ok
-     *      request
+     * @return a http response with a List of application objects in a {@link ResponseEntity} with a found status
+     * @throws ApplicationRequestException when no matching applications found
      */
     @GetMapping("occupation")
     public ResponseEntity<List<Application>> getApplicationByOccupation(@RequestBody ApplicantOccupation
-                                                                                    applicantOccupation) {
+                                                                            applicantOccupation)
+                                                                            throws ApplicationRequestException {
 
-        return new ResponseEntity<>(applicationService
-                .getAllApplicationsByApplicantOccupation(applicantOccupation), HttpStatus.OK);
+        Optional<List<Application>> applications = applicationService.getAllApplicationsByApplicantOccupation(applicantOccupation);
+        if( applications.isPresent()) {
+            return new ResponseEntity<>(applications.get(), HttpStatus.FOUND);
+        } else {
+            throw new ApplicationRequestException("Could not locate any applications for occupation " + applicantOccupation.getJobTitle());
+        }
     }
 
     /**
@@ -133,43 +149,78 @@ public class ApplicationController {
      * the need object
      *
      * @param need need object in the request body
-     * @return a http response with a List of application objects in a {@link ResponseEntity} that contains an ok
-     *      request
+     * @return a http response with a List of application objects in a {@link ResponseEntity} with a found status
+     * @throws ApplicationRequestException when no matching applications found
      */
     @GetMapping("need")
-    public ResponseEntity<List<Application>> getApplicationByNeed(@RequestBody Need need) {
-        return new ResponseEntity<>(applicationService.getAllApplicationsByNeed(need), HttpStatus.OK);
+    public ResponseEntity<List<Application>> getApplicationByNeed(@RequestBody Need need) throws ApplicationRequestException {
+
+        Optional<List<Application>> applications = applicationService.getAllApplicationsByNeed(need);
+        if(applications.isPresent()) {
+            return new ResponseEntity(applications.get(), HttpStatus.FOUND);
+        } else {
+            throw new ApplicationRequestException("Could not locate applications for needId " + need.getNeedId());
+        }
     }
 
     /**
      * Gets a List of application objects associated with a client and a certain applicant employment status.
+     *
      * @param employmentStatus That status to be matched with applicants
      * @param clientId The client to be matched with applications
-     * @return http response with the list of application objects in a {@Link ResponseEntity} or NOT_FOUND response
+     * @return http response with the list of application objects in a {@Link ResponseEntity} with a found status
+     * @throws ApplicationRequestException when no matching applications found
      */
-    @GetMapping
+    @GetMapping("status/employmentStatus=?/client/client=?")
     public ResponseEntity<List<Application>> getApplicationByEmploymentStatusAndClient(@RequestParam String employmentStatus,
-                                                                                       @RequestParam int clientId){
+                                                                                       @RequestParam int clientId)
+                                                                                        throws ApplicationRequestException {
 
-        List<Application> applications = applicationService.getApplicationByEmploymentStatusAndClient(employmentStatus, clientId);
+        Optional<List<Application>> applications = applicationService.getApplicationByEmploymentStatusAndClient(employmentStatus, clientId);
+        if (applications.isPresent()) {
+            return new ResponseEntity(applications.get(), HttpStatus.FOUND);
+        }
+        else {
+            throw new ApplicationRequestException("Could not locate " + employmentStatus + " applicants for clientId " + clientId);
+        }
+    }
 
-        if (applications.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); // null pointer exception from isEmpty()?
-        else return new ResponseEntity<>(applications, HttpStatus.FOUND);
+    /**
+     * Gets a List of applications associated with a certain client.
+     *
+     * @param clientId the client to be matched with applications
+     * @return http response with the list of application objects in a (@Link ResponseEntity} with a found status
+     * @throws ApplicationRequestException when no match found
+     */
+    @GetMapping("client/clientId=?")
+    public ResponseEntity<List<Application>> getApplicationByClient(@RequestParam int clientId) throws ApplicationRequestException{
+
+        Optional<List<Application>> applications = applicationService.getApplicationByClient(clientId);
+        if (applications.isPresent()) {
+            return new ResponseEntity(applications.get(), HttpStatus.FOUND);
+        }
+        else throw new ApplicationRequestException("Could not locate applications matching clientId " + clientId);
     }
 
     /**
      * Gets a List of application objects associated with a need and a certain applicant employment status.
+     *
      * @param employmentStatus That status to be matched with applicants
-     * @param clientId The need to be matched with applications
-     * @return http response with the list of application objects in a {@Link ResponseEntity} or NOT_FOUND response
+     * @param needId The need to be matched with applications
+     * @return http response with the list of application objects in a {@Link ResponseEntity} with a found status
+     * @throws ApplicationRequestException when no matching applications found
      */
-    @GetMapping
+    @GetMapping("status/employmentStatus=?/need/needId=?")
     public ResponseEntity<List<Application>> getApplicationsByEmploymentStatusAndNeed(@RequestParam int needId,
-                                                                                     @RequestParam String employmentStatus){
+                                                                                     @RequestParam String employmentStatus)
+                                                                                     throws ApplicationRequestException {
 
-        List<Application> applications = applicationService.getApplicationByEmploymentStatusAndNeed(employmentStatus, needId);
-        if (applications.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); // null pointer exception from isEmpty()?
-        else return new ResponseEntity<>(applications, HttpStatus.FOUND);
+        Optional<List<Application>> applications = applicationService.getApplicationByEmploymentStatusAndNeed(employmentStatus, needId);
+        if (applications.isPresent()) {
+            return new ResponseEntity(applications.get(), HttpStatus.FOUND);
+        } else {
+            throw new ApplicationRequestException("Could not find " + employmentStatus + " applicants for needId " + needId);
+        }
 
     }
 }

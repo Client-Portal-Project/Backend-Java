@@ -136,7 +136,8 @@ public class ApplicantController {
 
 
 
-    @GetMapping("skills")
+
+    @GetMapping("skill")
     public ResponseEntity<List<Applicant>> getApplicantBySkillsIsContaining(@RequestParam Skill skill){
         List<Applicant> applicants = applicantService.getApplicantSkillsIsContaining(skill);
         if (applicants == null){
