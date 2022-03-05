@@ -14,7 +14,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Applications")
+@Table(name = "Applications", indexes = {
+        @Index(name = "applicantIndex", columnList = "applicant_applicant_id"),
+        @Index(name = "needIndex", columnList = "need_need_id"),
+        @Index(name = "clientIndex", columnList = "client_client_id")
+})
+
 public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +31,6 @@ public class Application {
     private Integer status;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Applicant applicant;
-//    Redundant. Already joined to applicant.
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ApplicantOccupation applicantOccupation;
     @ManyToOne(fetch = FetchType.EAGER)
