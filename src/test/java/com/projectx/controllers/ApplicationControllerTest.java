@@ -148,7 +148,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testGetApplicationByApplicant() {
-        when(applicationService.getAllApplicationsByApplicant(expected.getApplicant())).thenReturn(Optional.ofNullable(list));
+        when(applicationService.getAllApplicationsByApplicant(expected.getApplicant())).thenReturn(list);
         mvc.perform(MockMvcRequestBuilders.get(URI+"/applicant")
                         .content(objectMapper.writeValueAsString(expected.getApplicant()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -161,7 +161,7 @@ public class ApplicationControllerTest {
     @SneakyThrows
     void testGetApplicationByOccupation() {
         when(applicationService.getAllApplicationsByApplicantOccupation(expected
-                .getApplicantOccupation())).thenReturn(Optional.ofNullable(list));
+                .getApplicantOccupation())).thenReturn(list);
         mvc.perform(MockMvcRequestBuilders.get(URI+"/occupation")
                         .content(objectMapper.writeValueAsString(expected.getApplicantOccupation()))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -173,7 +173,7 @@ public class ApplicationControllerTest {
     @Test
     @SneakyThrows
     void testGetApplicationByNeed() {
-        when(applicationService.getAllApplicationsByNeed(expected.getNeed())).thenReturn(Optional.ofNullable(list));
+        when(applicationService.getAllApplicationsByNeed(expected.getNeed())).thenReturn(list);
         mvc.perform(MockMvcRequestBuilders.get(URI+"/need")
                         .content(objectMapper.writeValueAsString(expected.getNeed()))
                         .contentType(MediaType.APPLICATION_JSON)

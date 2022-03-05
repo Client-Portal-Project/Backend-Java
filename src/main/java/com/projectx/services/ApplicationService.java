@@ -59,7 +59,7 @@ public class ApplicationService {
      * @param applicant applicant object
      * @return Optional List of application objects that are associated with the applicant object
      */
-    public Optional<List<Application>> getAllApplicationsByApplicant(Applicant applicant) {
+    public List<Application> getAllApplicationsByApplicant(Applicant applicant) {
         return applicationDao.findByApplicant_ApplicantId(applicant.getApplicantId());
     }
 
@@ -69,7 +69,7 @@ public class ApplicationService {
      * @param applicantOccupation applicantOccupation object
      * @return Optional List of application objects that are associated with the applicantOccupation object
      */
-    public Optional<List<Application>> getAllApplicationsByApplicantOccupation(ApplicantOccupation applicantOccupation) {
+    public List<Application> getAllApplicationsByApplicantOccupation(ApplicantOccupation applicantOccupation) {
         return applicationDao.findByApplicantOccupation_ApplicantOccupationalId(applicantOccupation
                 .getApplicantOccupationalId());
     }
@@ -80,7 +80,7 @@ public class ApplicationService {
      * @param need need object
      * @return Optional List of application objects that are associated with the need object
      */
-    public Optional<List<Application>> getAllApplicationsByNeed(Need need) {
+    public List<Application> getAllApplicationsByNeed(Need need) {
         return applicationDao.findByNeed_NeedId(need.getNeedId());
     }
 
@@ -91,15 +91,15 @@ public class ApplicationService {
      * @param clientId integer
      * @return Optional List of applications with employmentStatus and clientId
      */
-    public Optional<List<Application>> getApplicationByEmploymentStatusAndClient(String employmentStatus, int clientId){
+    public List<Application> getApplicationByEmploymentStatusAndClient(String employmentStatus, int clientId){
         return applicationDao.findApplicationsByApplicant_EmploymentStatusAndClient_ClientId(employmentStatus, clientId);
     }
 
-    public Optional<List<Application>> getApplicationByEmploymentStatusAndNeed(String employmentStatus, int needId){
+    public List<Application> getApplicationByEmploymentStatusAndNeed(String employmentStatus, int needId){
         return applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(employmentStatus, needId);
     }
 
-    public Optional<List<Application>> getApplicationByClient(int clientId) {
+    public List<Application> getApplicationByClient(int clientId) {
         return applicationDao.findApplicationsByClient_ClientId(clientId);
     }
 
