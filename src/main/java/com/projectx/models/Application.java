@@ -38,9 +38,6 @@ public class Application {
     @ManyToOne(fetch = FetchType.EAGER)
     private Client client;
 
-    // Application(1, null, null, applicant, occupation, need)
-    // Application(1, null, 0, applicant, applicantOccupation, need);
-
     public Application(Integer applicationId, Applicant applicant, ApplicantOccupation applicantOccupation, Need need) {
         this.applicationId = applicationId;
         this.applicant = applicant;
