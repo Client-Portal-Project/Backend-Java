@@ -28,8 +28,8 @@ public class ApplicationServiceTest {
         MockitoAnnotations.openMocks(this);
         Applicant applicant = new Applicant();
         applicant.setApplicantId(1);
-        ApplicantOccupation applicantOccupation = new ApplicantOccupation();
-        applicantOccupation.setApplicantOccupationalId(1);
+        ApplicantOccupation applicantOccupation = new ApplicantOccupation(1);
+        //applicantOccupation.setApplicantOccupationalId(1);
         Need need =  new Need();
         Client client = new Client(1);
         need.setNeedId(1);
