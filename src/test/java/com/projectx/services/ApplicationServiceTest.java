@@ -8,8 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +15,6 @@ import static org.mockito.Mockito.*;
 
 public class ApplicationServiceTest {
     private Application expected;
-    private List<Application> list;
     @Mock
     private ApplicationDao applicationDao;
     @InjectMocks
@@ -27,15 +24,14 @@ public class ApplicationServiceTest {
     void initMock() {
         MockitoAnnotations.openMocks(this);
         Applicant applicant = new Applicant();
-        applicant.setApplicantId(1);
         ApplicantOccupation applicantOccupation = new ApplicantOccupation();
-        applicantOccupation.setApplicantOccupationalId(1);
         Need need =  new Need();
         Client client = new Client(1);
         need.setNeedId(1);
         expected = new Application(1, 0, applicant, applicantOccupation, need, client);
         list = new ArrayList<>();
         list.add(expected);
+
     }
 
     @Test
@@ -60,7 +56,7 @@ public class ApplicationServiceTest {
         assertEquals(actual.get(), expected);
     }
 
-    @Test
+  @Test
     void testGetApplicationByApplicant() {
         when(applicationDao.findByApplicant_ApplicantId(expected.getApplicant().getApplicantId())).thenReturn(list);
         List<Application> actual = applicationService.getAllApplicationsByApplicant(expected.getApplicant());
