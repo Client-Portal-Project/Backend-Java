@@ -1,6 +1,8 @@
 package com.projectx.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.projectx.exception.ApplicantRequestException;
+import com.projectx.exception.ApplicationExceptionHandler;
 import com.projectx.exception.ApplicationRequestException;
 import com.projectx.models.*;
 import com.projectx.services.ApplicationService;
@@ -33,6 +35,7 @@ public class ApplicationControllerTest {
     private List<Application> list;
     private MockMvc mvc;
     private ObjectMapper objectMapper;
+    private ApplicationRequestException e;
     @Mock
     private ApplicationService applicationService;
     @InjectMocks
@@ -41,8 +44,11 @@ public class ApplicationControllerTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        mvc = MockMvcBuilders.standaloneSetup(applicationController).build();
+        mvc = MockMvcBuilders.standaloneSetup(applicationController)
+                .setControllerAdvice(new ApplicationExceptionHandler())
+                .build();
         objectMapper = new ObjectMapper();
+        e = new ApplicationRequestException();
         Applicant applicant = new Applicant();
         ApplicantOccupation occupation = new ApplicantOccupation();
         Need need = new Need();
@@ -64,19 +70,16 @@ public class ApplicationControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(expected)));
     }
 
-//    @Test
-//    @SneakyThrows
-//    void testCreateApplicationFail()throws Exception{
-//        when(applicationService.findById(expected.getApplicationId())).thenReturn(Optional.ofNullable(expected));
-//        //when(applicationService.saveApplication(expected)).thenReturn(expected);
-//        mvc.perform(MockMvcRequestBuilders.post(URI)
-//                        .content(objectMapper.writeValueAsString(expected))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                        //.accept(MediaType.APPLICATION_JSON))
-//                //.andExpect(status().isBadRequest())
-//                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ApplicationRequestException));
-//                //.andExpect(result -> (assertEquals("Application already exists.", result.getResolvedException().getMessage() )));
-//    }
+    @Test
+    @SneakyThrows
+    void testCreateApplicationFail(){
+        when(applicationService.findById(expected.getApplicationId())).thenReturn(Optional.ofNullable(expected));
+        mvc.perform(MockMvcRequestBuilders.post(URI)
+                        .content(objectMapper.writeValueAsString(expected))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ApplicationRequestException));
+    }
 
     @Test
     @SneakyThrows
@@ -91,17 +94,17 @@ public class ApplicationControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(expected)));
     }
 
-//    @Test
-//    @SneakyThrows
-//    void testUpdateApplicationFail() {
-//        when(applicationService.findById(expected.getApplicationId())).thenReturn(null);
-//        mvc.perform(MockMvcRequestBuilders.put(URI)
-//                        .content(objectMapper.writeValueAsString(expected))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(content().string(""));
-//    }
+    @Test
+    @SneakyThrows
+    void testUpdateApplicationFail() {
+        when(applicationService.findById(expected.getApplicationId())).thenThrow(e);
+        mvc.perform(MockMvcRequestBuilders.put(URI)
+                        .content(objectMapper.writeValueAsString(expected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ApplicationRequestException));
+    }
 
     @Test
     @SneakyThrows
@@ -114,16 +117,17 @@ public class ApplicationControllerTest {
                 .andExpect(status().is2xxSuccessful());
     }
 
-//    @Test
-//    @SneakyThrows
-//    void testDeleteApplicationFail() {
-//        when(applicationService.findById(expected.getApplicationId())).thenReturn(null);
-//        mvc.perform(MockMvcRequestBuilders.delete(URI)
-//                        .content(objectMapper.writeValueAsString(expected))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isBadRequest());
-//    }
+    @Test
+    @SneakyThrows
+    void testDeleteApplicationFail() {
+        when(applicationService.findById(expected.getApplicationId())).thenThrow(e);
+        mvc.perform(MockMvcRequestBuilders.delete(URI)
+                        .content(objectMapper.writeValueAsString(expected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ApplicationRequestException));
+    }
 
     @Test
     @SneakyThrows
@@ -137,17 +141,17 @@ public class ApplicationControllerTest {
                 //.andExpect(content().json(objectMapper.writeValueAsString(expected)));
     }
 
-//    @Test
-//    @SneakyThrows
-//    void testGetApplicationFail() {
-//        when(applicationService.findById(expected.getApplicationId())).thenReturn(null);
-//        mvc.perform(MockMvcRequestBuilders.get(URI+"?id=1")
-//                        .content(objectMapper.writeValueAsString(expected))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNotFound())
-//                .andExpect(content().string(""));
-//    }
+    @Test
+    @SneakyThrows
+    void testGetApplicationFail() {
+        when(applicationService.findById(expected.getApplicationId())).thenThrow(e);
+        mvc.perform(MockMvcRequestBuilders.get(URI+"/id?id=1")
+                        .content(objectMapper.writeValueAsString(expected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ApplicationRequestException));
+    }
 
     @Test
     @SneakyThrows
