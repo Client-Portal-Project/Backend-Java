@@ -7,7 +7,7 @@ package com.projectx.controllers;
  */
 
 import com.projectx.Driver;
-import com.projectx.exception.ApplicantRequestException;
+
 import com.projectx.exception.ApplicationRequestException;
 import com.projectx.models.Applicant;
 import com.projectx.models.ApplicantOccupation;
@@ -120,8 +120,7 @@ public class ApplicationController {
         if(!applications.isEmpty()) {
             return new ResponseEntity(applications, HttpStatus.FOUND);
         } else {
-            throw new ApplicantRequestException("Could not find any applications for applicant ");// + applicant.getUser().getFirstName()//+ " "
-                // + applicant.getUser().getLastName());
+            throw new ApplicationRequestException("Could not find any applications for applicant ");
         }
     }
 

@@ -6,7 +6,7 @@
 
 package com.projectx.services;
 
-import com.projectx.exception.ApplicantRequestException;
+
 import com.projectx.exception.ApplicationRequestException;
 import com.projectx.models.Applicant;
 import com.projectx.models.ApplicantOccupation;

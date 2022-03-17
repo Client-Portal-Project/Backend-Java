@@ -1,7 +1,6 @@
 package com.projectx.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.projectx.exception.ApplicantRequestException;
 import com.projectx.exception.ApplicationExceptionHandler;
 import com.projectx.exception.ApplicationRequestException;
 import com.projectx.models.*;
