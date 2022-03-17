@@ -21,7 +21,7 @@ pipeline {
                     CURR = "Unit Testing"
                     CMD = 'mvn test > result'
                     sh 'make check || true'
-                    //sh (script: CMD)
+                    sh (script: CMD)
                 }
                 discordSend description: ":memo: Successfully Passed Tests for ${JOB_NAME}", result: currentBuild.currentResult, webhookURL: WEBHO_JA
             }
