@@ -14,6 +14,7 @@ import com.projectx.models.ApplicantOccupation;
 import com.projectx.models.Application;
 import com.projectx.models.Need;
 import com.projectx.services.ApplicationService;
+import lombok.NonNull;
 import org.apache.tomcat.util.descriptor.web.ApplicationParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextException;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.channels.AcceptPendingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +45,7 @@ public class ApplicationController {
     @PostMapping
     public ResponseEntity<Application> createApplication(@RequestBody Application application) throws ApplicationRequestException {
         Optional<Application> check = applicationService.findById(application.getApplicationId());
-        if (check.isPresent()) {
+        if (!check.isPresent()) {
             return new ResponseEntity<>(applicationService.saveApplication(application), HttpStatus.CREATED);
         } else {
             throw new ApplicationRequestException("Application already exists.");
@@ -79,7 +81,7 @@ public class ApplicationController {
     @DeleteMapping
     public ResponseEntity<Void> deleteApplication(@RequestBody Application application) throws ApplicationRequestException{
         Optional<Application> check = applicationService.findById(application.getApplicationId());
-        if (!check.isPresent()) {
+        if (check.isPresent()) {
             applicationService.deleteApplication(application);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } else {
@@ -222,6 +224,19 @@ public class ApplicationController {
             throw new ApplicationRequestException("Could not find " + employmentStatus + " applicants for clientId " + clientId);
         }
     }
+
+//    @GetMapping
+//    public ResponseEntity<List<Application>> getAllApplications() {
+//        List<Application> applications = new ArrayList<>();//applicationService.getAllApplications();
+//        Application app = new Application();
+//        applications.add(app);
+//        //if(!applications.isEmpty()){
+//            return new ResponseEntity<>(applications, HttpStatus.FOUND);
+//        //} else {
+//         //   throw new ApplicationRequestException("No Applications");
+//        //}
+
+ //   }
 
 
 

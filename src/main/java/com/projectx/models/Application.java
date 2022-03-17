@@ -1,6 +1,7 @@
 package com.projectx.models;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -30,12 +31,16 @@ public class Application {
     @Column
     private Integer status;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Nullable
     private Applicant applicant;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Nullable
     private ApplicantOccupation applicantOccupation;
     @ManyToOne(fetch = FetchType.EAGER)
+    @Nullable
     private Need need;
     @ManyToOne(fetch = FetchType.EAGER)
+    @Nullable
     private Client client;
 
     public Application(Integer applicationId, Applicant applicant, ApplicantOccupation applicantOccupation, Need need) {

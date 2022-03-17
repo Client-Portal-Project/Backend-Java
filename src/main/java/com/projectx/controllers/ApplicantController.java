@@ -119,7 +119,7 @@ public class ApplicantController {
      //  if (clientId == null){
             List<Applicant> applicants = applicantService.getApplicantByEmploymentStatus(employmentStatus);
 
-            if (applicants == null) {
+            if (applicants.isEmpty()) {
                 return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
                 /*
                     Are we blanket using 400 for null results?

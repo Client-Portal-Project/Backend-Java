@@ -1,6 +1,6 @@
 package com.projectx.exception;
 
-public class ApplicationRequestException extends Throwable{
+public class ApplicationRequestException extends RuntimeException{
     public ApplicationRequestException(String message){
         super(message);
     }

@@ -103,4 +103,8 @@ public class ApplicationService {
         return applicationDao.findApplicationsByClient_ClientId(clientId);
     }
 
+    public List<Application> getAllApplications(){
+        return applicationDao.findAll();
+    }
+
 }
