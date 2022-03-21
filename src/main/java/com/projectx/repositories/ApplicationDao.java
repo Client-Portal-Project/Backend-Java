@@ -25,5 +25,5 @@ public interface ApplicationDao extends JpaRepository<Application, Integer> {
     List<Application> findByNeed_NeedId (int needId);
     List<Application> findApplicationsByApplicant_EmploymentStatusAndClient_ClientId(String employmentStatus, int clientId);
     List<Application> findApplicationsByClient_ClientId(int clientId);
-    List<Application> findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(String employmentStatus, int NeedId);
+    List<Application> findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(String employmentStatus, int needId);
 }

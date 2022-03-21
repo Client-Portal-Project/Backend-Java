@@ -130,20 +130,6 @@ public class InterviewController {
 			return new ResponseEntity<>(view, HttpStatus.FOUND);
 		}
 	}
-	@GetMapping("skills")
-	public ResponseEntity<List<Interview>> getBySkill(@RequestBody Set<Skill> skills)
-	{
-		//List<Interview> view = this.interviewService.findInterviewBySkill(skills);
-		List<Interview> view = new ArrayList<>();
-		if(view.size() == 0)
-		{
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-		else
-		{
-			return new ResponseEntity<>(view, HttpStatus.FOUND);
-		}
-	}
 	@GetMapping("need")
 	public ResponseEntity<List<Interview>> findByNeed(@RequestBody Need need)
 	{

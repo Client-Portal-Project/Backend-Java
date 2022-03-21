@@ -15,6 +15,8 @@ import com.projectx.models.Need;
 import com.projectx.models.Skill;
 import com.projectx.repositories.InterviewDao;
 
+import javax.swing.text.html.Option;
+
 @Service("interviewService")
 public class InterviewService {
 	private InterviewDao interviewDao;
@@ -47,14 +49,11 @@ public class InterviewService {
 	}
 	public boolean deleteInterview(Interview interview)
 	{
-		this.interviewDao.delete(interview);
-		if(this.interviewDao.findById(interview.getInterviewId()) == null ||
-				!this.interviewDao.findById(interview.getInterviewId()).equals(Optional.of(interview)))
-		{
+		Optional<Interview> check = interviewDao.findById(interview.getInterviewId());
+		if(check.isPresent()) {
+			interviewDao.delete(interview);
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -67,7 +66,6 @@ public class InterviewService {
 		}
 		else
 		{
-			//to do
 			return this.interviewDao.save(interview);
 		}
 	}
@@ -75,11 +73,6 @@ public class InterviewService {
 	{
 		return this.interviewDao.findInterviewsByClient(client);
 	}
-	
-	/*public List<Interview> findInterviewBySkill(Set<Skill> skills)
-	{
-		return this.interviewDao.findInterviewBySkill(skills);
-	}*/
 	
 	public List<Interview> findInterviewByNeed(Need need)
 	{

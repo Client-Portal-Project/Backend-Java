@@ -136,8 +136,8 @@ public class ApplicationControllerTest {
                         .content(objectMapper.writeValueAsString(expected))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isFound());
-                //.andExpect(content().json(objectMapper.writeValueAsString(expected)));
+                .andExpect(status().isFound())
+                .andExpect(content().json(objectMapper.writeValueAsString(expected)));
     }
 
     @Test
