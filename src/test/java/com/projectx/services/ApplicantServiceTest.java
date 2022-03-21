@@ -90,7 +90,6 @@ public class ApplicantServiceTest {
         List<Applicant> list = new ArrayList<>();
         list.add(expected);
         Skill skill = new Skill();
-        //Skill[] skills = expected.getApplicantSkills().toArray(new Skill[expected.getApplicantSkills().size()]);
         when(applicantDao.findByApplicantSkillsIsContaining(skill)).thenReturn(list);
         List<Applicant> actual = applicantService.getApplicantSkillsIsContaining(skill);
 

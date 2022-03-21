@@ -29,7 +29,6 @@ public class NeedServiceTest {
         Client client = new Client(1, null);
         expected = new Need(1, null, null, null,
                 null, null, null, null, client, null, null);
-        //expected = new Need(1, client);
     }
 
     @Test
