@@ -102,13 +102,23 @@ public class ApplicationServiceTest {
 
     @Test
     void testGetApplicationByEmploymentStatusAndClient(){
-        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(expected.getApplicant().getEmploymentStatus()
+        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndClient_ClientId(expected.getApplicant().getEmploymentStatus()
                 , expected.getClient().getClientId()))
                 .thenReturn(list);
-        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
+        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndClient(expected.getApplicant().getEmploymentStatus()
                 , expected.getClient().getClientId());
 
         assertFalse(actual.isEmpty());
         assertEquals(actual, list);
+    }
+
+    @Test
+    void getApplicationByClient() {
+        when(applicationDao.findApplicationsByClient_ClientId(expected.getClient().getClientId()))
+                .thenReturn(list);
+        List<Application> actual = applicationService.getApplicationByClient(expected.getClient().getClientId());
+
+        assertFalse(actual.isEmpty());
+        assertEquals(actual,list);
     }
 }
