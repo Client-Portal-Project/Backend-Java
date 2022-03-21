@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 
-
+@Data
 public class ApplicationRequestException extends RuntimeException{
 
     private final HttpStatus httpStatus;
