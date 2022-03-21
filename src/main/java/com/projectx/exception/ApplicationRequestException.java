@@ -8,20 +8,19 @@ import java.time.ZonedDateTime;
 @Data
 public class ApplicationRequestException extends RuntimeException{
 
-    private String message;
-    private Throwable e;
-    private HttpStatus httpStatus;
-    private ZonedDateTime timestamp;
+    private final HttpStatus httpStatus;
+    private final ZonedDateTime timestamp;
 
     public ApplicationRequestException(String message){
         super(message);
+        this.httpStatus = HttpStatus.BAD_REQUEST;
+        this.timestamp = ZonedDateTime.now();
     }
 
     public ApplicationRequestException(String message, Throwable cause){
         super(message, cause);
+        this.httpStatus = HttpStatus.BAD_REQUEST;
+        this.timestamp = ZonedDateTime.now();
     }
 
-    public ApplicationRequestException() {
-
-    }
 }
