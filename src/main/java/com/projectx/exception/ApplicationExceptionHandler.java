@@ -14,7 +14,7 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(value = {ApplicationRequestException.class})
     public ResponseEntity<Object> handleApplicationRequestException(ApplicationRequestException e) {
-        System.err.println(e.getHttpStatus() + " : " + e.getTimestamp());
+        System.out.println(e.getHttpStatus() + " : " + e.getTimestamp());
         return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
     }
 }
