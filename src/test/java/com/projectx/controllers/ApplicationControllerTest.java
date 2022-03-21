@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +48,7 @@ public class ApplicationControllerTest {
                 .setControllerAdvice(new ApplicationExceptionHandler())
                 .build();
         objectMapper = new ObjectMapper();
-        e = new ApplicationRequestException();
+        e = new ApplicationRequestException("test message");
         Applicant applicant = new Applicant();
         ApplicantOccupation occupation = new ApplicantOccupation();
         Need need = new Need();

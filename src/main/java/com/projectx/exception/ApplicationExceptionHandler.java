@@ -13,8 +13,6 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(value = {ApplicationRequestException.class})
     public ResponseEntity<Object> handleApplicationRequestException(ApplicationRequestException e) {
-                e.setHttpStatus(HttpStatus.BAD_REQUEST);
-                e.setTimestamp(ZonedDateTime.now());
 
         return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
     }
