@@ -24,7 +24,8 @@ public class ApplicationServiceTest {
     void initMock() {
         MockitoAnnotations.openMocks(this);
         Applicant applicant = new Applicant();
-        ApplicantOccupation applicantOccupation = new ApplicantOccupation();
+        applicant.setApplicantId(1);
+        ApplicantOccupation applicantOccupation = new ApplicantOccupation(1);
         Need need =  new Need();
         Client client = new Client(1);
         need.setNeedId(1);
@@ -99,13 +100,23 @@ public class ApplicationServiceTest {
 
     @Test
     void testGetApplicationByEmploymentStatusAndClient(){
-        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(expected.getApplicant().getEmploymentStatus()
+        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndClient_ClientId(expected.getApplicant().getEmploymentStatus()
                 , expected.getClient().getClientId()))
                 .thenReturn(list);
-        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
+        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndClient(expected.getApplicant().getEmploymentStatus()
                 , expected.getClient().getClientId());
 
         assertFalse(actual.isEmpty());
         assertEquals(actual, list);
+    }
+
+    @Test
+    void getApplicationByClient() {
+        when(applicationDao.findApplicationsByClient_ClientId(expected.getClient().getClientId()))
+                .thenReturn(list);
+        List<Application> actual = applicationService.getApplicationByClient(expected.getClient().getClientId());
+
+        assertFalse(actual.isEmpty());
+        assertEquals(actual,list);
     }
 }

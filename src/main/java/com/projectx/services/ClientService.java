@@ -59,8 +59,7 @@ public class ClientService {
         if(temp != null) {
             return null;
         } else {
-            Client result = this.clientDao.save(client);
-            return result;
+            return this.clientDao.save(client);
         }
     }
 
@@ -76,8 +75,7 @@ public class ClientService {
     		 return null;
     	} else {
     		temp.setCompanyName(client.getCompanyName());
-    		Client updated = this.clientDao.save(temp);
-    		return updated;
+    		return this.clientDao.save(temp);
     	}
     }
 

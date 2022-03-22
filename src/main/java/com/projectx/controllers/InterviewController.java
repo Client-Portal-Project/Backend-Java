@@ -98,43 +98,11 @@ public class InterviewController {
 			return new ResponseEntity<>(view, HttpStatus.FOUND);
 		}
 	}
-	/**
-	 * read descriptions of the 3 methods above
-	 * 
-	 * @param when date searched
-	 * @return response containing list of all interviews on specified day, hopefully
-	 */
-	@GetMapping("date")
-	public ResponseEntity<List<Interview>> getByDate(@RequestBody Date when)
-	{
-		List<Interview> view = this.interviewService.findByDate(when);
-		if(view.size() == 0)
-		{
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-		else
-		{
-			return new ResponseEntity<>(view, HttpStatus.FOUND);
-		}
-	}
+
 	@GetMapping("client")
 	public ResponseEntity<List<Interview>> getByClient(@RequestBody Client client)
 	{
 		List<Interview> view = this.interviewService.findInterviewsbyClient(client);
-		if(view.size() == 0)
-		{
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-		else
-		{
-			return new ResponseEntity<>(view, HttpStatus.FOUND);
-		}
-	}
-	@GetMapping("skills")
-	public ResponseEntity<List<Interview>> getBySkill(@RequestBody Set<Skill> skills)
-	{
-		//List<Interview> view = this.interviewService.findInterviewBySkill(skills);
-		List<Interview> view = new ArrayList<>();
 		if(view.size() == 0)
 		{
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

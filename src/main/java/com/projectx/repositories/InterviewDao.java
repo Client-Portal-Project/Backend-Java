@@ -20,10 +20,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface InterviewDao extends JpaRepository<Interview, Integer> {
 	List<Interview> findInterviewByDate(Date later);
 	List<Interview> findInterviewByApplication(Application application);
-	//List<Interview> findInterviewByMonth(int month);
-	//List<Interview> findInterviewsThisWeek();
-	//List<Interview> findInterviewsOnWeekOf(Date later);
 	List<Interview> findInterviewsByClient(Client clients);
-	//List<Interview> findInterviewBySkill(Set<Skill> skills);
 	List<Interview> findInterviewByNeed(Need need);
 }

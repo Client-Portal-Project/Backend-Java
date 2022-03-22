@@ -24,10 +24,4 @@ public interface ApplicantDao extends JpaRepository<Applicant, Integer> {
     @Nullable
     List<Applicant> findByApplicantSkillsIsContaining(Skill skill);
 
-
-   // @Nullable
-   // List<Applicant> findApplicantByEmploymentStatusAndApplicantSkillsIsContaining(String employmentStatus);
-
-
-
 }

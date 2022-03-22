@@ -224,20 +224,4 @@ public class ApplicationController {
         }
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<Application>> getAllApplications() {
-//        List<Application> applications = new ArrayList<>();//applicationService.getAllApplications();
-//        Application app = new Application();
-//        applications.add(app);
-//        //if(!applications.isEmpty()){
-//            return new ResponseEntity<>(applications, HttpStatus.FOUND);
-//        //} else {
-//         //   throw new ApplicationRequestException("No Applications");
-//        //}
-
- //   }
-
-
-
-
 }

@@ -36,4 +36,8 @@ public class ApplicantOccupation {
         this.openMarket = openMarket;
         this.applicant = applicant;
     }
+
+    public ApplicantOccupation(Integer applicantOccupationalId) {
+        this.applicantOccupationalId = applicantOccupationalId;
+    }
 }

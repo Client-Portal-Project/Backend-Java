@@ -113,20 +113,13 @@ public class ApplicantController {
     }
 
    @GetMapping("status")
-   //public ResponseEntity<List<Applicant>> getApplicantByEmploymentStatus(@RequestParam String employmentStatus,
-   //                                                                        @RequestParam(required = false) int clientId){
+
    public ResponseEntity<List<Applicant>> getApplicantByEmploymentStatus(@RequestParam String employmentStatus){
-     //  if (clientId == null){
+
             List<Applicant> applicants = applicantService.getApplicantByEmploymentStatus(employmentStatus);
 
             if (applicants.isEmpty()) {
                 return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-                /*
-                    Are we blanket using 400 for null results?
-
-                    return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-                */
-
             } else {
                 return new ResponseEntity<>(applicants, HttpStatus.FOUND);
             }
