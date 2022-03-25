@@ -15,6 +15,7 @@ import static org.mockito.Mockito.*;
 
 public class ApplicationServiceTest {
     private Application expected;
+    private List<Application> list;
     @Mock
     private ApplicationDao applicationDao;
     @InjectMocks
