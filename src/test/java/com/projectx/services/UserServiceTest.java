@@ -13,10 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.constraints.Email;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class UserServiceTest {
+    private static final String BDAY = "01/01/2000";
+    private static final String NAME = "John Doe";
+    private static final String 
     private static final String EMAIL = "testuser@test.com";
     private static final String PASSWORD = "password";
     @Mock
@@ -34,8 +39,7 @@ public class UserServiceTest {
     void findUserById() {
         // Assign
         Integer userId = 1;
-        User expectedResult = new User(1, EMAIL, PASSWORD,
-                "test", "user", null);
+        User expectedResult = new User();
         Mockito.when(userDao.findById(userId)).thenReturn(Optional.of(expectedResult));
 
         // Act
@@ -61,8 +65,7 @@ public class UserServiceTest {
     @Test
     void findUserByEmail() {
         // Assign
-        User expectedResult = new User(1, EMAIL, PASSWORD,
-                "test", "user", null);
+        User expectedResult = new User();
         Mockito.when(userDao.findUserByEmail(EMAIL)).thenReturn(expectedResult);
 
         // Act
@@ -88,10 +91,8 @@ public class UserServiceTest {
     @Test
     void createUser() {
         // Assign
-        User temp = new User(null, EMAIL, PASSWORD,
-                "test", "user", null);
-        User newUser = new User(1, EMAIL, PASSWORD,
-                "test", "user", null);
+        User temp = new User(1,"2-2-1999", EMAIL, 
+        User newUser = new User();
         Mockito.when(userDao.findUserByEmail(temp.getEmail())).thenReturn(null);
         Mockito.when(userDao.save(temp)).thenReturn(newUser);
         User expectedResult = newUser;

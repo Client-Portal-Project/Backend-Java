@@ -6,14 +6,12 @@ import com.projectx.models.User;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @RestController("userController")
@@ -54,23 +52,23 @@ public class UserController {
      * @return http response with a user object in a {@link ResponseEntity} that contains a CREATED request if the
      * user exists; thus, generating a token, else a CONFLICT request.
      */
-    @NoAuth
-    @PostMapping("login")
-    public ResponseEntity<User> login(@RequestBody User user) {
-        ResponseEntity<User> response;
-        User existingUser = this.userService.getUserByEmailAndPassword(user.getEmail(), user.getPassword());
-        if(existingUser != null) {
-            String token = jwtUtil.generateToken(existingUser.getUserId());
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("authorization", token);
-            responseHeaders.set("Access-Control-Expose-Headers", "authorization");
-            existingUser.setPassword(null); // To prevent sensitive information getting leaked out
-            response = new ResponseEntity<>(existingUser, responseHeaders, HttpStatus.CREATED);
-        } else {
-            response = new ResponseEntity<>(null, HttpStatus.CONFLICT);
-        }
-        return response;
-    }
+    // @NoAuth
+    // @PostMapping("login")
+    // public ResponseEntity<User> login(@RequestBody User user) {
+    //     ResponseEntity<User> response;
+    //     User existingUser = this.userService.getUserByEmailAndPassword(user.getEmail(), user.getPassword());
+    //     if(existingUser != null) {
+    //         String token = jwtUtil.generateToken(existingUser.getUserId());
+    //         HttpHeaders responseHeaders = new HttpHeaders();
+    //         responseHeaders.set("authorization", token);
+    //         responseHeaders.set("Access-Control-Expose-Headers", "authorization");
+    //         /** existingUser.setPassword(null); // To prevent sensitive information getting leaked out*/
+    //         response = new ResponseEntity<>(existingUser, responseHeaders, HttpStatus.CREATED);
+    //     } else {
+    //         response = new ResponseEntity<>(null, HttpStatus.CONFLICT);
+    //     }
+    //     return response;
+    // }
 
     /**
      * Retrieve all users in the database
@@ -98,17 +96,11 @@ public class UserController {
     public ResponseEntity<User> editUser(@RequestBody User user, HttpServletRequest headers) {
         ResponseEntity<User> response;
         if(Objects.equals(headers.getAttribute("userId"), user.getUserId())) {
-            if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
-                // Password encryption goes here
-                User updatedUser = this.userService.editUser(user);
-                if(updatedUser == null) {
-                    response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-                } else {
-                    updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
-                    response = new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
-                }
+            User updatedUser = this.userService.editUser(user);
+            if(updatedUser == null) {
+                response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             } else {
-                response = new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                response = new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
             }
         } else {
             response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -147,15 +139,15 @@ public class UserController {
      * @return http response with a user object in a {@link ResponseEntity} that contains a found request if the
      *      user was found, else a not found request and null object.
      */
-    @GetMapping ("login")
-    public ResponseEntity<User> getUser(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String password = body.get("password");
-        User user = userService.getUserByEmailAndPassword(email, password);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.FOUND);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-    }
+    // @GetMapping ("login")
+    // public ResponseEntity<User> getUser(@RequestBody Map<String, String> body) {
+    //     String email = body.get("email");
+    //     String password = body.get("password");
+    //     User user = userService.getUserByEmailAndPassword(email, password);
+    //     if (user != null) {
+    //         return new ResponseEntity<>(user, HttpStatus.FOUND);
+    //     } else {
+    //         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    //     }
+    // }
 }

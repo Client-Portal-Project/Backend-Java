@@ -36,8 +36,8 @@ public class ClientServiceTest {
 	public void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		testUser = new User(1, "test1", "", "", "", true);
-		User testUserExtra = new User(2, "test2", "", "", "", true);
+		testUser = new User();
+		User testUserExtra = new User();
 		testClient1 = new Client(1, "Test Company 1");
 		Set<User> expected = new HashSet<>();
 		expected.add(testUser);

@@ -50,7 +50,7 @@ public class ClientControllerTest {
 		
 		testClient1 = new Client(1, "Test1");
 		testClient2 = new Client(null, "Test2");
-		testUser = new User(null, "", "", "", "", false);
+		testUser = new User();
 		
 		testClientList = new ArrayList<>();
 		testClientList.add(testClient1);

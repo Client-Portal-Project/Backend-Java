@@ -63,9 +63,9 @@ public class UserService {
 
     public User createUser(User user) {
         User temp = this.userDao.findUserByEmail(user.getEmail());
-        if(temp != null)
-            return null;
-        return this.userDao.save(user);
+        if (temp != null) {
+            return this.userDao.save(user);
+        } else {return null;}
     }
 
     /**
@@ -76,9 +76,9 @@ public class UserService {
      * @return the user associated with the user's email and password
      */
 
-    public User getUserByEmailAndPassword(String email, String password) {
-        return this.userDao.findUserByEmailAndPassword(email, password);
-    }
+    // public User getUserByEmailAndPassword(String email, String password) {
+    //     return this.userDao.findUserByEmailAndPassword(email, password);
+    // }
 
     /**
      * Edit a user from the database
@@ -92,16 +92,26 @@ public class UserService {
         if(temp == null)
             return null;
         else {
+            if(user.getBirthdate() != null)
+                temp.setEmail(user.getEmail());
             if(user.getEmail() != null)
                 temp.setEmail(user.getEmail());
-            if(user.getPassword() != null)
-                temp.setPassword(user.getPassword());
-            if(user.getFirstName() != null)
-                temp.setFirstName(user.getFirstName());
-            if(user.getLastName() != null)
-                temp.setLastName(user.getLastName());
-            if(user.getApproved() != null)
-                temp.setApproved(user.getApproved());
+            if(user.getEmail_verified() != null)
+                temp.setEmail_verified(user.getEmail_verified());
+            if(user.getGiven_name() != null)
+                temp.setGiven_name(user.getGiven_name());
+            if(user.getFamily_name() != null)
+                temp.setFamily_name(user.getFamily_name());
+            if(user.getName() != null)
+                temp.setName(user.getName());
+            if(user.getNickname() != null)
+                temp.setNickname(user.getNickname());
+            if(user.getPhone_number() != null)
+                temp.setPhone_number(user.getPhone_number());
+            if(user.getPhone_number_verified() != null)
+                temp.setPhone_number_verified(user.getPhone_number_verified());
+            if(user.getPicture() != null)
+                temp.setPicture(user.getPicture());
             return this.userDao.save(temp);
         }
     }

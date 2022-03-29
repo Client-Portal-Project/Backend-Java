@@ -28,7 +28,7 @@ public class ApplicantServiceTest {
     void initMock() {
         MockitoAnnotations.openMocks(this);
         String dummy = "";
-        User user = new User(1, dummy, dummy, dummy, dummy, true);
+        User user = new User();
         expected = new Applicant(1, dummy, dummy, dummy, dummy, user);
     }
 

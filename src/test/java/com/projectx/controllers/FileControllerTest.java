@@ -48,7 +48,7 @@ public class FileControllerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         mockMvc = webAppContextSetup(context).build();
-        User user = new User(1, null, null, null, null, true);
+        User user = new User();
         applicant = new Applicant(1, "", "", "", "",
                 user);
         expected = new File(1, "test", "test", ("test").getBytes(), null, applicant);

@@ -19,16 +19,37 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(unique = true, nullable = false)
     private Integer userId;
+
+    @Column(nullable = true)
+    private String birthdate;
+
     @Column(unique = true, nullable = false)
     private String email;
-    @Column(nullable = false)
-    private String password;
-    @Column(nullable = false)
-    private String firstName;
-    @Column(nullable = false)
-    private String lastName;
-    @Column
-    private Boolean approved;
+
+    @Column(nullable = true)
+    private Boolean email_verified;
+
+    @Column(nullable = true)
+    private String given_name;
+
+    @Column(nullable = true)
+    private String family_name;
+
+    @Column(nullable = true)
+    private String name;
+
+    @Column(nullable = true)
+    private String nickname;
+
+    @Column(nullable = true)
+    private String phone_number;
+
+    @Column(nullable = true)
+    private Boolean phone_number_verified;
+
+    @Column(nullable = true)
+    private String picture;
+
 }
