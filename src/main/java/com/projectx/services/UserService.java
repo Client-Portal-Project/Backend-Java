@@ -40,7 +40,7 @@ public class UserService {
     public User findUserByEmail(String email) {
     	return this.userDao.findUserByEmail(email);
     }
-
+    
     /**
      * Retrieve all users in the database
      *
