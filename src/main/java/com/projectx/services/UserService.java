@@ -63,9 +63,7 @@ public class UserService {
 
     public User createUser(User user) {
         User temp = this.userDao.findUserByEmail(user.getEmail());
-        if (temp != null) {
-            return this.userDao.save(user);
-        } else {return null;}
+        return temp == null ? this.userDao.save(user) : null;
     }
 
     /**

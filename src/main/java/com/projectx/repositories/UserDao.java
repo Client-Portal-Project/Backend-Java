@@ -9,5 +9,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserDao extends JpaRepository<User, Integer> {
     User findUserByEmail(String email);
-    User findUserById(Integer id);
 }
