@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 /*
-    Will handle the User's information and functionality
+    Will handle the User's information and functionality from Auth0
     (Owner, Applicant, Client)
  */
 
