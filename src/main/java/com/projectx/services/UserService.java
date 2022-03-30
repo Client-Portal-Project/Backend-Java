@@ -87,9 +87,7 @@ public class UserService {
 
     public User editUser(User user) {
         User temp = this.userDao.findById(user.getUserId()).orElse(null);
-        if(temp == null)
-            return null;
-        else {
+        if(temp != null){
             if(user.getBirthdate() != null)
                 temp.setEmail(user.getEmail());
             if(user.getEmail() != null)
@@ -110,8 +108,8 @@ public class UserService {
                 temp.setPhone_number_verified(user.getPhone_number_verified());
             if(user.getPicture() != null)
                 temp.setPicture(user.getPicture());
-            return this.userDao.save(temp);
         }
+        return temp == null ? this.userDao.save(user) : null;
     }
 
     /**
