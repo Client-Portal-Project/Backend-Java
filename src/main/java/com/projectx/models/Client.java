@@ -39,4 +39,8 @@ public class Client {
         this.companyName=companyName;
         this.clientUser=new HashSet<>();
     }
+
+    public Client(Integer clientId) {
+        this.clientId = clientId;
+    }
 }

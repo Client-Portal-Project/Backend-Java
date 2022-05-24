@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+//will possibly get rid of this once auth0 is properly implemented
 @Aspect
 @Log4j2
 @Component
@@ -22,7 +23,6 @@ public class AuthAspect {
 
     @Autowired
     private JwtUtil jwtUtil;
-
 
     /**
      * Catches the method execution of a method within the UserController that does not have a

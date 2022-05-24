@@ -1,6 +1,7 @@
 package com.projectx.services;
 
 import com.projectx.models.Applicant;
+import com.projectx.models.Skill;
 import com.projectx.models.User;
 import com.projectx.repositories.ApplicantDao;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,5 +71,29 @@ public class ApplicantServiceTest {
         Applicant actual = applicantService.getApplicant(1);
 
         assertEquals(actual, expected);
+    }
+
+    @Test
+    void testGetApplicantByEmploymentStatus() {
+        List<Applicant> list = new ArrayList<>();
+        list.add(expected);
+
+        when(applicantDao.findByEmploymentStatus(expected.getEmploymentStatus())).thenReturn(list);
+        List<Applicant> actual = applicantService.getApplicantByEmploymentStatus(expected.getEmploymentStatus());
+
+        assertEquals(actual, list);
+    }
+
+    // Not sure if I like the new Skill() check. Need to look into set retrieval to get/mock an actual skill from mocked applicant
+    @Test
+    void testGetApplicantBySkillsIsContaining() {
+        List<Applicant> list = new ArrayList<>();
+        list.add(expected);
+        Skill skill = new Skill();
+        when(applicantDao.findByApplicantSkillsIsContaining(skill)).thenReturn(list);
+        List<Applicant> actual = applicantService.getApplicantSkillsIsContaining(skill);
+
+        assertEquals(actual, list);
+
     }
 }

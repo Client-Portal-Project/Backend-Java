@@ -1,12 +1,15 @@
 /**
- * @author April Weaver
+ * @authors April Weaver, Steven Hanley
  * @since  2021-12-21
+ * @lastupdate 2022-02-23
  */
 package com.projectx.controllers;
 
 import com.projectx.Driver;
 import com.projectx.models.Applicant;
+import com.projectx.models.Skill;
 import com.projectx.services.ApplicantService;
+import org.hibernate.hql.internal.ast.tree.ResolvableNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -106,6 +109,35 @@ public class ApplicantController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(applicant, HttpStatus.FOUND);
+        }
+    }
+
+   @GetMapping("status")
+
+   public ResponseEntity<List<Applicant>> getApplicantByEmploymentStatus(@RequestParam String employmentStatus){
+
+            List<Applicant> applicants = applicantService.getApplicantByEmploymentStatus(employmentStatus);
+
+            if (applicants.isEmpty()) {
+                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(applicants, HttpStatus.FOUND);
+            }
+
+    }
+
+
+
+
+
+    @GetMapping("skill")
+    public ResponseEntity<List<Applicant>> getApplicantBySkillsIsContaining(@RequestParam Skill skill){
+        List<Applicant> applicants = applicantService.getApplicantSkillsIsContaining(skill);
+        if (applicants == null){
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+        else {
+            return new ResponseEntity<>(applicants, HttpStatus.FOUND);
         }
     }
 }

@@ -18,5 +18,5 @@ WORKDIR /app/
 
 COPY --from=BUILDER /build/target/application.jar /app/
 
-EXPOSE 3000
+EXPOSE 8080
 CMD java -jar /app/application.jar
