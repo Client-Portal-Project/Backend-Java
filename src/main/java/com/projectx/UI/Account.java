@@ -9,12 +9,14 @@ public class Account {
         This function is designed to be interacted with from the front end.
         After the user clicks on the button, this function gets called.
     */
-    public static String addUser(String email,String password,String name)
+    public static String addUser(String email,String password,
+                                 String name,String birthdate,String nickname,String phone,
+                                 String given_name,String family_name,String picture)
     {
         UserController controller=new UserController();
          User user=new User(0,
-                 null,email,false,null,null,name,
-                 null,null,false,null,password);
+                 birthdate,email,false,given_name,family_name,name,
+                 nickname,phone,false,picture,password);
          ResponseEntity<String> response =controller.createUser(user);
          return response.getBody();
     }
