@@ -46,14 +46,6 @@ public class UserController {
         return response;
     }
 
-    /**
-     * Verify a user's credentials, and generates a web token if successful
-     * The request body must contain a user (email, password)
-     *
-     * @param user - the user intending to log in to their account
-     * @return http response with a user object in a {@link ResponseEntity} that contains a CREATED request if the
-     * user exists; thus, generating a token, else a CONFLICT request.
-     */
     // @NoAuth
     // @PostMapping("login")
     // public ResponseEntity<User> login(@RequestBody User user) {
@@ -137,19 +129,20 @@ public class UserController {
     /**
      * Gets a user from the database through the service by using an email and password
      *
-     * @param body a map of two strings for the email and password
+     * @param  email of type string
      * @return http response with a user object in a {@link ResponseEntity} that contains a found request if the
      *      user was found, else a not found request and null object.
      */
-    // @GetMapping ("login")
-    // public ResponseEntity<User> getUser(@RequestBody Map<String, String> body) {
+      @GetMapping ("login")
+      public ResponseEntity<User> getUser(@RequestBody String email) {
     //     String email = body.get("email");
     //     String password = body.get("password");
+           User user= userService.findUserByEmail(email);
     //     User user = userService.getUserByEmailAndPassword(email, password);
-    //     if (user != null) {
-    //         return new ResponseEntity<>(user, HttpStatus.FOUND);
-    //     } else {
-    //         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    //     }
-    // }
+         if (user != null) {
+             return new ResponseEntity<>(user, HttpStatus.FOUND);
+         } else {
+             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+         }
+     }
 }
