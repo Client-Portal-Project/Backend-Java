@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.5.8.Final</version>
+			<version>5.6.1.Final</version>
 		</dependency>
 
 		<!-- Lombok -->
@@ -78,8 +78,14 @@
 			<artifactId>java-jwt</artifactId>
 			<version>3.18.2</version>
 		</dependency>
+        <dependency>
+            <groupId>me.minidigger</groupId>
+            <artifactId>MiniMessage</artifactId>
+            <version>2.1.0</version>
+            <scope>compile</scope>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<finalName>Client-Portal</finalName>
