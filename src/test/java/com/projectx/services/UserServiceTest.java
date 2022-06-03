@@ -29,8 +29,8 @@ public class UserServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        user1 = new User(1,"1-1-1999","example1@gmail.com",true,"John","Doe","John Doe","RagingTiger221","111-111-1111",true,"https://i.imgur.com/J5LVHEL.png");
-        user2 = new User(2,"2-2-2000","example2@gmail.com",true,"Jane","Doe","Jane Doe","RagingTiger222","222-222-2222",true,"https://i.imgur.com/Q5LIk2L.png");
+        user1 = new User(1,"1-1-1999","example1@gmail.com",true,"John","Doe","John Doe","RagingTiger221","111-111-1111",true,"https://i.imgur.com/J5LVHEL.png","Ro");
+        user2 = new User(2,"2-2-2000","example2@gmail.com",true,"Jane","Doe","Jane Doe","RagingTiger222","222-222-2222",true,"https://i.imgur.com/Q5LIk2L.png","Ro");
         EMAIL = "example1@gmail.com";
     }
 
