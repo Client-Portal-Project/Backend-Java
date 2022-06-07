@@ -2,15 +2,18 @@ package com.projectx.UI;
 
 import com.projectx.controllers.UserController;
 import com.projectx.models.User;
-import org.apache.catalina.connector.Request;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Objects;
 
 public class Account {
     private static final UserController controller=new UserController();
@@ -54,8 +57,8 @@ public class Account {
         User user=response.getBody();
         assert user != null;
         user.setEmail_verified(true);
-
-        //controller.editUser(user);
+        HttpServletRequest request= ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        controller.editUser(user,request);
     }
 
 }
