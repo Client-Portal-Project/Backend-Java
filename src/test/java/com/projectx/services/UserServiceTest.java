@@ -5,6 +5,7 @@ import com.projectx.repositories.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
@@ -21,6 +22,7 @@ public class UserServiceTest {
     private static User user2;
     private static String EMAIL;
 
+    @Mock
     private UserDao userDao;
 
     @InjectMocks
@@ -137,13 +139,12 @@ public class UserServiceTest {
         User after = user2;
         Mockito.when(userDao.findById(after.getUserId())).thenReturn(Optional.of(before));
         Mockito.when(userDao.save(before)).thenReturn(after);
-        User expectedResult = after;
 
         // Act
         User actualResult = userService.editUser(before);
 
         // Assert
-        assertEquals(expectedResult, actualResult);
+        assertEquals(after, actualResult);
     }
 
     @Test
