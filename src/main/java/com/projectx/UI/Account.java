@@ -2,16 +2,18 @@ package com.projectx.UI;
 
 import com.projectx.controllers.UserController;
 import com.projectx.models.User;
+import org.apache.catalina.connector.Request;
 import org.springframework.http.ResponseEntity;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletRequest;
 import java.util.Date;
 
 public class Account {
-    private static UserController controller;
+    private static final UserController controller=new UserController();
     /**
         This function is designed to be interacted with from the front end with user account creation.
         After the user clicks on the button, this function gets called.
@@ -45,4 +47,15 @@ public class Account {
         Transport.send(msg);
         return "The email has been sent";
     }
+
+    public static void changeEmailStatus(String email)
+    {
+        ResponseEntity<User> response=controller.getUser(email);
+        User user=response.getBody();
+        assert user != null;
+        user.setEmail_verified(true);
+
+        //controller.editUser(user);
+    }
+
 }
