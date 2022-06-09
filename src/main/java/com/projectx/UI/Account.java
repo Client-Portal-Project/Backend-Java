@@ -51,6 +51,17 @@ public class Account {
         return "The email has been sent";
     }
 
+    public static void UpdatePassword(String password,String email)
+    {
+        ResponseEntity<User> response=controller.getUser(email);
+        User user=response.getBody();
+        assert user != null;
+        user.setPassword(password);
+        HttpServletRequest request= ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        controller.editUser(user,request);
+    }
+
+
     public static void changeEmailStatus(String email)
     {
         ResponseEntity<User> response=controller.getUser(email);
