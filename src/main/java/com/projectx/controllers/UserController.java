@@ -8,6 +8,7 @@ import com.projectx.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,12 +18,17 @@ import java.util.Objects;
 @RestController("userController")
 @RequestMapping("user")
 @CrossOrigin(value = Driver.CROSS_ORIGIN_VALUE, allowCredentials = "true")
+@Controller
 public class UserController {
     @Autowired
     private UserService userService;
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * Adds a user to the database

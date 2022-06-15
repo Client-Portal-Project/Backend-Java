@@ -2,7 +2,10 @@ package com.projectx.UI;
 
 import com.projectx.controllers.UserController;
 import com.projectx.models.User;
+import com.projectx.repositories.UserDaoExtension;
+import com.projectx.services.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -13,34 +16,54 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.Objects;
+import java.util.Properties;
 
+@Service
 public class Account {
-    private static final UserController controller=new UserController();
+    private UserService userService=new UserService(new UserDaoExtension());
+    private final UserController controller=new UserController(userService);
+
     /**
         This function is designed to be interacted with from the front end with user account creation.
         After the user clicks on the button, this function gets called.
     */
-    public static String addUser(String email,String password,
-                                 String name,String birthdate,String nickname,String phone,
-                                 String given_name,String family_name,String picture)
+
+    public static void main(String[] args) throws MessagingException, NamingException {
+        Account account=new Account();
+        System.out.println(account.addUser("18xxperson@gmail.com","Rockband","Jonathan"));
+        account.verifyEmail("18xxperson@gmail.com");
+        System.out.println(account.forgotPassword("18xxperson@gmail.com"));
+        account.UpdatePassword("Rockband3","18xxperson@gmail.com");
+    }
+
+    public String addUser(String email,String password,String name)
     {
-         User user=new User(0,
-                 birthdate,email,false,given_name,family_name,name,
-                 nickname,phone,false,picture,password);
+         User user=new User();
+         user.setEmail(email);
+         user.setPassword(password);
+         user.setName(name);
          ResponseEntity<String> response =controller.createUser(user);
          return response.getBody();
     }
-    public static String forgotPassword(String email) throws NamingException, MessagingException {
+    public String forgotPassword(String email) throws MessagingException {
         ResponseEntity<User> response=controller.getUser(email);
         if(response.getBody()==null)
         {
             return "There is no user with this email";
         }
         String message="Click on this link to reset your password";
-        InitialContext ic = new InitialContext();
-        String snName = "java:comp/env/mail/MyMailSession";
-        Session session = (Session)ic.lookup(snName);
+        Properties properties=System.getProperties();
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.auth", "true"); //enable authentication
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        Authenticator authenticator=new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(email,response.getBody().getPassword());
+            }
+        };
+        Session session = Session.getInstance(properties,authenticator);
         Message msg = new MimeMessage(session);
         msg.setFrom();
         msg.setText(message);
@@ -51,24 +74,24 @@ public class Account {
         return "The email has been sent";
     }
 
-    public static void UpdatePassword(String password,String email)
+    public void UpdatePassword(String password,String email)
     {
         ResponseEntity<User> response=controller.getUser(email);
         User user=response.getBody();
         assert user != null;
         user.setPassword(password);
-        HttpServletRequest request= ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        HttpServletRequest request= new HttpRequestHandler();
         controller.editUser(user,request);
     }
 
 
-    public static void changeEmailStatus(String email)
+    public void verifyEmail(String email)
     {
         ResponseEntity<User> response=controller.getUser(email);
         User user=response.getBody();
-        assert user != null;
-        user.setEmail_verified(true);
-        HttpServletRequest request= ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        if(user!=null)
+           user.setEmail_verified(true);
+        HttpServletRequest request= new HttpRequestHandler();
         controller.editUser(user,request);
     }
 
