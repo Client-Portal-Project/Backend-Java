@@ -56,4 +56,9 @@ public class Applicant {
         this.user = user;
         this.applicantSkills = new HashSet<>();
     }
+
+	public int getApplicantId() {
+		// TODO Auto-generated method stub
+		return this.applicantId;
+	}
 }
