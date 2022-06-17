@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class UserDaoExtension implements UserDao {
+public class UserDaoExtension implements UserDao{
     @JsonSerialize
     private final List<User> list=new ArrayList<>();
     @Override
