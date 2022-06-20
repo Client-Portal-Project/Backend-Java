@@ -7,17 +7,17 @@
 package com.projectx.services;
 
 
-import com.projectx.exception.ApplicationRequestException;
+import java.util.List;
+import java.util.Optional;
+
 import com.projectx.models.Applicant;
 import com.projectx.models.ApplicantOccupation;
 import com.projectx.models.Application;
 import com.projectx.models.Need;
 import com.projectx.repositories.ApplicationDao;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service("applicationService")
 public class ApplicationService {
