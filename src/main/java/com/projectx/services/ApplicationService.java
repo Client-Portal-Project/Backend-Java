@@ -70,8 +70,7 @@ public class ApplicationService {
      * @return Optional List of application objects that are associated with the applicantOccupation object
      */
     public List<Application> getAllApplicationsByApplicantOccupation(ApplicantOccupation applicantOccupation) {
-        return applicationDao.findByApplicantOccupation_ApplicantOccupationalId(applicantOccupation
-                .getApplicantOccupationalId());
+        return applicationDao.findByApplicantOccupation_ApplicantOccupationalId(applicantOccupation.getApplicantOccupationalId());
     }
 
     /**
