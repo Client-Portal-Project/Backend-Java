@@ -1,41 +1,48 @@
 package com.projectx.repositories;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.projectx.models.User;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import org.springframework.lang.NonNullApi;
 
-import java.util.ArrayList;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+@SuppressWarnings("NullableProblems")
 public class UserDaoExtension implements UserDao{
-    @JsonSerialize
-    private final List<User> list=new ArrayList<>();
+    private final String database="jdbc:postgresql://cpp-database.cfoxoiklzn1n.us-east-1.rds.amazonaws.com:5432/clientPortalProject";
+    Connection con= DriverManager.getConnection(
+            database,"postgres","MarL#Pueiy$190Zi");
+    Statement stmt=con.createStatement();
+
+    public UserDaoExtension() throws SQLException {
+    }
+
     @Override
     public User findUserByEmail(String email) {
-        for (User user : list) {
-            if (user.getEmail().equals(email))
-                return user;
+        try {
+            ResultSet resultSet = stmt.executeQuery("select * from users where email = :email");
+            if(resultSet.wasNull())
+                return null;
+
+        }catch (Exception ignored)
+        {
+
         }
         return null;
     }
 
-    public void addUser(User user)
-    {
-        list.add(user);
-    }
-
+    @SuppressWarnings("NullableProblems")
     @Override
     public List<User> findAll() {
         return null;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public List<User> findAll(Sort sort) {
         return null;
@@ -83,7 +90,7 @@ public class UserDaoExtension implements UserDao{
 
     @Override
     public <S extends User> S save(S entity) {
-        addUser(entity);
+
         return entity;
     }
 
