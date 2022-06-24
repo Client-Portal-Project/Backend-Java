@@ -138,4 +138,18 @@ public class UserController {
 
         return response;
     }
+
+    @NoAuth
+    @PostMapping
+    public ResponseEntity<String> verifyEmail(@PathVariable String email)
+    {
+        User user=userService.findUserByEmail(email);
+        if(user==null)
+        {
+            return new ResponseEntity<>("Email is not correct",HttpStatus.NOT_FOUND);
+        }
+        user.setApproved(true);
+        userService.editUser(user);
+        return new ResponseEntity<>("Email has been verified",HttpStatus.ACCEPTED);
+    }
 }
