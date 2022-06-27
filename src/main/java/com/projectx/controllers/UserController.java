@@ -147,7 +147,7 @@ public class UserController {
     }
 
     @NoAuth
-    @PostMapping
+    @PostMapping("verification")
     public ResponseEntity<String> verifyEmail(@PathVariable String email)
     {
         User user=userService.findUserByEmail(email);
@@ -161,7 +161,7 @@ public class UserController {
     }
 
     @NoAuth
-    @PostMapping
+    @PostMapping("recover")
     public ResponseEntity<String> recoverPassword(@PathVariable String email)
     {
         User user = userService.findUserByEmail(email);
