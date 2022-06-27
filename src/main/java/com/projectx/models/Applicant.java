@@ -12,53 +12,53 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Applicants")
+@Table(name = "applicants")
 public class Applicant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer applicantId;
+    private Integer applicant_id;
     @Column
-    private String aboutMe;
+    private String about_me;
     @Column
-    private String educationLevel;
+    private String education_level;
     @Column
-    private String educationField;
+    private String education_field;
     @Column
-    private String employmentStatus;
+    private String employment_status;
     @OneToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
     @ManyToMany
     @JoinTable(
-            name = "ApplicantSkills",
+            name = "applicantskills",
             joinColumns = @JoinColumn(name = "applicant_id"),
-            inverseJoinColumns = @JoinColumn(name = "skillId"))
+            inverseJoinColumns = @JoinColumn(name = "skill_id"))
     Set<Skill> applicantSkills;
 
     public Applicant(int applicantId, String aboutMe, String educationLevel, String educationField,
                      String employmentStatus, User user) {
-        this.applicantId = applicantId;
-        this.aboutMe = aboutMe;
-        this.educationLevel = educationLevel;
-        this.educationField = educationField;
-        this.employmentStatus = employmentStatus;
+        this.applicant_id = applicantId;
+        this.about_me = aboutMe;
+        this.education_level = educationLevel;
+        this.education_field = educationField;
+        this.employment_status = employmentStatus;
         this.user = user;
         this.applicantSkills = new HashSet<>();
     }
 
     public Applicant(String aboutMe, String educationLevel, String educationField, String employmentStatus,
                      User user) {
-        this.aboutMe = aboutMe;
-        this.educationLevel = educationLevel;
-        this.educationField = educationField;
-        this.employmentStatus = employmentStatus;
+        this.about_me = aboutMe;
+        this.education_level = educationLevel;
+        this.education_field = educationField;
+        this.employment_status = employmentStatus;
         this.user = user;
         this.applicantSkills = new HashSet<>();
     }
 
 	public int getApplicantId() {
 		// TODO Auto-generated method stub
-		return this.applicantId;
+		return this.applicant_id;
 	}
 }

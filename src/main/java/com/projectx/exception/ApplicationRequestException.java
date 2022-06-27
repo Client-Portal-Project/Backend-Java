@@ -1,10 +1,6 @@
 package com.projectx.exception;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
-
-import java.time.ZonedDateTime;
 
 @Data
 public class ApplicationRequestException extends RuntimeException{

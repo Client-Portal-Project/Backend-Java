@@ -15,7 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Applications", indexes = {
+@Table(name = "applications", indexes = {
         @Index(name = "applicantIndex", columnList = "applicant_applicant_id"),
         @Index(name = "needIndex", columnList = "need_need_id"),
         @Index(name = "clientIndex", columnList = "client_client_id")

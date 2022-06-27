@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Interviews")
+@Table(name = "interviews")
 public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +25,15 @@ public class Interview {
     private Date date;
     @ManyToMany
     @JoinTable(
-    		name = "InterviewClient",
-    		joinColumns = @JoinColumn(name = "interviewId"),
-    		inverseJoinColumns = @JoinColumn(name = "clientId"))
+    		name = "interview_client",
+    		joinColumns = @JoinColumn(name = "interview_id"),
+    		inverseJoinColumns = @JoinColumn(name = "client_id"))
     Set<Client> client;
     @ManyToMany
     @JoinTable(
-    		name = "InterviewSkill",
-    		joinColumns = @JoinColumn(name = "interviewId"),
-    		inverseJoinColumns = @JoinColumn(name = "skillId"))
+    		name = "interview_skill",
+    		joinColumns = @JoinColumn(name = "interview_id"),
+    		inverseJoinColumns = @JoinColumn(name = "skill_id"))
     Set<Skill> skill;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Need need;

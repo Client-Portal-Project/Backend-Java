@@ -17,41 +17,41 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Needs")
+@Table(name = "needs")
 public class Need {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer needId;
+    private Integer need_id;
     @Column
     @Nullable
-    private Integer amountNeeded;
+    private Integer amount_needed;
     @Column
     @Nullable
-    private Integer amountFulfilled;
+    private Integer amount_fulfilled;
     @Column
     @Nullable
-    private String educationField; // i.e. Biology, Computer Science
+    private String education_field; // i.e. Biology, Computer Science
     @Column
     @Nullable
-    private Integer yearsExperience;
+    private Integer years_experience;
     @Column
     @Nullable
-    private String extraDescription;
+    private String extra_description;
     @Column
     @Nullable
-    private String jobTitle;
+    private String job_title;
     @Column
     @Nullable
-    private String educationLevel; // i.e. Associate's Bachelor's...
+    private String education_level; // i.e. Associate's Bachelor's...
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Client client;
     @ManyToMany
     @Nullable
     @JoinTable(
-            name = "NeedSkill",
-            joinColumns = @JoinColumn(name = "needId"),
-            inverseJoinColumns = @JoinColumn(name = "skillId"))
+            name = "need_skill",
+            joinColumns = @JoinColumn(name = "need_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id"))
     Set<Skill> skills;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
             @Nullable
@@ -59,12 +59,12 @@ public class Need {
 
     public Need (Integer amountNeeded, Integer amountFulfilled, String educationField, Integer yearsExperience,
                  String extraExperience, String jobTitle, Client client) {
-        this.amountNeeded = amountNeeded;
-        this.amountFulfilled = amountFulfilled;
-        this.educationField = educationField;
-        this.yearsExperience = yearsExperience;
-        this.extraDescription = extraExperience;
-        this.jobTitle = jobTitle;
+        this.amount_needed = amountNeeded;
+        this.amount_fulfilled = amountFulfilled;
+        this.education_field = educationField;
+        this.years_experience = yearsExperience;
+        this.extra_description = extraExperience;
+        this.job_title = jobTitle;
         this.client = client;
         this.skills = new HashSet<>();
     }

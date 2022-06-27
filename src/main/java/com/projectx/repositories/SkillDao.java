@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface SkillDao extends JpaRepository<Skill, Integer> {
-    List<Skill> findByApplicants_ApplicantId (int applicantId);
+    List<Skill> findByApplicants_ApplicantId (int applicant_id);
 }

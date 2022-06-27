@@ -80,7 +80,7 @@ public class ApplicationService {
      * @return Optional List of application objects that are associated with the need object
      */
     public List<Application> getAllApplicationsByNeed(Need need) {
-        return applicationDao.findByNeed_NeedId(need.getNeedId());
+        return applicationDao.findbyneed_needid(need.getNeed_id());
     }
 
     /**

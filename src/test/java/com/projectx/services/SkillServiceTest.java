@@ -48,7 +48,7 @@ public class SkillServiceTest {
     @Test
     void testGetSkill() {
         when(skillDao.findById(1)).thenReturn(Optional.of(expected));
-        Skill actual = skillService.getSkill(expected.getSkillId());
+        Skill actual = skillService.getSkill(expected.getSkill_id());
 
         assertEquals(actual, expected);
     }

@@ -53,7 +53,7 @@ public class SkillControllerTest {
     @Test
     @SneakyThrows
     void testCreateSkillSuccess() {
-        when(skillService.getSkill(expected.getSkillId())).thenReturn(null);
+        when(skillService.getSkill(expected.getSkill_id())).thenReturn(null);
         when(skillService.saveSkill(expected)).thenReturn(expected);
         mvc.perform(MockMvcRequestBuilders.post(URI)
                         .content(objectMapper.writeValueAsString(expected))
@@ -66,7 +66,7 @@ public class SkillControllerTest {
     @Test
     @SneakyThrows
     void testCreateSkillFail() {
-        when(skillService.getSkill(wrong.getSkillId())).thenReturn(wrong);
+        when(skillService.getSkill(wrong.getSkill_id())).thenReturn(wrong);
         mvc.perform(MockMvcRequestBuilders.post(URI)
                         .content(objectMapper.writeValueAsString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -78,7 +78,7 @@ public class SkillControllerTest {
     @Test
     @SneakyThrows
     void testUpdateSkillSuccess() {
-        when(skillService.getSkill(expected.getSkillId())).thenReturn(expected);
+        when(skillService.getSkill(expected.getSkill_id())).thenReturn(expected);
         when(skillService.saveSkill(expected)).thenReturn(expected);
         mvc.perform(MockMvcRequestBuilders.put(URI)
                         .content(objectMapper.writeValueAsString(expected))
@@ -91,7 +91,7 @@ public class SkillControllerTest {
     @Test
     @SneakyThrows
     void testUpdateSkillFail() {
-        when(skillService.getSkill(wrong.getSkillId())).thenReturn(null);
+        when(skillService.getSkill(wrong.getSkill_id())).thenReturn(null);
         mvc.perform(MockMvcRequestBuilders.put(URI)
                         .content(objectMapper.writeValueAsString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -103,7 +103,7 @@ public class SkillControllerTest {
     @Test
     @SneakyThrows
     void testDeleteSkillSuccess() {
-        when(skillService.getSkill(expected.getSkillId())).thenReturn(expected);
+        when(skillService.getSkill(expected.getSkill_id())).thenReturn(expected);
         mvc.perform(MockMvcRequestBuilders.delete(URI)
                      .content(objectMapper.writeValueAsString(expected))
                      .contentType(MediaType.APPLICATION_JSON)
@@ -114,7 +114,7 @@ public class SkillControllerTest {
     @Test
     @SneakyThrows
     void testDeleteSkillFail() {
-        when(skillService.getSkill(wrong.getSkillId())).thenReturn(null);
+        when(skillService.getSkill(wrong.getSkill_id())).thenReturn(null);
         mvc.perform(MockMvcRequestBuilders.delete(URI)
                         .content(objectMapper.writeValueAsString(wrong))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -125,7 +125,7 @@ public class SkillControllerTest {
     @Test
     @SneakyThrows
     void testGetSkill() {
-        when(skillService.getSkill(expected.getSkillId())).thenReturn(expected);
+        when(skillService.getSkill(expected.getSkill_id())).thenReturn(expected);
         mvc.perform(MockMvcRequestBuilders.get(URI + "/{id}", 1) //success
                         .param("id", "1"))
                 .andExpect(status().isFound())

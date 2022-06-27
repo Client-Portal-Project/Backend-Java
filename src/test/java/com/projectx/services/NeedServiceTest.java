@@ -47,7 +47,7 @@ public class NeedServiceTest {
 
     @Test
     void testGetNeed() {
-        when(needDao.findById(expected.getNeedId())).thenReturn(Optional.of(expected));
+        when(needDao.findById(expected.getNeed_id())).thenReturn(Optional.of(expected));
         Need actual = needService.getNeed(1);
 
         assertEquals(actual, expected);
