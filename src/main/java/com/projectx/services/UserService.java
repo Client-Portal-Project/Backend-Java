@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service("userService")
 public class UserService {
-    private UserDao userDao;
+    private final UserDao userDao;
 
     @Autowired
     public UserService(UserDao userDao) {
@@ -65,6 +65,8 @@ public class UserService {
         User temp = this.userDao.findUserByEmail(user.getEmail());
         if(temp != null)
             return null;
+        List<User> userList=findAllUsers();
+        user.setUserId(userList.size()+1);
         return this.userDao.save(user);
     }
 

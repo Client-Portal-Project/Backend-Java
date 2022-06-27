@@ -11,9 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 
 @RestController("userController")
 @RequestMapping("user")
@@ -64,7 +71,7 @@ public class UserController {
             responseHeaders.set("authorization", token);
             responseHeaders.set("Access-Control-Expose-Headers", "authorization");
             existingUser.setPassword(null); // To prevent sensitive information getting leaked out
-            response = new ResponseEntity<>(existingUser, responseHeaders, HttpStatus.CREATED);
+            response = new ResponseEntity<>(existingUser, responseHeaders, HttpStatus.FOUND);
         } else {
             response = new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
@@ -151,5 +158,47 @@ public class UserController {
         user.setApproved(true);
         userService.editUser(user);
         return new ResponseEntity<>("Email has been verified",HttpStatus.ACCEPTED);
+    }
+
+    @NoAuth
+    @PostMapping
+    public ResponseEntity<String> recoverPassword(@PathVariable String email)
+    {
+        User user = userService.findUserByEmail(email);
+        if(user==null)
+        {
+            return new ResponseEntity<>("Email is not correct",HttpStatus.NOT_FOUND);
+        }
+        if(!user.getApproved())
+        {
+            return new ResponseEntity<>("Cannot do this request",HttpStatus.BAD_REQUEST);
+        }
+        sendEmail(email,"reset password","Click on this link to reset your password");
+        return new ResponseEntity<>("An email has been sent",HttpStatus.ACCEPTED);
+    }
+    /**
+     * Function for setting emails needed for verifying email and resetting password
+     * @param message - What you see if your email
+     * @param email - The users email
+     * @param subject - The subject line for the email
+     */
+    public void sendEmail(String email,String subject,String message)
+    {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.from", "me@example.com");
+        Session session = Session.getInstance(props, null);
+        try {
+            MimeMessage msg = new MimeMessage(session);
+            msg.setFrom();
+            msg.setRecipients(Message.RecipientType.TO,
+                    email);
+            msg.setSubject(subject);
+            msg.setSentDate(new Date());
+            msg.setText(message);
+            Transport.send(msg);
+        } catch (MessagingException mex) {
+            System.out.println("send failed, exception: " + mex);
+        }
     }
 }
