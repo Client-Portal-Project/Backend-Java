@@ -112,7 +112,7 @@ public class ApplicantController {
         }
     }
 
-   @GetMapping("status")
+  /* @GetMapping("status")
 
    public ResponseEntity<List<Applicant>> getApplicantByEmploymentStatus(@RequestParam String employmentStatus){
 
@@ -125,7 +125,7 @@ public class ApplicantController {
             }
 
     }
-
+*/
 
 
 

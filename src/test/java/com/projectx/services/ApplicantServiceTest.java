@@ -73,16 +73,16 @@ public class ApplicantServiceTest {
         assertEquals(actual, expected);
     }
 
-    @Test
-    void testGetApplicantByEmploymentStatus() {
-        List<Applicant> list = new ArrayList<>();
-        list.add(expected);
-
-        when(applicantDao.findbyemploymentstatus(expected.getEmployment_status())).thenReturn(list);
-        List<Applicant> actual = applicantService.getApplicantByEmploymentStatus(expected.getEmployment_status());
-
-        assertEquals(actual, list);
-    }
+//    @Test
+//    void testGetApplicantByEmploymentStatus() {
+//        List<Applicant> list = new ArrayList<>();
+//        list.add(expected);
+//
+//        when(applicantDao.findbyemploymentstatus(expected.getEmployment_status())).thenReturn(list);
+//        List<Applicant> actual = applicantService.getApplicantByEmploymentStatus(expected.getEmployment_status());
+//
+//        assertEquals(actual, list);
+//    }
 
     // Not sure if I like the new Skill() check. Need to look into set retrieval to get/mock an actual skill from mocked applicant
     @Test
