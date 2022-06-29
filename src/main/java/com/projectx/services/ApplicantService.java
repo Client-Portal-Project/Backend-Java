@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service("applicantService")
 public class ApplicantService {
@@ -81,7 +82,7 @@ public class ApplicantService {
      * @return a list of applicants with requested skill
      */
     // May not be needed
-    public List<Applicant> getApplicantSkillsIsContaining(Skill skill) { return applicantDao.findByApplicantSkillsIsContaining(skill); }
+    public Set<Applicant> getApplicantSkillsIsContaining(Skill skill) { return applicantDao.findBySkillIsContaining(skill); }
 
 
 }

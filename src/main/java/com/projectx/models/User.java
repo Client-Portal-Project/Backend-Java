@@ -15,20 +15,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer userId;
-    @Column(unique = true, nullable = false)
+    @Column(name="user_id")
+    private int userId;
+    @Column(name="email", unique = true, nullable = false)
     private String email;
-    @Column(nullable = false)
+    @Column(name="password", nullable = false)
     private String password;
-    @Column(nullable = false)
+    @Column(name="first_name",nullable = false)
     private String firstName;
-    @Column(nullable = false)
+    @Column(name="last_name", nullable = false)
     private String lastName;
-    @Column
-    private Boolean approved;
+    @Column(name="approved", nullable=false)
+    private boolean approved;
 }

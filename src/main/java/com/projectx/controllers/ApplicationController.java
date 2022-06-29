@@ -160,7 +160,7 @@ public class ApplicationController {
         if(!applications.isEmpty()) {
             return new ResponseEntity(applications, HttpStatus.FOUND);
         } else {
-            throw new ApplicationRequestException("Could not find applications for needId " + need.getNeed_id());
+            throw new ApplicationRequestException("Could not find applications for needId " + need.getNeedId());
         }
     }
 

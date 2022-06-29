@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "files")
+@Table(name = "file")
 public class File {
 
     @Id
@@ -28,6 +28,7 @@ public class File {
     @Transient
     private Long size;
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="applicant_id")
     private Applicant applicant;
 
     public File(String name, String type, byte[] data, Applicant applicant) {
