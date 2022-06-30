@@ -23,12 +23,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "owners")
+@Table(name = "owner")
 public class Owner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="owner_id")
-    private Integer ownerId;
+    private int ownerId;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonBackReference(value="user-reference")
     @JoinColumn(name="user_id", nullable=false)

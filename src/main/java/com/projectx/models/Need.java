@@ -23,29 +23,29 @@ public class Need {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "need_id")
 	private int needId;
-	@Column(name = "amount_needed")
-	private int amountNeeded;
 	@Column(name = "amount_fulfilled")
 	private int amountFulfilled;
+	@Column(name = "amount_needed")
+	private int amountNeeded;
 	@Column(name = "education_field")
 	private String educationField; // i.e. Biology, Computer Science
-	@Column(name = "years_experience")
-	private int yearsExperience;
+	@Column(name = "education_level")
+	private String educationLevel; // i.e. Associate's Bachelor's...
 	@Column(name = "extra_description")
 	private String extraDescription;
 	@Column(name = "job_title")
 	private String jobTitle;
-	@Column(name = "education_level")
-	private String educationLevel; // i.e. Associate's Bachelor's...
+	@Column(name = "years_experience")
+	private int yearsExperience;
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "client_id")
 	private Client client;
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "skills_id")
-	Set<Skill> skills;
+	@JoinColumn(name = "skill_id")
+	Set<Skill> skill;
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "applicants_id")
-	Set<Applicant> applicants;
+	@JoinColumn(name = "applicant_id")
+	Set<Applicant> applicant;
 
 	public Need(int amountNeeded, int amountFulfilled, String educationField, int yearsExperience,
 			String extraExperience, String jobTitle, Client client) {
@@ -56,7 +56,7 @@ public class Need {
 		this.extraDescription = extraExperience;
 		this.jobTitle = jobTitle;
 		this.client = client;
-		this.skills = new HashSet<>();
+		this.skill = new HashSet<>();
 	}
 
 	public Need(int need_id, int amountNeeded, int amountFulfilled, String educationField, int yearsExperience,
@@ -69,7 +69,7 @@ public class Need {
 		this.extraDescription = extraExperience;
 		this.jobTitle = jobTitle;
 		this.client = client;
-		this.skills = new HashSet<>();
+		this.skill = new HashSet<>();
 	}
 
 }
