@@ -39,13 +39,13 @@ public class NeedControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(needController).build();
         objectMapper = new ObjectMapper();
         Client client = new Client(1, null);
-        expected = new Need(1, null, null, null,
-                null, null, null, null, client, null, null);
+        expected = new Need(1, 0, 0, null,
+                0, null, null, null, client, null, null);
     }
 
     @Test @SneakyThrows
     void testCreateNeedSuccess() {
-        when(needService.getNeed(expected.getNeed_id()))
+        when(needService.getNeed(expected.getNeedId()))
                 .thenReturn(null);
         when(needService.saveNeed(expected)).thenReturn(expected);
 
@@ -59,7 +59,7 @@ public class NeedControllerTest {
 
     @Test @SneakyThrows
     void testCreateNeedFail() {
-        when(needService.getNeed(expected.getNeed_id()))
+        when(needService.getNeed(expected.getNeedId()))
                 .thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders.post(URI)
@@ -72,7 +72,7 @@ public class NeedControllerTest {
 
     @Test @SneakyThrows
     void testEditNeedSuccess() {
-        when(needService.getNeed(expected.getNeed_id()))
+        when(needService.getNeed(expected.getNeedId()))
                 .thenReturn(expected);
         when(needService.saveNeed(expected)).thenReturn(expected);
 
@@ -86,7 +86,7 @@ public class NeedControllerTest {
 
     @Test @SneakyThrows
     void testEditNeedFail() {
-        when(needService.getNeed(expected.getNeed_id()))
+        when(needService.getNeed(expected.getNeedId()))
                 .thenReturn(null);
 
         mvc.perform(MockMvcRequestBuilders.put(URI)
@@ -99,7 +99,7 @@ public class NeedControllerTest {
 
     @Test @SneakyThrows
     void testDeleteNeedSuccess() {
-        when(needService.getNeed(expected.getNeed_id()))
+        when(needService.getNeed(expected.getNeedId()))
                 .thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders.delete(URI)
@@ -112,7 +112,7 @@ public class NeedControllerTest {
 
     @Test @SneakyThrows
     void testDeleteNeedFail() {
-        when(needService.getNeed(expected.getNeed_id()))
+        when(needService.getNeed(expected.getNeedId()))
                 .thenReturn(null);
 
         mvc.perform(MockMvcRequestBuilders.delete(URI)
@@ -125,7 +125,7 @@ public class NeedControllerTest {
 
     @Test @SneakyThrows
     void testGetNeedSuccess() {
-        when(needService.getNeed(expected.getNeed_id()))
+        when(needService.getNeed(expected.getNeedId()))
                 .thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders.get(URI+"/1")
@@ -137,7 +137,7 @@ public class NeedControllerTest {
 
     @Test @SneakyThrows
     void testGetNeedFail() {
-        when(needService.getNeed(expected.getNeed_id()))
+        when(needService.getNeed(expected.getNeedId()))
                 .thenReturn(null);
 
         mvc.perform(MockMvcRequestBuilders.get(URI+"/1")
