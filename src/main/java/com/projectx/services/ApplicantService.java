@@ -73,7 +73,7 @@ public class ApplicantService {
      * @return a List of applicants with requested employment status
      */
     // May not be needed
-    public List<Applicant> getApplicantByEmploymentStatus(String employmentStatus) { return applicantDao.findByEmploymentStatus(employmentStatus); }
+   // public List<Applicant> getApplicantByEmploymentStatus(String employment_status) { return applicantDao.findByEmployment_Status(employment_status); }
 
     /**
      * Returns a list of applicants with requested skill

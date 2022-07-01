@@ -97,7 +97,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<User> editUser(@RequestBody User user, HttpServletRequest headers) {
         ResponseEntity<User> response;
-        if(Objects.equals(headers.getAttribute("userId"), user.getUserId())) {
+        if(Objects.equals(headers.getAttribute("user_id"), user.getUserId())) {
             if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
                 // Password encryption goes here
                 User updatedUser = this.userService.editUser(user);
@@ -125,10 +125,10 @@ public class UserController {
      * @return http response with a string message in a {@link ResponseEntity} that contains an ACCEPTED request if the
      * user was updated, else an UNAUTHORIZED request.
      */
-    @DeleteMapping("{userId}")
+    @DeleteMapping("{user_id}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer userId, HttpServletRequest headers) {
         ResponseEntity<String> response;
-        if(Objects.equals(headers.getAttribute("userId"), userId)) {
+        if(Objects.equals(headers.getAttribute("user_id"), userId)) {
             User user = userService.findUserById(userId);
             userService.deleteUser(user);
             response = new ResponseEntity<>("Valid token, user deleted", HttpStatus.ACCEPTED);

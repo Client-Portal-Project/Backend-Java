@@ -16,10 +16,10 @@ import java.util.Set;
 @Transactional
 public interface ApplicantDao extends JpaRepository<Applicant, Integer> {
     @Nullable
-    Applicant findByUser_UserId(int userId);
+    Applicant findByUser_UserId(int user_id);
 
-    @Nullable
-    List<Applicant> findByEmploymentStatus(String employmentStatus);
+    //@Nullable
+    //List<Applicant> findByemploymentstatus(String employment_status);
 
     @Nullable
     List<Applicant> findByApplicantSkillsIsContaining(Skill skill);

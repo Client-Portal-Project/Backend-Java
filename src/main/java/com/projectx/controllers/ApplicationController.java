@@ -160,7 +160,7 @@ public class ApplicationController {
         if(!applications.isEmpty()) {
             return new ResponseEntity(applications, HttpStatus.FOUND);
         } else {
-            throw new ApplicationRequestException("Could not find applications for needId " + need.getNeedId());
+            throw new ApplicationRequestException("Could not find applications for needId " + need.getNeed_id());
         }
     }
 
@@ -213,14 +213,14 @@ public class ApplicationController {
 
     @GetMapping("client/status")
     public ResponseEntity<List<Application>> getApplicationByEmploymentStatusAndClient(@RequestParam String employmentStatus,
-                                                                                       @RequestParam int clientId)
+                                                                                       @RequestParam int client_id)
                                                                                         throws ApplicationRequestException {
 
-        List<Application> applications = applicationService.getApplicationByEmploymentStatusAndClient(employmentStatus, clientId);
+        List<Application> applications = applicationService.getApplicationByEmploymentStatusAndClient(employmentStatus, client_id);
         if(!applications.isEmpty()) {
             return new ResponseEntity(applications, HttpStatus.FOUND);
         } else {
-            throw new ApplicationRequestException("Could not find " + employmentStatus + " applicants for clientId " + clientId);
+            throw new ApplicationRequestException("Could not find " + employmentStatus + " applicants for clientId " + client_id);
         }
     }
 

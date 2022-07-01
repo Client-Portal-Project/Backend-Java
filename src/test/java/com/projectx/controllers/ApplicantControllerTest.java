@@ -104,7 +104,7 @@ public class ApplicantControllerTest {
 
         //wrong is not in the database
         Applicant wrong = expected;
-        wrong.setApplicantId(0);
+        wrong.setApplicant_id(0);
         when(applicantService.getApplicant(0)).thenReturn(null);
 
         mvc.perform(MockMvcRequestBuilders.delete(URI)

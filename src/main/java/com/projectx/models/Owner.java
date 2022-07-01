@@ -12,12 +12,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Owners")
+@Table(name = "owners")
 public class Owner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer ownerId;
+    private Integer owner_id;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private User user;
 }

@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Clients")
+@Table(name = "clients")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +25,8 @@ public class Client {
     @OneToMany
     @JoinTable(
             name = "ClientUser",
-            joinColumns = @JoinColumn(name = "clientId"),
-            inverseJoinColumns = @JoinColumn(name = "userId"))
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     Set<User> clientUser;
 
     public Client(Integer clientId, String companyName) {
@@ -35,12 +35,12 @@ public class Client {
         this.clientUser=new HashSet<>();
     }
 
-    public Client(String companyName) {
-        this.companyName=companyName;
+    public Client(String company_name) {
+        this.companyName=company_name;
         this.clientUser=new HashSet<>();
     }
 
-    public Client(Integer clientId) {
-        this.clientId = clientId;
+    public Client(Integer client_id) {
+        this.clientId = client_id;
     }
 }

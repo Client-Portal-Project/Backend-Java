@@ -27,11 +27,11 @@ public class ApplicationServiceTest {
     void initMock() {
         MockitoAnnotations.openMocks(this);
         Applicant applicant = new Applicant();
-        applicant.setApplicantId(1);
+        applicant.setApplicant_id(1);
         ApplicantOccupation applicantOccupation = new ApplicantOccupation(1);
         Need need =  new Need();
         Client client = new Client(1);
-        need.setNeedId(1);
+        need.setNeed_id(1);
         expected = new Application(1, 0, applicant, applicantOccupation, need, client);
         list = new ArrayList<>();
         list.add(expected);
@@ -82,7 +82,7 @@ public class ApplicationServiceTest {
 
     @Test
     void testGetApplicationByNeed() {
-        when(applicationDao.findByNeed_NeedId(expected.getNeed().getNeedId())).thenReturn(list);
+        when(applicationDao.findbyneed_needid(expected.getNeed().getNeed_id())).thenReturn(list);
         List<Application> actual = applicationService.getAllApplicationsByNeed(expected.getNeed());
 
         assertFalse(actual.isEmpty());
@@ -91,11 +91,11 @@ public class ApplicationServiceTest {
 
     @Test
     void testGetApplicationByEmploymentStatusAndNeed(){
-        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(expected.getApplicant().getEmploymentStatus()
-                , expected.getNeed().getNeedId()))
+        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(expected.getApplicant().getEmployment_status()
+                , expected.getNeed().getNeed_id()))
                 .thenReturn(list);
-        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
-                , expected.getNeed().getNeedId());
+        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmployment_status()
+                , expected.getNeed().getNeed_id());
 
         assertFalse(actual.isEmpty());
         assertEquals(actual, list);
@@ -103,10 +103,10 @@ public class ApplicationServiceTest {
 
     @Test
     void testGetApplicationByEmploymentStatusAndClient(){
-        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndClient_ClientId(expected.getApplicant().getEmploymentStatus()
+        when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndClient_ClientId(expected.getApplicant().getEmployment_status()
                 , expected.getClient().getClientId()))
                 .thenReturn(list);
-        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndClient(expected.getApplicant().getEmploymentStatus()
+        List<Application> actual = applicationService.getApplicationByEmploymentStatusAndClient(expected.getApplicant().getEmployment_status()
                 , expected.getClient().getClientId());
 
         assertFalse(actual.isEmpty());

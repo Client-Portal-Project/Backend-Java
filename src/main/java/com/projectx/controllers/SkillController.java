@@ -27,7 +27,7 @@ public class SkillController {
      */
     @PostMapping
     public ResponseEntity<Skill> createSkill(@RequestBody Skill skill) {
-        Skill check = skillService.getSkill(skill.getSkillId());
+        Skill check = skillService.getSkill(skill.getSkill_id());
         if (check == null) {
             return new ResponseEntity<>(skillService.saveSkill(skill), HttpStatus.CREATED);
         } else {
@@ -45,7 +45,7 @@ public class SkillController {
      */
     @PutMapping
     public ResponseEntity<Skill> editSkill(@RequestBody Skill skill) {
-        Skill check = skillService.getSkill(skill.getSkillId());
+        Skill check = skillService.getSkill(skill.getSkill_id());
         if (check != null) {
             return new ResponseEntity<>(skillService.saveSkill(skill), HttpStatus.OK);
         } else {
@@ -62,7 +62,7 @@ public class SkillController {
      */
     @DeleteMapping
     public ResponseEntity<Void> deleteSkill(@RequestBody Skill skill) {
-        Skill check = skillService.getSkill(skill.getSkillId());
+        Skill check = skillService.getSkill(skill.getSkill_id());
         if (check != null) {
             skillService.deleteSkill(skill);
             return new ResponseEntity<>(HttpStatus.OK);

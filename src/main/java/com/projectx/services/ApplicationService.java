@@ -7,17 +7,17 @@
 package com.projectx.services;
 
 
-import com.projectx.exception.ApplicationRequestException;
+import java.util.List;
+import java.util.Optional;
+
 import com.projectx.models.Applicant;
 import com.projectx.models.ApplicantOccupation;
 import com.projectx.models.Application;
 import com.projectx.models.Need;
 import com.projectx.repositories.ApplicationDao;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service("applicationService")
 public class ApplicationService {
@@ -70,8 +70,7 @@ public class ApplicationService {
      * @return Optional List of application objects that are associated with the applicantOccupation object
      */
     public List<Application> getAllApplicationsByApplicantOccupation(ApplicantOccupation applicantOccupation) {
-        return applicationDao.findByApplicantOccupation_ApplicantOccupationalId(applicantOccupation
-                .getApplicantOccupationalId());
+        return applicationDao.findByApplicantOccupation_ApplicantOccupationalId(applicantOccupation.getApplicantOccupationalId());
     }
 
     /**
@@ -81,7 +80,7 @@ public class ApplicationService {
      * @return Optional List of application objects that are associated with the need object
      */
     public List<Application> getAllApplicationsByNeed(Need need) {
-        return applicationDao.findByNeed_NeedId(need.getNeedId());
+        return applicationDao.findbyneed_needid(need.getNeed_id());
     }
 
     /**
