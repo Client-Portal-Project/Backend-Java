@@ -53,6 +53,7 @@ public class UserController {
      * @return http response with a user object in a {@link ResponseEntity} that contains a CREATED request if the
      * user exists; thus, generating a token, else a CONFLICT request.
      */
+  //@GetMapping("login")
     @NoAuth
     @PostMapping("login")
     public ResponseEntity<User> login(@RequestBody User user) {
