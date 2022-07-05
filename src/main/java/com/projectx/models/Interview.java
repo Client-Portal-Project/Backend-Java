@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "interview")
+@Table(name = "interviews")
 public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +41,10 @@ public class Interview {
     @JoinColumn(name = "skill_id")
     Set<Skill> skill;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="need_id")
-    private Need need;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="application_id")
+    @JoinColumn(name="application_application_id")
     private Application application;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="need_need_id")
+    private Need need;
+  
 }

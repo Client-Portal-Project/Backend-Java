@@ -15,7 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "application")
+@Table(name = "applications")
 
 public class Application {
     @Id
@@ -27,17 +27,18 @@ public class Application {
     @Column(name="status")
     private int status;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="applicant_id")
+    @JoinColumn(name="applicant_applicant_id")
     private Applicant applicant;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="applicant_occupational_id")
+    @JoinColumn(name="applicant_occupation_applicant_occupational_id")
     private ApplicantOccupation applicantOccupation;
     @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinColumn(name="need_id")
-    private Need need;
+    @JoinColumn(name="client_client_id")
+    private Client client;    
     @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinColumn(name="client_id")
-    private Client client;
+    @JoinColumn(name="need_need_id")
+    private Need need;
+   
 
     public Application(int applicationId, Applicant applicant, ApplicantOccupation applicantOccupation, Need need) {
         this.applicationId = applicationId;

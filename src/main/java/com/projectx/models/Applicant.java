@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "applicant")
+@Table(name = "applicants")
 public class Applicant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,18 +20,19 @@ public class Applicant {
 	private int applicantId;
 	@Column(name = "about_me")
 	private String aboutMe;
-	@Column(name = "eductaion_level")
-	private String educationLevel;
 	@Column(name = "education_field")
 	private String educationField;
+	@Column(name = "eductaion_level")
+	private String educationLevel;
 	@Column(name = "employment_status")
 	private String employmentStatus;
-	@OneToOne(cascade = CascadeType.MERGE, fetch=FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_fk")
 	private User user;
-	@JoinColumn(name="skill_id")
-	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    Set<Skill> skill;
+	@JoinColumn(name = "skill_id")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	Set<Skill> skill;
+
 	public Applicant(int applicantId, String aboutMe, String educationLevel, String educationField,
 			String employmentStatus, User user) {
 		this.applicantId = applicantId;

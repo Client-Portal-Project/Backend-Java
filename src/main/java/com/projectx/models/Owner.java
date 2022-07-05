@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "owner")
+@Table(name = "owners")
 public class Owner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,6 @@ public class Owner {
     private int ownerId;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonBackReference(value="user-reference")
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name="user_user_id", nullable=false)
     private User user;
 }
