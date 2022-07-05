@@ -103,7 +103,7 @@ public class ClientService {
      */
     public List<User> findAllClientUsers(Client client) {
         Client temp = findClientById(client.getClientId()); //checks if client exists
-        return new ArrayList<>(temp.getClientUser());
+        return new ArrayList<>(temp.getUser());
     }
 
     /**
@@ -136,9 +136,9 @@ public class ClientService {
             return false;
         } else { //takes list from client from database and updates it
             Client temp = findClientById(client.getClientId());
-            Set<User> list = temp.getClientUser();
+            Set<User> list = temp.getUser();
             Boolean result = list.add(user); //true if added, false if already a duplicate
-            temp.setClientUser(list);
+            temp.setUser(list);
             clientDao.save(temp); //updates list in database
             return result;
         }
@@ -157,9 +157,9 @@ public class ClientService {
             return false;
         } else { //takes list from client from database and updates it
             Client temp = findClientById(client.getClientId());
-            Set<User> list = temp.getClientUser();
+            Set<User> list = temp.getUser();
             Boolean result = list.remove(user); //true if deleted, false if it does not exist
-            temp.setClientUser(list);
+            temp.setUser(list);
             clientDao.save(temp); //updates list in database
             return result;
         }

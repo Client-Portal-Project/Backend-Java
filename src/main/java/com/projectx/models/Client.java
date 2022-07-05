@@ -14,33 +14,30 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "clients")
+@Table(name = "client")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer clientId;
-    @Column
+    @Column(name="client_id")
+    private int clientId;
+    @Column(name="company_name")
     private String companyName;
-    @OneToMany
-    @JoinTable(
-            name = "ClientUser",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    Set<User> clientUser;
+    @OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+    @JoinColumn(name="user_id")
+    Set<User> user;
 
-    public Client(Integer clientId, String companyName) {
+    public Client(int clientId, String companyName) {
         this.clientId=clientId;
         this.companyName=companyName;
-        this.clientUser=new HashSet<>();
+        this.user=new HashSet<>();
     }
 
     public Client(String company_name) {
         this.companyName=company_name;
-        this.clientUser=new HashSet<>();
+        this.user=new HashSet<>();
     }
 
-    public Client(Integer client_id) {
+    public Client(int client_id) {
         this.clientId = client_id;
     }
 }

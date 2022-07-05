@@ -35,7 +35,7 @@ public class UserServiceTest {
         // Assign
         Integer userId = 1;
         User expectedResult = new User(1, EMAIL, PASSWORD,
-                "test", "user", null);
+                "test", "user", false);
         Mockito.when(userDao.findById(userId)).thenReturn(Optional.of(expectedResult));
 
         // Act
@@ -62,7 +62,7 @@ public class UserServiceTest {
     void findUserByEmail() {
         // Assign
         User expectedResult = new User(1, EMAIL, PASSWORD,
-                "test", "user", null);
+                "test", "user", false);
         Mockito.when(userDao.findUserByEmail(EMAIL)).thenReturn(expectedResult);
 
         // Act
@@ -88,10 +88,10 @@ public class UserServiceTest {
     @Test
     void createUser() {
         // Assign
-        User temp = new User(null, EMAIL, PASSWORD,
-                "test", "user", null);
+        User temp = new User(0, EMAIL, PASSWORD,
+                "test", "user", false);
         User newUser = new User(1, EMAIL, PASSWORD,
-                "test", "user", null);
+                "test", "user", false);
         Mockito.when(userDao.findUserByEmail(temp.getEmail())).thenReturn(null);
         Mockito.when(userDao.save(temp)).thenReturn(newUser);
         User expectedResult = newUser;
@@ -106,8 +106,8 @@ public class UserServiceTest {
     @Test
     void createUserWhenUserAlreadyExists() {
         // Assign
-        User user = new User(null, EMAIL, PASSWORD,
-                "test", "user", null);
+        User user = new User(0, EMAIL, PASSWORD,
+                "test", "user", false);
         Mockito.when(userDao.findUserByEmail(user.getEmail())).thenReturn(user);
         User expectedResult = null;
 
@@ -122,7 +122,7 @@ public class UserServiceTest {
     void getUserByEmailAndPassword() {
         // Assign
         User expectedResult = new User(1, EMAIL, PASSWORD,
-                "test", "user", null);
+                "test", "user", false);
         Mockito.when(userDao.findUserByEmailAndPassword(EMAIL, PASSWORD)).thenReturn(expectedResult);
 
         // Act
@@ -154,7 +154,7 @@ public class UserServiceTest {
     void editUserWhenUserIsNull() {
         // Assign
         User user = new User(1, EMAIL, PASSWORD,
-                "test", "user", null);
+                "test", "user", false);
         Mockito.when(userDao.findById(user.getUserId())).thenReturn(Optional.empty());
         User expectedResult = null;
 
@@ -169,7 +169,7 @@ public class UserServiceTest {
     void deleteUser() {
         // Assign
         User user = new User(1, EMAIL, PASSWORD,
-                "test", "user", null);
+                "test", "user", false);
 
         // Act
         userService.deleteUser(user);

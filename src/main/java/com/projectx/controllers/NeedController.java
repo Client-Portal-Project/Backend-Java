@@ -26,7 +26,7 @@ public class NeedController {
      */
     @PostMapping
     public ResponseEntity<Need> createNeed(@RequestBody Need need) {
-        Need check = needService.getNeed(need.getNeed_id());
+        Need check = needService.getNeed(need.getNeedId());
         if (check == null) {
             return new ResponseEntity<>(needService.saveNeed(need), HttpStatus.CREATED);
         } else {
@@ -43,7 +43,7 @@ public class NeedController {
      */
     @PutMapping
     public ResponseEntity<Need> editNeed(@RequestBody Need need) {
-        Need check = needService.getNeed(need.getNeed_id());
+        Need check = needService.getNeed(need.getNeedId());
         if (check != null) {
             return new ResponseEntity<>(needService.saveNeed(need), HttpStatus.OK);
         } else {
@@ -60,7 +60,7 @@ public class NeedController {
      */
     @DeleteMapping
     public ResponseEntity<Boolean> deleteNeed(@RequestBody Need need) {
-        Need check = needService.getNeed(need.getNeed_id());
+        Need check = needService.getNeed(need.getNeedId());
         if (check != null) {
             needService.deleteNeed(need);
             return new ResponseEntity<>(true, HttpStatus.OK);

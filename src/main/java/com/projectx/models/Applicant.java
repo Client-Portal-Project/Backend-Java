@@ -12,53 +12,48 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "applicants")
+@Table(name = "applicant")
 public class Applicant {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer applicant_id;
-    @Column
-    private String about_me;
-    @Column
-    private String education_level;
-    @Column
-    private String education_field;
-    @Column
-    private String employment_status;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToMany
-    @JoinTable(
-            name = "applicantskills",
-            joinColumns = @JoinColumn(name = "applicant_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id"))
-    Set<Skill> applicantSkills;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "applicant_id")
+	private int applicantId;
+	@Column(name = "about_me")
+	private String aboutMe;
+	@Column(name = "eductaion_level")
+	private String educationLevel;
+	@Column(name = "education_field")
+	private String educationField;
+	@Column(name = "employment_status")
+	private String employmentStatus;
+	@OneToOne(cascade = CascadeType.MERGE, fetch=FetchType.EAGER)
+	@JoinColumn(name = "user_fk")
+	private User user;
+	@JoinColumn(name="skill_id")
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    Set<Skill> skill;
+	public Applicant(int applicantId, String aboutMe, String educationLevel, String educationField,
+			String employmentStatus, User user) {
+		this.applicantId = applicantId;
+		this.aboutMe = aboutMe;
+		this.educationLevel = educationLevel;
+		this.educationField = educationField;
+		this.employmentStatus = employmentStatus;
+		this.user = user;
+		this.skill = new HashSet<>();
+	}
 
-    public Applicant(int applicantId, String aboutMe, String educationLevel, String educationField,
-                     String employmentStatus, User user) {
-        this.applicant_id = applicantId;
-        this.about_me = aboutMe;
-        this.education_level = educationLevel;
-        this.education_field = educationField;
-        this.employment_status = employmentStatus;
-        this.user = user;
-        this.applicantSkills = new HashSet<>();
-    }
-
-    public Applicant(String aboutMe, String educationLevel, String educationField, String employmentStatus,
-                     User user) {
-        this.about_me = aboutMe;
-        this.education_level = educationLevel;
-        this.education_field = educationField;
-        this.employment_status = employmentStatus;
-        this.user = user;
-        this.applicantSkills = new HashSet<>();
-    }
+	public Applicant(String aboutMe, String educationLevel, String educationField, String employmentStatus, User user) {
+		this.aboutMe = aboutMe;
+		this.educationLevel = educationLevel;
+		this.educationField = educationField;
+		this.employmentStatus = employmentStatus;
+		this.user = user;
+		this.skill = new HashSet<>();
+	}
 
 	public int getApplicantId() {
 		// TODO Auto-generated method stub
-		return this.applicant_id;
+		return this.applicantId;
 	}
 }

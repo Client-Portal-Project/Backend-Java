@@ -37,7 +37,7 @@ class UserControllerTest {
     private static final String AUTH = "authorization";
     private static final String ID = "userId";
 
-    private User user = new User(1, EMAIL, PASS, "test", "user", null);
+    private User user = new User(1, EMAIL, PASS, "test", "user", false);
 
     @BeforeEach
     void setUp() {
@@ -114,9 +114,9 @@ class UserControllerTest {
     void editUser() {
         //Assign
         User before = new User(-1, EMAIL, PASS, "test",
-                "user", null);
+                "user", false);
         User after = new User(-1, EMAIL, null, "test-1",
-                "user-1", null);
+                "user-1", false);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
         Mockito.when(userService.editUser(before)).thenReturn(after);
@@ -144,7 +144,7 @@ class UserControllerTest {
     void editUserWhenPasswordLengthLessThenEight() {
         //Assign
         User temp = new User(-1, EMAIL, "pass", "test",
-                "user", null);
+                "user", false);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
         ResponseEntity<User> expectedResult = new ResponseEntity<>(null,
@@ -159,7 +159,7 @@ class UserControllerTest {
     void editUserWhenUserIsNull() {
         //Assign
         User temp = new User(-1, EMAIL, PASS, "test",
-                "user", null);
+                "user", false);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
         ResponseEntity<User> expectedResult = new ResponseEntity<>(null,
@@ -175,7 +175,7 @@ class UserControllerTest {
     void deleteUser() {
         //Assign
         Integer userId = -1;
-        User temp = new User(-1, EMAIL, PASS, "test", "user", null);
+        User temp = new User(-1, EMAIL, PASS, "test", "user", false);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
         Mockito.when(userService.findUserById(userId)).thenReturn(temp);
