@@ -9,5 +9,6 @@ import java.util.Set;
 
 @Repository()
 public interface SkillDao extends JpaRepository<Skill, Integer> {
-    Set<Skill> findBySkillId(Set<Skill> set);
-}
+    Set<Skill> findBySkillIdIn(Set<Skill> set);
+    }
+ 
