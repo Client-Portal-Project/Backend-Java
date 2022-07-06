@@ -40,7 +40,7 @@ Todo-List:
 - 
 
 ## Getting Started
-- git clone https://github.com/RVTR-StagingRemote/Staging-Project-Back-End-Java
+- git clone
 - Create a relational database called "batchesDB".
 - List of environment variables:
     - PXDB_URL - Database Host URL.
