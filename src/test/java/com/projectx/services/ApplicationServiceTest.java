@@ -82,7 +82,7 @@ public class ApplicationServiceTest {
 
     @Test
     void testGetApplicationByNeed() {
-        when(applicationDao.findbyneed_needid(expected.getNeed().getNeedId())).thenReturn(list);
+        when(applicationDao.findByNeed_NeedId(expected.getNeed().getNeedId())).thenReturn(list);
         List<Application> actual = applicationService.getAllApplicationsByNeed(expected.getNeed());
 
         assertFalse(actual.isEmpty());

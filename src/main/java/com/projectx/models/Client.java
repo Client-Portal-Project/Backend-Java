@@ -22,7 +22,7 @@ public class Client {
     private int clientId;
     @Column(name="company_name")
     private String companyName;
-    @OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+    @OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.MERGE)
     @JoinColumn(name="user_id")
     Set<User> user;
 

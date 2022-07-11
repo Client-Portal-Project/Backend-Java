@@ -28,7 +28,7 @@ public class NeedServiceTest {
         MockitoAnnotations.openMocks(this);
         Client client = new Client(1, null);
         expected = new Need(1, 0, 0, null,
-                0, null, null, null, client, null, null);
+                null, null, null, 0, client, null, null);
     }
 
     @Test

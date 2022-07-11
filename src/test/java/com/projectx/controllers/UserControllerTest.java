@@ -37,7 +37,7 @@ class UserControllerTest {
     private static final String AUTH = "authorization";
     private static final String ID = "userId";
 
-    private User user = new User(1, EMAIL, PASS, "test", "user", false);
+    private User user = new User(1, false, PASS, "test", "user", EMAIL);
 
     @BeforeEach
     void setUp() {
@@ -113,10 +113,10 @@ class UserControllerTest {
     @Test
     void editUser() {
         //Assign
-        User before = new User(-1, EMAIL, PASS, "test",
-                "user", false);
-        User after = new User(-1, EMAIL, null, "test-1",
-                "user-1", false);
+        User before = new User(-1, false, PASS, "test",
+                "user", EMAIL);
+        User after = new User(-1, false, null, "test-1",
+                "user-1", EMAIL);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
         Mockito.when(userService.editUser(before)).thenReturn(after);
@@ -143,8 +143,8 @@ class UserControllerTest {
     @Test
     void editUserWhenPasswordLengthLessThenEight() {
         //Assign
-        User temp = new User(-1, EMAIL, "pass", "test",
-                "user", false);
+        User temp = new User(-1, false, "pass", "test",
+                "user", EMAIL);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
         ResponseEntity<User> expectedResult = new ResponseEntity<>(null,
@@ -158,8 +158,8 @@ class UserControllerTest {
     @Test
     void editUserWhenUserIsNull() {
         //Assign
-        User temp = new User(-1, EMAIL, PASS, "test",
-                "user", false);
+        User temp = new User(-1, false, PASS, "test",
+                "user", EMAIL);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
         ResponseEntity<User> expectedResult = new ResponseEntity<>(null,
@@ -175,7 +175,7 @@ class UserControllerTest {
     void deleteUser() {
         //Assign
         Integer userId = -1;
-        User temp = new User(-1, EMAIL, PASS, "test", "user", false);
+        User temp = new User(-1, false, PASS, "test", "user", EMAIL);
         MockHttpServletRequest headers = new MockHttpServletRequest();
         headers.setAttribute(ID, -1);
         Mockito.when(userService.findUserById(userId)).thenReturn(temp);

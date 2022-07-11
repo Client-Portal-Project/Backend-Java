@@ -57,7 +57,7 @@ public class SkillServiceTest {
     void testGetAllSkills() {
         Set<Skill> list = new HashSet<>();
         list.add(expected);
-        when(skillDao.findBySkillId(list)).thenReturn(list);
+        when(skillDao.findBySkillIdIn(list)).thenReturn(list);
      //   Applicant[] array = expected.getApplicants().toArray(new Applicant[expected.getApplicants().size()]);
         Applicant[] array = new Applicant[1];
         array[0]=new Applicant(0,"","","",null,null,list);
