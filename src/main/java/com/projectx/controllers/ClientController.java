@@ -24,7 +24,7 @@ import com.projectx.services.ClientService;
 @RequestMapping("client")
 @CrossOrigin(value = Driver.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ClientController {
-    @Autowirede
+    @Autowired
     private ClientService clientServ;
 
     /**
