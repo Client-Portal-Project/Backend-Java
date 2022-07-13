@@ -1,12 +1,13 @@
 package com.projectx.services;
 
+import java.util.Set;
+
 import com.projectx.models.Applicant;
 import com.projectx.models.Skill;
 import com.projectx.repositories.SkillDao;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service("skillService")
 public class SkillService {
@@ -48,7 +49,7 @@ public class SkillService {
      * @param applicant applicant object
      * @return a List of skill objects
      */
-    public List<Skill> getAllSkills(Applicant applicant) {
-        return skillDao.findByApplicants_ApplicantId(applicant.getApplicantId());
+    public Set<Skill> getAllSkills(Applicant applicant) {
+        return skillDao.findBySkillIdIn(applicant.getSkill());
     }
 }

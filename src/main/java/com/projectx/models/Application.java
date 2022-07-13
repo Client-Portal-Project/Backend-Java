@@ -15,43 +15,54 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "applications", indexes = {
-        @Index(name = "applicantIndex", columnList = "applicant_applicant_id"),
-        @Index(name = "needIndex", columnList = "need_need_id"),
-        @Index(name = "clientIndex", columnList = "client_client_id")
-})
+@Table(name = "applications")
 
 public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer applicationId;
-    @Column
+    @Column(name="application_id")
+    private int applicationId;
+    @Column(name="date_of_application")
     private Date dateOfApplication;
-    @Column
-    private Integer status;
+    @Column(name="status")
+    private int status;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @Nullable
+    @JoinColumn(name="applicant_applicant_id")
     private Applicant applicant;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @Nullable
+    @JoinColumn(name="applicant_occupation_applicant_occupational_id")
     private ApplicantOccupation applicantOccupation;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Nullable
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinColumn(name="client_client_id")
+    private Client client;    
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinColumn(name="need_need_id")
     private Need need;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Nullable
-    private Client client;
+   
 
-    public Application(Integer applicationId, Applicant applicant, ApplicantOccupation applicantOccupation, Need need) {
+    public Application(int applicationId, Applicant applicant, ApplicantOccupation applicantOccupation, Need need) {
         this.applicationId = applicationId;
         this.applicant = applicant;
         this.applicantOccupation = applicantOccupation;
         this.need = need;
     }
 
-    public Application(Integer applicationId, Integer status, Applicant applicant, ApplicantOccupation applicantOccupation, Need need, Client client) {
+    public Application(int applicationId, int status, Applicant applicant, ApplicantOccupation applicantOccupation, Need need, Client client) {
         this.applicationId = applicationId;
+        this.status = status;
+        this.applicant = applicant;
+        this.applicantOccupation = applicantOccupation;
+        this.need = need;
+        this.client = client;
+    }
+    
+    public Application(Applicant applicant, ApplicantOccupation applicantOccupation, Need need) {
+        this.applicant = applicant;
+        this.applicantOccupation = applicantOccupation;
+        this.need = need;
+    }
+
+    public Application(int status, Applicant applicant, ApplicantOccupation applicantOccupation, Need need, Client client) {
         this.status = status;
         this.applicant = applicant;
         this.applicantOccupation = applicantOccupation;

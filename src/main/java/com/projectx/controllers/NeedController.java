@@ -1,14 +1,23 @@
 package com.projectx.controllers;
 
+import java.util.List;
+
 import com.projectx.models.Client;
 import com.projectx.models.Need;
 import com.projectx.services.NeedService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController("needController")
 @RequestMapping("need")
@@ -26,7 +35,7 @@ public class NeedController {
      */
     @PostMapping
     public ResponseEntity<Need> createNeed(@RequestBody Need need) {
-        Need check = needService.getNeed(need.getNeed_id());
+        Need check = needService.getNeed(need.getNeedId());
         if (check == null) {
             return new ResponseEntity<>(needService.saveNeed(need), HttpStatus.CREATED);
         } else {
@@ -43,11 +52,11 @@ public class NeedController {
      */
     @PutMapping
     public ResponseEntity<Need> editNeed(@RequestBody Need need) {
-        Need check = needService.getNeed(need.getNeed_id());
+        Need check = needService.getNeed(need.getNeedId());
         if (check != null) {
             return new ResponseEntity<>(needService.saveNeed(need), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        	return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -60,7 +69,7 @@ public class NeedController {
      */
     @DeleteMapping
     public ResponseEntity<Boolean> deleteNeed(@RequestBody Need need) {
-        Need check = needService.getNeed(need.getNeed_id());
+        Need check = needService.getNeed(need.getNeedId());
         if (check != null) {
             needService.deleteNeed(need);
             return new ResponseEntity<>(true, HttpStatus.OK);

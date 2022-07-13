@@ -27,8 +27,8 @@ public class NeedServiceTest {
     void initMock() {
         MockitoAnnotations.openMocks(this);
         Client client = new Client(1, null);
-        expected = new Need(1, null, null, null,
-                null, null, null, null, client, null, null);
+        expected = new Need(1, 0, 0, null,
+                null, null, null, 0, client, null, null);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class NeedServiceTest {
 
     @Test
     void testGetNeed() {
-        when(needDao.findById(expected.getNeed_id())).thenReturn(Optional.of(expected));
+        when(needDao.findById(expected.getNeedId())).thenReturn(Optional.of(expected));
         Need actual = needService.getNeed(1);
 
         assertEquals(actual, expected);

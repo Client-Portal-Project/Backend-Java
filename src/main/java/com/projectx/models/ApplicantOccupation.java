@@ -19,17 +19,18 @@ import javax.persistence.*;
 public class ApplicantOccupation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer applicantOccupationalId;
-    @Column
+    @Column (name="applicant_occupationl_id")
+    private int applicantOccupationalId;
+    @Column(name="job_title")
     private String jobTitle;
-    @Column
-    private Integer yearsExperience;
-    @Column
-    private Boolean openMarket;
+    @Column(name="year_experience")
+    private int yearsExperience;
+    @Column(name="open_market", nullable=false)
+    private boolean openMarket;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="applicant_id")
     private Applicant applicant;
-
+ 
     public ApplicantOccupation(String jobTitle, int yeasExperience, Boolean openMarket, Applicant applicant) {
         this.jobTitle = jobTitle;
         this.yearsExperience = yeasExperience;
@@ -37,7 +38,11 @@ public class ApplicantOccupation {
         this.applicant = applicant;
     }
 
-    public ApplicantOccupation(Integer applicantOccupationalId) {
+    public ApplicantOccupation(int applicantOccupationalId, String jobTitle, int yeasExperience, Boolean openMarket, Applicant applicant) {
         this.applicantOccupationalId = applicantOccupationalId;
+        this.jobTitle = jobTitle;
+        this.yearsExperience = yeasExperience;
+        this.openMarket = openMarket;
+        this.applicant = applicant;
     }
 }
