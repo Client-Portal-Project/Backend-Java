@@ -10,5 +10,5 @@ import java.util.List;
 @Repository("applicantOccupationDao")
 @Transactional
 public interface ApplicantOccupationDao extends JpaRepository<ApplicantOccupation, Integer> {
-    List<ApplicantOccupation> findByApplicant_ApplicantId (int applicantId);
+    List<ApplicantOccupation> findByApplicant_ApplicantId (int applicant_id);
 }

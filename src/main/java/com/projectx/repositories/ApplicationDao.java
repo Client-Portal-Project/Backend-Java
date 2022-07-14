@@ -20,10 +20,10 @@ import java.util.Optional;
 @Transactional
 public interface ApplicationDao extends JpaRepository<Application, Integer> {
 
-    List<Application> findByApplicant_ApplicantId (int applicantId);
-    List<Application> findByApplicantOccupation_ApplicantOccupationalId (int applicantOccupationId);
-    List<Application> findByNeed_NeedId (int needId);
-    List<Application> findApplicationsByApplicant_EmploymentStatusAndClient_ClientId(String employmentStatus, int clientId);
-    List<Application> findApplicationsByClient_ClientId(int clientId);
-    List<Application> findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(String employmentStatus, int needId);
+    List<Application> findByApplicant_ApplicantId (int applicant_id);
+    List<Application> findByApplicantOccupation_ApplicantOccupationalId (int applicant_occupation_id);
+    List<Application> findByNeed_NeedId(int need_id);
+    List<Application> findApplicationsByApplicant_EmploymentStatusAndClient_ClientId(String employment_status, int client_id);
+    List<Application> findApplicationsByClient_ClientId(int client_id);
+    List<Application> findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(String employment_status, int need_id);
 }

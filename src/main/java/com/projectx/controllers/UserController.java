@@ -1,13 +1,20 @@
 package com.projectx.controllers;
 
+import java.util.List;
+import java.util.Objects;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.projectx.Driver;
 import com.projectx.aspects.annotations.NoAuth;
 import com.projectx.models.User;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +28,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController("userController")
-@RequestMapping("user")
+@RequestMapping(value="user",consumes=MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(value = Driver.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class UserController {
     @Autowired
@@ -60,6 +77,7 @@ public class UserController {
      * @return http response with a user object in a {@link ResponseEntity} that contains a CREATED request if the
      * user exists; thus, generating a token, else a CONFLICT request.
      */
+  //@GetMapping("login")
     @NoAuth
     @PostMapping("login")
     public ResponseEntity<User> login(@RequestBody User user) {
@@ -103,7 +121,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<User> editUser(@RequestBody User user, HttpServletRequest headers) {
         ResponseEntity<User> response;
-        if(Objects.equals(headers.getAttribute("userId"), user.getUserId())) {
+        if(Objects.equals(headers.getAttribute("user_id"), user.getUserId())) {
             if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
                 // Password encryption goes here
                 User updatedUser = this.userService.editUser(user);
@@ -131,10 +149,10 @@ public class UserController {
      * @return http response with a string message in a {@link ResponseEntity} that contains an ACCEPTED request if the
      * user was updated, else an UNAUTHORIZED request.
      */
-    @DeleteMapping("{userId}")
+    @DeleteMapping("{user_id}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer userId, HttpServletRequest headers) {
         ResponseEntity<String> response;
-        if(Objects.equals(headers.getAttribute("userId"), userId)) {
+        if(Objects.equals(headers.getAttribute("user_id"), userId)) {
             User user = userService.findUserById(userId);
             userService.deleteUser(user);
             response = new ResponseEntity<>("Valid token, user deleted", HttpStatus.ACCEPTED);
@@ -169,7 +187,7 @@ public class UserController {
         {
             return new ResponseEntity<>("Email is not correct",HttpStatus.NOT_FOUND);
         }
-        if(!user.getApproved())
+        if(!user.isApproved())
         {
             return new ResponseEntity<>("Cannot do this request",HttpStatus.BAD_REQUEST);
         }

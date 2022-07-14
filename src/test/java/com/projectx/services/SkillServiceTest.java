@@ -28,7 +28,7 @@ public class SkillServiceTest {
         String dummy = "";
         Applicant applicant = new Applicant(1, dummy, dummy, dummy, dummy, null);
         set.add(applicant);
-        expected = new Skill(1, null, set);
+        expected = new Skill(1, null);
     }
 
     @Test
@@ -55,11 +55,13 @@ public class SkillServiceTest {
 
     @Test
     void testGetAllSkills() {
-        List<Skill> list = new ArrayList<>();
+        Set<Skill> list = new HashSet<>();
         list.add(expected);
-        when(skillDao.findByApplicants_ApplicantId(1)).thenReturn(list);
-        Applicant[] array = expected.getApplicants().toArray(new Applicant[expected.getApplicants().size()]);
-        List<Skill> actual = skillService.getAllSkills(array[0]);
+        when(skillDao.findBySkillIdIn(list)).thenReturn(list);
+     //   Applicant[] array = expected.getApplicants().toArray(new Applicant[expected.getApplicants().size()]);
+        Applicant[] array = new Applicant[1];
+        array[0]=new Applicant(0,"","","",null,null,list);
+        Set<Skill> actual = skillService.getAllSkills(array[0]);
 
         assertEquals(actual, list);
     }

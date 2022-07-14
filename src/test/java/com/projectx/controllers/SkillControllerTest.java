@@ -46,8 +46,8 @@ public class SkillControllerTest {
         String dummy = "";
         applicant = new Applicant(1, dummy, dummy, dummy, dummy, null);
         set.add(applicant);
-        expected = new Skill(1, dummy, set);
-        wrong = new Skill(2, null, null);
+        expected = new Skill(1, dummy);
+        wrong = new Skill(2, null);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class SkillControllerTest {
     @Test
     @SneakyThrows
     void testGetAllSkills() {
-        List<Skill> list = new ArrayList<>();
+        Set<Skill> list = new HashSet<>();
         list.add(expected);
         when(skillService.getAllSkills(applicant)).thenReturn(list);
 
