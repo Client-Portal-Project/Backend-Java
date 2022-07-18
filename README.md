@@ -33,13 +33,14 @@ work what they are best at.
 
 ## Features
 ### Users can:
-- 
+
+### Application Controller/service/repo currently setup to work with models as of 3/31/22. Some user models information has changed which hasn't been tested with application. 
 
 Todo-List:
 - 
 
 ## Getting Started
-- git clone https://github.com/RVTR-StagingRemote/Staging-Project-Back-End-Java
+- git clone
 - Create a relational database called "batchesDB".
 - List of environment variables:
     - PXDB_URL - Database Host URL.

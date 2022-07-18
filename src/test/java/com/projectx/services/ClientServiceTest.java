@@ -36,16 +36,16 @@ public class ClientServiceTest {
 	public void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		testUser = new User(1, "test1", "", "", "", true);
-		User testUserExtra = new User(2, "test2", "", "", "", true);
+		testUser = new User(1, true, "", "", "", "test1");
+		User testUserExtra = new User(2, true, "", "", "", "test2");
 		testClient1 = new Client(1, "Test Company 1");
 		Set<User> expected = new HashSet<>();
 		expected.add(testUser);
-		testClient1.setClientUser(expected);
+		testClient1.setUser(expected);
 		testClient1Optional = Optional.of(testClient1);
 		testClient2 = new Client(2, "Test Company 2");
 		testEditClient1 = new Client(1, "Test");
-		testEditClient1.setClientUser(expected);
+		testEditClient1.setUser(expected);
 		
 		testClientList = new ArrayList<>();
 		testClientList.add(testClient1);
@@ -122,7 +122,7 @@ public class ClientServiceTest {
 
 	@Test
 	void testFindAllClientUsers() {
-		assertArrayEquals(clientServ.findAllClientUsers(testClient1).toArray(), testClient1.getClientUser().toArray()); //to not use array, need to override hashcode()
+		assertArrayEquals(clientServ.findAllClientUsers(testClient1).toArray(), testClient1.getUser().toArray()); //to not use array, need to override hashcode()
 	}
 
 	@Test

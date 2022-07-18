@@ -17,11 +17,24 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class LoggerAspect {
 
+    /**
+     * Before a method is executed in the controllers package, message is printed
+     * to show which method is being hit.
+     *
+     * @param joinPoint the joinPoint from the method execution
+     */
     @Before("within(com.projectx.controllers.*)")
     public void logHit(final JoinPoint joinPoint) {
         log.info(joinPoint.getSignature().toShortString() + " successfully hit.");
     }
 
+    /**
+     * after a controller method is executed, takes the response and join point to print a warning if
+     * it's an error or info otherwise of the http status code and method.
+     *
+     * @param joinPoint a join point from the method execution
+     * @param response a {@link ResponseEntity} being sent from the controller method
+     */
     @AfterReturning(pointcut = "within(com.projectx.controllers.*)", returning = "response")
     public void log(final JoinPoint joinPoint, final ResponseEntity<?> response){
         final HttpServletRequest request =

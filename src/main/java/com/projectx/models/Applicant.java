@@ -1,8 +1,6 @@
 package com.projectx.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -14,48 +12,49 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Applicants")
+@Table(name = "applicants")
 public class Applicant {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "applicant_id")
-    private Integer applicantId;
-    @Column
-    private String aboutMe;
-    @Column
-    private String educationLevel;
-    @Column
-    private String educationField;
-    @Column
-    private String employmentStatus;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToMany
-    @JoinTable(
-            name = "ApplicantSkills",
-            joinColumns = @JoinColumn(name = "applicant_id"),
-            inverseJoinColumns = @JoinColumn(name = "skillId"))
-    Set<Skill> applicantSkills;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "applicant_id")
+	private int applicantId;
+	@Column(name = "about_me")
+	private String aboutMe;
+	@Column(name = "education_field")
+	private String educationField;
+	@Column(name = "eductaion_level")
+	private String educationLevel;
+	@Column(name = "employment_status")
+	private String employmentStatus;
+	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_fk")
+	private User user;
+	@JoinColumn(name = "skill_id")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	Set<Skill> skill;
 
-    public Applicant(int applicantId, String aboutMe, String educationLevel, String educationField,
-                     String employmentStatus, User user) {
-        this.applicantId = applicantId;
-        this.aboutMe = aboutMe;
-        this.educationLevel = educationLevel;
-        this.educationField = educationField;
-        this.employmentStatus = employmentStatus;
-        this.user = user;
-        this.applicantSkills = new HashSet<>();
-    }
+	public Applicant(int applicantId, String aboutMe, String educationLevel, String educationField,
+			String employmentStatus, User user) {
+		this.applicantId = applicantId;
+		this.aboutMe = aboutMe;
+		this.educationLevel = educationLevel;
+		this.educationField = educationField;
+		this.employmentStatus = employmentStatus;
+		this.user = user;
+		this.skill = new HashSet<>();
+	}
 
-    public Applicant(String aboutMe, String educationLevel, String educationField, String employmentStatus,
-                     User user) {
-        this.aboutMe = aboutMe;
-        this.educationLevel = educationLevel;
-        this.educationField = educationField;
-        this.employmentStatus = employmentStatus;
-        this.user = user;
-        this.applicantSkills = new HashSet<>();
-    }
+	public Applicant(String aboutMe, String educationLevel, String educationField, String employmentStatus, User user) {
+		this.aboutMe = aboutMe;
+		this.educationLevel = educationLevel;
+		this.educationField = educationField;
+		this.employmentStatus = employmentStatus;
+		this.user = user;
+		this.skill = new HashSet<>();
+	}
+
+	public int getApplicantId() {
+		// TODO Auto-generated method stub
+		return this.applicantId;
+	}
 }

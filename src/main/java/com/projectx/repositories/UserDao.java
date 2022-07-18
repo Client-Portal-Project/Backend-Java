@@ -9,5 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserDao extends JpaRepository<User, Integer> {
     User findUserByEmail(String email);
+    
+    //@Query(value="select email, password from users where email = 'testuser0@test.com'")
     User findUserByEmailAndPassword(String email, String password);
 }
