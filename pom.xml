@@ -8,7 +8,9 @@
 	<artifactId>Client-Portal</artifactId>
 	<version>0.0.1</version>
 
+
 <properties>
+
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.source>17</maven.compiler.source>
 	</properties>
@@ -27,11 +29,13 @@
 	</properties>
 
 	<dependencies>
+
 		<!-- Spring Boot -->
 
 		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-data-jpa</artifactId> 
 			</dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -47,10 +51,13 @@
 			<version>2.7.1</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jdbc -->
+		<dependency>
+ 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<version>2.7.1</version>
+		</dependency>
 
-		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-web</artifactId> 
-			</dependency> -->
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -67,17 +74,12 @@
 			<version>2.7.1</version>
 		</dependency>
 
-
-
-		<!-- <dependency> <groupId>org.postgresql</groupId> <artifactId>postgresql</artifactId> 
-			</dependency> -->
-		<!-- postgres -->
-		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.4.0</version>
 		</dependency>
+
 
 
 
