@@ -1,20 +1,23 @@
 /**
- * @author April Weaver
+ * @authors April Weaver, Steven Hanley
  * @since  2021-12-21
+ * @lastupdate 2022-02-23
  */
 package com.projectx.services;
 
 import com.projectx.models.Applicant;
+import com.projectx.models.Skill;
 import com.projectx.repositories.ApplicantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service("applicantService")
 public class ApplicantService {
     @Autowired
-    ApplicantDao applicantDao;
+    private ApplicantDao applicantDao;
 
     /**
      * Adds an applicant into the database. Before adding to the database, checks if the applicant
@@ -64,4 +67,22 @@ public class ApplicantService {
     public Applicant getApplicant(int id) {
         return applicantDao.findByUser_UserId(id);
     }
+
+    /**
+     * Returns a list of applicants with requested employment status
+     * @param employmentStatus
+     * @return a List of applicants with requested employment status
+     */
+    // May not be needed
+   // public List<Applicant> getApplicantByEmploymentStatus(String employment_status) { return applicantDao.findByEmployment_Status(employment_status); }
+
+    /**
+     * Returns a list of applicants with requested skill
+     * @param skill
+     * @return a list of applicants with requested skill
+     */
+    // May not be needed
+    public Set<Applicant> getApplicantSkillsIsContaining(Skill skill) { return applicantDao.findBySkillIsContaining(skill); }
+
+
 }

@@ -41,7 +41,7 @@ public class ApplicantControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(applicantController).build();
         objectMapper = new ObjectMapper();
         String dummy = "";
-        User user = new User(1, dummy, dummy, dummy, dummy, true);
+        User user = new User(1, true, dummy, dummy, dummy, dummy);
         expected = new Applicant(1, dummy, dummy, dummy, dummy, user);
     }
 

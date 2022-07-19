@@ -21,6 +21,14 @@ public class FileService {
         this.fileRepository = fileRepository;
     }
 
+    /**
+     * Creates a file object within the database with an applicant and a multipart file object
+     *
+     * @param file multipart file object
+     * @param applicant applicant object
+     * @return file object
+     * @throws IOException
+     */
     public File store(MultipartFile file, Applicant applicant) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         File newFile = new File(fileName, file.getContentType(), file.getBytes(), applicant);
@@ -28,10 +36,22 @@ public class FileService {
         return fileRepository.save(newFile);
     }
 
+    /**
+     * Gets a file object from the database with its id
+     *
+     * @param id id of the file
+     * @return file object if found, null otherwise
+     */
     public File getFile(int id) {
         return fileRepository.findById(id).get();
     }
 
+    /**
+     * Gets a List of files attached to an applicant object
+     *
+     * @param applicant applicant object
+     * @return List of file objects
+     */
     public List<File> getAllFiles(Applicant applicant) {
         return fileRepository.findByApplicant_ApplicantId(applicant.getApplicantId());
     }

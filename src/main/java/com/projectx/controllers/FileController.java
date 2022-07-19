@@ -24,6 +24,14 @@ public class FileController {
     @Autowired
     private ApplicantService applicantService;
 
+    /**
+     * Creates a new file in the database through the file service class
+     *
+     * @param file multipart file in the request parameter
+     * @param applicant applicant object in the request body
+     * @return a http response with a boolean in a {@link ResponseEntity} that
+     *      contains an ok request and true, otherwise false and a not found status code
+     */
     @PostMapping
     public ResponseEntity<Boolean> uploadFile(@RequestParam("file") MultipartFile file,
                                               @RequestBody Applicant applicant){
@@ -35,6 +43,13 @@ public class FileController {
         }
     }
 
+    /**
+     * Gets all the files under the applicant object in a List
+     *
+     * @param applicant applicant object in the request body
+     * @return a http response with a List of file objects in a {@link ResponseEntity} that
+     *      contains an ok request
+     */
     @GetMapping
     public ResponseEntity<List<File>> getListFiles(@RequestBody Applicant applicant) {
         List<File> files = fileService.getAllFiles(applicant);
@@ -45,8 +60,15 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
+    /**
+     * Gets a file by its id number
+     *
+     * @param id id of the file in the path variable
+     * @return a http response with a byte array of the file in a {@link ResponseEntity} that
+     *      contains an ok request
+     */
     @GetMapping("{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable Integer id) {
+    public ResponseEntity<byte[]> getFile(@PathVariable int id) {
         File file = fileService.getFile(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
