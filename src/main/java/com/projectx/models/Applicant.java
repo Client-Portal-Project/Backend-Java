@@ -22,11 +22,11 @@ public class Applicant {
 	private String aboutMe;
 	@Column(name = "education_field")
 	private String educationField;
-	@Column(name = "eductaion_level")
+	@Column(name = "education_level")
 	private String educationLevel;
 	@Column(name = "employment_status")
 	private String employmentStatus;
-	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_fk")
 	private User user;
 	@JoinColumn(name = "skill_id")

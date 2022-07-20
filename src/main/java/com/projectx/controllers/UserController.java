@@ -3,6 +3,7 @@ package com.projectx.controllers;
 import java.util.List;
 import java.util.Objects;
 
+import javax.mail.*;
 import javax.servlet.http.HttpServletRequest;
 
 import com.projectx.Driver;
@@ -18,10 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -164,7 +161,6 @@ public class UserController {
         return response;
     }
 
-    @NoAuth
     @PostMapping("verification")
     public ResponseEntity<String> verifyEmail(@PathVariable String email)
     {
@@ -178,7 +174,6 @@ public class UserController {
         return new ResponseEntity<>("Email has been verified",HttpStatus.ACCEPTED);
     }
 
-    @NoAuth
     @PostMapping("recover")
     public ResponseEntity<String> recoverPassword(@PathVariable String email)
     {
@@ -204,8 +199,17 @@ public class UserController {
     {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.from", "me@example.com");
-        Session session = Session.getInstance(props, null);
+        props.put("mail.smtp.port",587);
+        props.put("mail.smtp.auth",true);
+        props.put("mail.smtp.starttls.enable",true);
+        props.put("mail.smtp.ssl.protocols","TLSv1.2");
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                //The password must be an app specific password with the gmail smtp server
+                return new PasswordAuthentication("18xxperson@gmail.com","ovilmpbewocdmwjz");
+            }
+        });
         try {
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom();
