@@ -6,6 +6,6 @@ public class Testing {
     public static void main(String[] args)
     {
         UserController userController=new UserController();
-        userController.sendEmail("18xxperson@gmail.com","reset password","Click on this link to reset the password");
+        userController.sendEmail("18xxperson@gmail.com","Creating account","Your password for logging in is nklxvcjkl;aewrjio[");
     }
 }

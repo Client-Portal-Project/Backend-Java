@@ -59,8 +59,10 @@ public class UserController {
     public ResponseEntity<String> createUser(@RequestBody User user) {
         ResponseEntity<String> response;
         User newUser = this.userService.createUser(user);
-        if(newUser != null)
+        if(newUser != null) {
             response = new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
+            sendEmail(newUser.getEmail(), "Creating your account","Your password for logging in is"+newUser.getPassword());
+        }
         else
             response = new ResponseEntity<>("Email entered already exists", HttpStatus.CONFLICT);
         return response;
@@ -159,19 +161,6 @@ public class UserController {
         }
 
         return response;
-    }
-
-    @PostMapping("verification")
-    public ResponseEntity<String> verifyEmail(@PathVariable String email)
-    {
-        User user=userService.findUserByEmail(email);
-        if(user==null)
-        {
-            return new ResponseEntity<>("Email is not correct",HttpStatus.NOT_FOUND);
-        }
-        user.setApproved(true);
-        userService.editUser(user);
-        return new ResponseEntity<>("Email has been verified",HttpStatus.ACCEPTED);
     }
 
     @PostMapping("recover")
