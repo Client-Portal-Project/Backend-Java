@@ -10,5 +10,5 @@ import java.util.List;
 @Repository("clientDao")
 @Transactional
 public interface ClientDao extends JpaRepository<Client, Integer> {
-    Client findClientByCompanyName(String companyName);
+    Client findClientByCompanyName(String company_name);
 }

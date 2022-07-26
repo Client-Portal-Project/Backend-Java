@@ -14,8 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class UserServiceTest {
+    private static final String EMAIL = "testuser@test.com";
+    private static final String PASSWORD = "password";
     @Mock
     private UserDao userDao;
 
@@ -31,8 +34,8 @@ public class UserServiceTest {
     void findUserById() {
         // Assign
         Integer userId = 1;
-        User expectedResult = new User(1, "testuser@test.com", "password",
-                "test", "user", null);
+        User expectedResult = new User(1, false, PASSWORD,
+                "test", "user", EMAIL);
         Mockito.when(userDao.findById(userId)).thenReturn(Optional.of(expectedResult));
 
         // Act
@@ -46,26 +49,24 @@ public class UserServiceTest {
     void findUserByIdWhenUserIsNull() {
         // Assign
         Integer userId = 1;
-        User expectedResult = null;
         Mockito.when(userDao.findById(userId)).thenReturn(Optional.empty());
 
         // Act
         User actualResult = userService.findUserById(userId);
 
         // Assert
-        assertEquals(expectedResult, actualResult);
+        assertNull(actualResult);
     }
 
     @Test
     void findUserByEmail() {
         // Assign
-        String email = "testuser@test.com";
-        User expectedResult = new User(1, "testuser@test.com", "password",
-                "test", "user", null);
-        Mockito.when(userDao.findUserByEmail(email)).thenReturn(expectedResult);
+        User expectedResult = new User(1, false, PASSWORD,
+                "test", "user", EMAIL);
+        Mockito.when(userDao.findUserByEmail(EMAIL)).thenReturn(expectedResult);
 
         // Act
-        User actualResult = userService.findUserByEmail(email);
+        User actualResult = userService.findUserByEmail(EMAIL);
 
         // Assert
         assertEquals(expectedResult, actualResult);
@@ -87,10 +88,10 @@ public class UserServiceTest {
     @Test
     void createUser() {
         // Assign
-        User temp = new User(null, "testuser@test.com", "password",
-                "test", "user", null);
-        User newUser = new User(1, "testuser@test.com", "password",
-                "test", "user", null);
+        User temp = new User(0, false, PASSWORD,
+                "test", "user", EMAIL);
+        User newUser = new User(1, false, PASSWORD,
+                "test", "user", EMAIL);
         Mockito.when(userDao.findUserByEmail(temp.getEmail())).thenReturn(null);
         Mockito.when(userDao.save(temp)).thenReturn(newUser);
         User expectedResult = newUser;
@@ -105,8 +106,8 @@ public class UserServiceTest {
     @Test
     void createUserWhenUserAlreadyExists() {
         // Assign
-        User user = new User(null, "testuser@test.com", "password",
-                "test", "user", null);
+        User user = new User(0, false, PASSWORD,
+                "test", "user", EMAIL);
         Mockito.when(userDao.findUserByEmail(user.getEmail())).thenReturn(user);
         User expectedResult = null;
 
@@ -120,14 +121,12 @@ public class UserServiceTest {
     @Test
     void getUserByEmailAndPassword() {
         // Assign
-        String email = "testuser@test.com";
-        String password = "password";
-        User expectedResult = new User(1, "testuser@test.com", "password",
-                "test", "user", null);
-        Mockito.when(userDao.findUserByEmailAndPassword(email, password)).thenReturn(expectedResult);
+        User expectedResult = new User(1, false, PASSWORD,
+                "test", "user", EMAIL);
+        Mockito.when(userDao.findUserByEmailAndPassword(EMAIL, PASSWORD)).thenReturn(expectedResult);
 
         // Act
-        User actualResult = userService.userDao.findUserByEmailAndPassword(email, password);
+        User actualResult = userService.getUserByEmailAndPassword(EMAIL, PASSWORD);
 
         // Assert
         assertEquals(expectedResult, actualResult);
@@ -136,10 +135,10 @@ public class UserServiceTest {
     @Test
     void editUser() {
         // Assign
-        User before = new User(1, "testuser@test.com", "password",
-                "test", "user", null);
-        User after = new User(1, "testuser1@test.com", "password1",
-                "test1", "user1", null);
+        User before = new User(1, true, PASSWORD,
+                "test", "user", EMAIL);
+        User after = new User(1, true, PASSWORD,
+                "test1", "user1", EMAIL);
         Mockito.when(userDao.findById(after.getUserId())).thenReturn(Optional.of(before));
         Mockito.when(userDao.save(before)).thenReturn(after);
         User expectedResult = after;
@@ -154,8 +153,8 @@ public class UserServiceTest {
     @Test
     void editUserWhenUserIsNull() {
         // Assign
-        User user = new User(1, "testuser@test.com", "password",
-                "test", "user", null);
+        User user = new User(1, false, PASSWORD,
+                "test", "user", EMAIL);
         Mockito.when(userDao.findById(user.getUserId())).thenReturn(Optional.empty());
         User expectedResult = null;
 
@@ -169,11 +168,11 @@ public class UserServiceTest {
     @Test
     void deleteUser() {
         // Assign
-        User user = new User(1, "testuser@test.com", "password",
-                "test", "user", null);
+        User user = new User(1, false, PASSWORD,
+                "test", "user", EMAIL);
 
         // Act
-        userService.userDao.delete(user);
+        userService.deleteUser(user);
 
         // Assert
         Mockito.verify(userDao, Mockito.times(1)).delete(user);

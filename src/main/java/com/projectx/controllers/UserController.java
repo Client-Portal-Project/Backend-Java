@@ -1,22 +1,33 @@
 package com.projectx.controllers;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
+import java.util.List;
+import java.util.Objects;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.projectx.Driver;
+import com.projectx.aspects.annotations.NoAuth;
 import com.projectx.models.User;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController("userController")
-@RequestMapping("user")
+@RequestMapping(value="user",consumes=MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(value = Driver.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class UserController {
     @Autowired
@@ -33,6 +44,7 @@ public class UserController {
      * @return http response with a string message in a {@link ResponseEntity} that contains a CREATED request if the
      * user is added, else a CONFLICT request.
      */
+    @NoAuth
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody User user) {
         ResponseEntity<String> response;
@@ -52,6 +64,8 @@ public class UserController {
      * @return http response with a user object in a {@link ResponseEntity} that contains a CREATED request if the
      * user exists; thus, generating a token, else a CONFLICT request.
      */
+  //@GetMapping("login")
+    @NoAuth
     @PostMapping("login")
     public ResponseEntity<User> login(@RequestBody User user) {
         ResponseEntity<User> response;
@@ -75,6 +89,7 @@ public class UserController {
      * @return http response with a list of user objects in a {@link ResponseEntity} that contains an ACCEPTED
      * request; this endpoint is intended for verifying users in the database via Postman, but may be deleted.
      */
+    @NoAuth
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(this.userService.findAllUsers(), HttpStatus.ACCEPTED);
@@ -87,32 +102,27 @@ public class UserController {
      *
      * @param user - the user to be updated in the database
      * @return http response with a user object in a {@link ResponseEntity} that contains an ACCEPTED request if the
-     * user was updated, else response with a string message and an UNAUTHORIZED request.
+     * user was updated, else response with no object and an UNAUTHORIZED if password does not match the criteria,
+     * NOT_FOUND if the User is not in the database, or BAD_REQUEST request if the user ids don't match.
      */
     @PutMapping
-    public ResponseEntity<?> editUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
-        ResponseEntity<?> response;
-        DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));
-        if(decodedJWT == null) {
-            response = new ResponseEntity<>("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
-        } else {
-            if(Objects.equals(decodedJWT.getClaims().get("userId").asInt(), user.getUserId())) {
-                if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
-                    // Password encryption goes here
-                    User updatedUser = this.userService.editUser(user);
-                    if(updatedUser == null) {
-                        response = new ResponseEntity<>("Invalid token (4), user does not exist", HttpStatus.UNAUTHORIZED);
-                    } else {
-                        updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
-                        response = new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
-                    }
+    public ResponseEntity<User> editUser(@RequestBody User user, HttpServletRequest headers) {
+        ResponseEntity<User> response;
+        if(Objects.equals(headers.getAttribute("user_id"), user.getUserId())) {
+            if(user.getPassword() == null || user.getPassword() != null && user.getPassword().length() >= 8) {
+                // Password encryption goes here
+                User updatedUser = this.userService.editUser(user);
+                if(updatedUser == null) {
+                    response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
                 } else {
-                    response = new ResponseEntity<>("Invalid token (3), invalid password", HttpStatus.UNAUTHORIZED);
+                    updatedUser.setPassword(null); // To prevent sensitive information getting leaked out
+                    response = new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
                 }
-
             } else {
-                response = new ResponseEntity<>("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
+                response = new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             }
+        } else {
+            response = new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         return response;
     }
@@ -126,22 +136,18 @@ public class UserController {
      * @return http response with a string message in a {@link ResponseEntity} that contains an ACCEPTED request if the
      * user was updated, else an UNAUTHORIZED request.
      */
-    @DeleteMapping("{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
+    @DeleteMapping("{user_id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Integer userId, HttpServletRequest headers) {
         ResponseEntity<String> response;
-        DecodedJWT decodedJWT = jwtUtil.verify(headers.get("authorization"));
-        if(decodedJWT == null) {
-            response = new ResponseEntity<>("Invalid token (1), no authorization", HttpStatus.UNAUTHORIZED);
-        } else {
-            if(Objects.equals(decodedJWT.getClaims().get("userId").asInt(), userId)) {
-                User user = userService.findUserById(userId);
-                userService.deleteUser(user);
-                response = new ResponseEntity<>("Valid token, user deleted", HttpStatus.ACCEPTED);
-            }
-            else {
-                response = new ResponseEntity<>("Invalid token (2), user mismatch", HttpStatus.UNAUTHORIZED);
-            }
+        if(Objects.equals(headers.getAttribute("user_id"), userId)) {
+            User user = userService.findUserById(userId);
+            userService.deleteUser(user);
+            response = new ResponseEntity<>("Valid token, user deleted", HttpStatus.ACCEPTED);
         }
+        else {
+            response = new ResponseEntity<>("Invalid token, user mismatch", HttpStatus.UNAUTHORIZED);
+        }
+
         return response;
     }
 }

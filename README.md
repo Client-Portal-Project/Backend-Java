@@ -1,4 +1,18 @@
 # Client Portal Project
+
+<br />
+<p align="center">
+<img alt="Sonar Cloud" src="https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg" />
+</p>
+<p align="center">
+<img alt="Quality Gate" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=alert_status" />
+<img alt="Security" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=security_rating" />
+<br/>
+<img alt="Bugs" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=bugs" />
+<img alt="Line of Code" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=ncloc" />
+<img alt="Vulnerabilities" src="https://sonarcloud.io/api/project_badges/measure?project=Backend-Java&metric=vulnerabilities" />
+</p>
+
 ## Project Description
 This application is designed to match clients' needs with applicants' qualifications; 
 so that clients may have the personnel needed for their goals, and applicants may
@@ -19,13 +33,14 @@ work what they are best at.
 
 ## Features
 ### Users can:
-- 
+
+### Application Controller/service/repo currently setup to work with models as of 3/31/22. Some user models information has changed which hasn't been tested with application. 
 
 Todo-List:
 - 
 
 ## Getting Started
-- git clone https://github.com/RVTR-StagingRemote/Staging-Project-Back-End-Java
+- git clone
 - Create a relational database called "batchesDB".
 - List of environment variables:
     - PXDB_URL - Database Host URL.

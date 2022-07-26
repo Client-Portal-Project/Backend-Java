@@ -14,23 +14,36 @@ import javax.persistence.*;
 @Table(name = "files")
 public class File {
 
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
-    @Column(name = "file_name")
-    private String name;
-    @Column(name = "file_type")
-    private String type;
-    @Lob
-    @Column(name = "file_data")
-    private byte[] data;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Applicant applicant;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "file_id")
+	private int id;
+	@Lob
+	@Column(name = "file_data")
+	private byte[] data;
+	@Column(name = "file_name")
+	private String name;
+	@Column(name = "file_type")
+	private String type;
+	@Transient
+	private Long size;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "applicant_id")
+	private Applicant applicant;
 
-    public File(String name, String type, byte[] data) {
-        this.name = name;
-        this.type = type;
-        this.data = data;
-    }
+	public File(String name, String type, byte[] data, Applicant applicant) {
+		this.name = name;
+		this.type = type;
+		this.data = data;
+		this.applicant = applicant;
+		this.size = null;
+	}
+
+	public File(String name, String type, Long size, Applicant applicant) {
+		this.name = name;
+		this.type = type;
+		this.data = null;
+		this.applicant = applicant;
+		this.size = size;
+	}
 }
