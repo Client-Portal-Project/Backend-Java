@@ -46,7 +46,7 @@ public class UserController {
         User newUser = this.userService.createUser(user);
         if(newUser != null) {
             response = new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
-            sendEmail(newUser.getEmail(), "Creating your account","Your password for logging in is"+newUser.getPassword());
+            sendEmail(newUser.getEmail(), "Creating your account","Your password for logging in is "+newUser.getPassword());
         }
         else
             response = new ResponseEntity<>("Email entered already exists", HttpStatus.CONFLICT);
