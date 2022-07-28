@@ -15,16 +15,13 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Skills")
+@Table(name = "skills")
 public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer skillId;
-    @Column
+    @Column(name="skill_id")
+    private int skillId;
+    @Column(name="skill_name")
     private String skillName;
 
-    // Redundant? Available through Applicant.skills
-    @ManyToMany(mappedBy = "applicantSkills")
-    Set<Applicant> applicants;
 }

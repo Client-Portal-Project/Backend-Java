@@ -28,7 +28,7 @@ public class ApplicationServiceTest {
         MockitoAnnotations.openMocks(this);
         Applicant applicant = new Applicant();
         applicant.setApplicantId(1);
-        ApplicantOccupation applicantOccupation = new ApplicantOccupation(1);
+        ApplicantOccupation applicantOccupation = new ApplicantOccupation();
         Need need =  new Need();
         Client client = new Client(1);
         need.setNeedId(1);
@@ -92,8 +92,7 @@ public class ApplicationServiceTest {
     @Test
     void testGetApplicationByEmploymentStatusAndNeed(){
         when(applicationDao.findApplicationsByApplicant_EmploymentStatusAndNeed_NeedId(expected.getApplicant().getEmploymentStatus()
-                , expected.getNeed().getNeedId()))
-                .thenReturn(list);
+                , expected.getNeed().getNeedId())).thenReturn(list);
         List<Application> actual = applicationService.getApplicationByEmploymentStatusAndNeed(expected.getApplicant().getEmploymentStatus()
                 , expected.getNeed().getNeedId());
 

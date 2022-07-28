@@ -1,8 +1,10 @@
 package com.projectx.aspects;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.projectx.utility.JwtUtil;
-import lombok.extern.log4j.Log4j2;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
+import lombok.extern.log4j.Log4j2;
 
 //will possibly get rid of this once auth0 is properly implemented
 @Aspect

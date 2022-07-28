@@ -68,7 +68,7 @@ public class FileController {
      *      contains an ok request
      */
     @GetMapping("{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable Integer id) {
+    public ResponseEntity<byte[]> getFile(@PathVariable int id) {
         File file = fileService.getFile(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")

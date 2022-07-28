@@ -39,8 +39,8 @@ public class NeedControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(needController).build();
         objectMapper = new ObjectMapper();
         Client client = new Client(1, null);
-        expected = new Need(1, null, null, null,
-                null, null, null, null, client, null, null);
+        expected = new Need(1, 0, 0, null,
+                null, null, null, 0, client, null, null);
     }
 
     @Test @SneakyThrows
