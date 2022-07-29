@@ -6,8 +6,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.Session;
 
 import com.projectx.Driver;
 import com.projectx.aspects.annotations.NoAuth;
