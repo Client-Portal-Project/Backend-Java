@@ -1,15 +1,11 @@
 package com.projectx.controllers;
 
-import java.net.Authenticator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,7 +15,6 @@ import com.projectx.models.User;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
 
-import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,8 +53,10 @@ public class UserController {
     public ResponseEntity<String> createUser(@RequestBody User user) {
         ResponseEntity<String> response;
         User newUser = this.userService.createUser(user);
-        if(newUser != null)
+        if(newUser != null) {
             response = new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
+            sendEmail(newUser.getEmail(), "Creating account","Your password is "+newUser.getPassword());
+        }
         else
             response = new ResponseEntity<>("Email entered already exists", HttpStatus.CONFLICT);
         return response;
