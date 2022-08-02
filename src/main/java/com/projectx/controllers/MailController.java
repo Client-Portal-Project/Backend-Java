@@ -1,6 +1,9 @@
 package com.projectx.controllers;
 
+import com.projectx.models.Mail;
+import com.projectx.models.User;
 import com.projectx.services.MailService;
+import com.projectx.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,11 @@ public class MailController {
     @PostMapping("recover")
     public ResponseEntity<String> recoverPassword(@PathVariable String email)
     {
+        Mail mail=mailService.recoverPassword(email);
+        if(mail==null)
+        {
+            return new ResponseEntity<>("The email is incorrect",HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>("Your new password has been sent", HttpStatus.ACCEPTED);
     }
 
