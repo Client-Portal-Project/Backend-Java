@@ -31,8 +31,13 @@ public class MailController {
     }
 
     @PostMapping
-    public ResponseEntity<String> register()
+    public ResponseEntity<String> register(User user)
     {
+        Mail mail=mailService.register(user);
+        if(mail==null)
+        {
+            return new ResponseEntity<>("No user here",HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>("Your registration information has been sent", HttpStatus.ACCEPTED);
     }
 }
