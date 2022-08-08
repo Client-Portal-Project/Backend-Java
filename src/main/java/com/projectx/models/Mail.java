@@ -1,8 +1,9 @@
 package com.projectx.models;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class Mail {
     private String sendToEmail;
     private String subject;

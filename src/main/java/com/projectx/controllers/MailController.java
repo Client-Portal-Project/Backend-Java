@@ -45,7 +45,7 @@ public class MailController {
         return new ResponseEntity<>("Your registration information has been sent", HttpStatus.ACCEPTED);
     }
     @Bean
-    public void sendEmail(Mail mail)
+    public Mail sendEmail(Mail mail)
     {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -67,11 +67,13 @@ public class MailController {
                     mail.getSendToEmail());
             msg.setSubject(mail.getSubject());
             msg.setSentDate(new Date());
-            msg.setText(mail.getMessage());
+            if(mail.getMessage()!=null)
+               msg.setText(mail.getMessage());
             Transport.send(msg);
         } catch (MessagingException mex) {
             System.out.println("send failed, exception: " + mex);
         }
+        return mail;
     }
 }
 
