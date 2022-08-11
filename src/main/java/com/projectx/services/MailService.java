@@ -24,7 +24,7 @@ public class MailService {
         userService.editUser(user);
         Mail mail=new Mail();
         mail.setSendToEmail(user.getEmail());
-        mail.setSubject("Reset Password");
+        mail.setSubject("Recover Password");
         mail.setSenderPassword("ovilmpbewocdmwjz");
         mail.setMessage("Hello "+user.getFirstName()+"Your new password is "+user.getPassword());
         mail.setFromEmail("18xxperson@gmail.com");
