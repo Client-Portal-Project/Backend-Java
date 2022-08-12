@@ -33,7 +33,7 @@ public class MailController {
         return new ResponseEntity<>("Your new password has been sent", HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("resetpassword/{userid}")
+    @PostMapping("reset password/{userid}")
     public ResponseEntity<String> reset_Password(@PathVariable int userid)
     {
         Mail mail=mailService.recoverPassword(userid);
