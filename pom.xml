@@ -7,6 +7,12 @@
 	<groupId>com.projectx</groupId>
 	<artifactId>Client-Portal</artifactId>
 	<version>0.0.1</version>
+	
+	<properties>
+
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
+	</properties>
 
 	<!-- Inherit defaults from Spring Boot -->
 	<parent>
@@ -38,7 +44,15 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>5.5.8.Final</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+<dependency>
+    <groupId>javax.mail</groupId>
+    <artifactId>mail</artifactId>
+    <version>1.4.7</version>
+</dependency>
 
+		
+		
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
