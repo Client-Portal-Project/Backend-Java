@@ -33,6 +33,13 @@ public class MailController {
         return new ResponseEntity<>("Your new password has been sent", HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("interview reminder/date")
+    public ResponseEntity<String> Interview(@PathVariable Date date)
+    {
+        Mail mail=mailService.interview_reminder(date);
+        return new ResponseEntity<>("Interview reminder sent",HttpStatus.OK);
+    }
+
     @PostMapping("reset password/{userid}")
     public ResponseEntity<String> reset_Password(@PathVariable int userid)
     {
