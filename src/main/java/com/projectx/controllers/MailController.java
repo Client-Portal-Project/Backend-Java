@@ -21,10 +21,10 @@ import java.util.Properties;
 public class MailController {
    @Autowired private MailService mailService;
 
-    @PostMapping("recover")
-    public ResponseEntity<String> recoverPassword(@PathVariable String email)
+    @PostMapping("register/{email}")
+    public ResponseEntity<String> register(@PathVariable String email)
     {
-        Mail mail=mailService.recoverPassword(email);
+        Mail mail=mailService.register(email);
         if(mail==null)
         {
             return new ResponseEntity<>("The email is incorrect",HttpStatus.NOT_FOUND);
@@ -33,17 +33,18 @@ public class MailController {
         return new ResponseEntity<>("Your new password has been sent", HttpStatus.ACCEPTED);
     }
 
-    @PostMapping
-    public ResponseEntity<String> register(User user)
+    @PostMapping("resetpassword/{userid}")
+    public ResponseEntity<String> reset_Password(@PathVariable int userid)
     {
-        Mail mail=mailService.register(user);
+        Mail mail=mailService.recoverPassword(userid);
         if(mail==null)
         {
             return new ResponseEntity<>("No user here",HttpStatus.BAD_REQUEST);
         }
-        sendEmail(mail);
+        Mail mail2=sendEmail(mail);
         return new ResponseEntity<>("Your registration information has been sent", HttpStatus.ACCEPTED);
     }
+
     @Bean
     public Mail sendEmail(Mail mail)
     {

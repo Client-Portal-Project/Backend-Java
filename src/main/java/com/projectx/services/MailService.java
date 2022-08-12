@@ -13,9 +13,9 @@ import java.util.Properties;
 @Service("mailService")
 public class MailService {
     @Autowired private UserService userService;
-    public Mail recoverPassword(String email)
+    public Mail recoverPassword(int userid)
     {
-        User user=userService.findUserByEmail(email);
+        User user=userService.findUserById(userid);
         if (user==null)
         {
             return null;
@@ -31,17 +31,18 @@ public class MailService {
         return mail;
     }
 
-    public Mail register(User user)
+    public Mail register(String email)
     {
+        User user= userService.findUserByEmail(email);
         if (user==null)
         {
             return null;
         }
         Mail mail=new Mail();
         mail.setSendToEmail(user.getEmail());
-        mail.setSubject("Reset Password");
+        mail.setSubject("Register User");
         mail.setSenderPassword("ovilmpbewocdmwjz");
-        mail.setMessage("Hello "+user.getFirstName()+"Your new password is "+user.getPassword());
+        mail.setMessage("Hello "+user.getFirstName()+"Your current password is "+user.getPassword());
         mail.setFromEmail("18xxperson@gmail.com");
         return mail;
     }
