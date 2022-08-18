@@ -57,7 +57,6 @@ public class UserController {
         
         if(newUser != null) {
         	Mail mail=mailService.register(newUser.getEmail());
-        	sendEmail(mail);
             response = new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
         }
         else
@@ -158,36 +157,5 @@ public class UserController {
 
         return response;
     }
-    
-    @Bean
-    public Mail sendEmail(Mail mail)
-    {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port",587);
-        props.put("mail.smtp.auth",true);
-        props.put("mail.smtp.starttls.enable",true);
-        props.put("mail.smtp.ssl.protocols","TLSv1.2");
-        Session session = Session.getInstance(props, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                //The password must be an app specific password with the gmail smtp server
-                return new PasswordAuthentication(mail.getFromEmail(),mail.getSenderPassword());
-            }
-        });
-        try {
-            MimeMessage msg = new MimeMessage(session);
-            msg.setFrom();
-            msg.setRecipients(Message.RecipientType.TO,
-                    mail.getSendToEmail());
-            msg.setSubject(mail.getSubject());
-            msg.setSentDate(new Date());
-            if(mail.getMessage()!=null)
-               msg.setText(mail.getMessage());
-            Transport.send(msg);
-        } catch (MessagingException mex) {
-            System.out.println("send failed, exception: " + mex);
-        }
-        return mail;
-    }
+
 }
