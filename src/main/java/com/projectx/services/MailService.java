@@ -16,9 +16,9 @@ import java.util.Properties;
 public class MailService {
     @Autowired private UserService userService;
     @Autowired private InterviewService interviewService;
-    public Mail recoverPassword(int userid)
+    public Mail recoverPassword(String email)
     {
-        User user=userService.findUserById(userid);
+        User user=userService.findUserByEmail(email);
         if (user==null)
         {
             return null;

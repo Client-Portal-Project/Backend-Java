@@ -2,7 +2,9 @@ package com.projectx.controllers;
 
 import com.projectx.Driver;
 import com.projectx.aspects.annotations.NoAuth;
+import com.projectx.models.Mail;
 import com.projectx.models.User;
+import com.projectx.services.MailService;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ import java.util.Objects;
 public class UserController {
     @Autowired
     private UserService userService;
+    
+    @Autowired 
+    private MailService mailService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -38,8 +43,11 @@ public class UserController {
     public ResponseEntity<String> createUser(@RequestBody User user) {
         ResponseEntity<String> response;
         User newUser = this.userService.createUser(user);
-        if(newUser != null)
+        
+        if(newUser != null) {
+        	Mail mail=mailService.register(newUser.getEmail());
             response = new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
+        }
         else
             response = new ResponseEntity<>("Email entered already exists", HttpStatus.CONFLICT);
         return response;
