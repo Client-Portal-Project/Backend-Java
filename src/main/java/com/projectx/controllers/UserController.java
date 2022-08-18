@@ -8,14 +8,25 @@ import com.projectx.services.MailService;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 
 @RestController("userController")
 @RequestMapping("user")
@@ -46,6 +57,7 @@ public class UserController {
         
         if(newUser != null) {
         	Mail mail=mailService.register(newUser.getEmail());
+        	sendEmail(mail);
             response = new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
         }
         else
@@ -145,5 +157,37 @@ public class UserController {
         }
 
         return response;
+    }
+    
+    @Bean
+    public Mail sendEmail(Mail mail)
+    {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port",587);
+        props.put("mail.smtp.auth",true);
+        props.put("mail.smtp.starttls.enable",true);
+        props.put("mail.smtp.ssl.protocols","TLSv1.2");
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                //The password must be an app specific password with the gmail smtp server
+                return new PasswordAuthentication(mail.getFromEmail(),mail.getSenderPassword());
+            }
+        });
+        try {
+            MimeMessage msg = new MimeMessage(session);
+            msg.setFrom();
+            msg.setRecipients(Message.RecipientType.TO,
+                    mail.getSendToEmail());
+            msg.setSubject(mail.getSubject());
+            msg.setSentDate(new Date());
+            if(mail.getMessage()!=null)
+               msg.setText(mail.getMessage());
+            Transport.send(msg);
+        } catch (MessagingException mex) {
+            System.out.println("send failed, exception: " + mex);
+        }
+        return mail;
     }
 }
