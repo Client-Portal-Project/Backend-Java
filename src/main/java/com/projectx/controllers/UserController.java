@@ -133,6 +133,20 @@ public class UserController {
         }
         return response;
     }
+    
+    /*
+     * get user from database by email*/
+    @NoAuth
+    @GetMapping("/by/{email}")
+    public ResponseEntity<User> verifyUserEmail(@PathVariable String email) {
+    	User tempUser = this.userService.findUserByEmail(email);
+    	if(tempUser == null) {
+    		return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+    	} else {
+    		return new ResponseEntity<User>(tempUser, HttpStatus.ACCEPTED);
+    	}
+    	
+    }
 
     /**
      * Update the user in the database
