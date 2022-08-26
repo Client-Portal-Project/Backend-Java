@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.*;
@@ -40,10 +41,10 @@ public class MailController {
         return new ResponseEntity<>("Interview reminder sent",HttpStatus.OK);
     }
 
-    @PostMapping("reset-password/{email}")
-    public ResponseEntity<String> reset_Password(@PathVariable String email)
+    @PostMapping("reset-password")
+    public ResponseEntity<String> reset_Password(@RequestBody User user)
     {
-        Mail mail=mailService.recoverPassword(email);
+        Mail mail=mailService.recoverPassword(user.getEmail());
         if(mail==null)
         {
             return new ResponseEntity<>("No user here",HttpStatus.BAD_REQUEST);
