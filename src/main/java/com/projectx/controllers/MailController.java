@@ -42,7 +42,7 @@ public class MailController {
     }
 
     @PostMapping("reset-password")
-    public ResponseEntity<String> reset_Password(@RequestBody User user)
+    public ResponseEntity<String> forgot_Password(@RequestBody User user)
     {
         Mail mail=mailService.recoverPassword(user.getEmail());
         if(mail==null)
