@@ -53,6 +53,15 @@ public class MailController {
         return new ResponseEntity<>("Your registration information has been sent", HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("find-email")
+    public ResponseEntity<String> forgot_email(@RequestBody User user)
+    {
+        String email = mailService.recoverEmail(user.getFirstName(), user.getLastName());
+        if(email.equals(""))
+            return new ResponseEntity<>("No user with this name",HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(email,HttpStatus.OK);
+    }
+
     @Bean
     public Mail sendEmail(Mail mail)
     {

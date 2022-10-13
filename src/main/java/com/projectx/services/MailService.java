@@ -14,25 +14,37 @@ import java.util.Properties;
 
 @Service("mailService")
 public class MailService {
-    @Autowired private UserService userService;
-    @Autowired private InterviewService interviewService;
-    public Mail recoverPassword(String email)
-    {
-        User user=userService.findUserByEmail(email);
-        if (user==null)
-        {
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private InterviewService interviewService;
+
+    public Mail recoverPassword(String email) {
+        User user = userService.findUserByEmail(email);
+        if (user == null) {
             return null;
         }
         user.setPassword("xcnvjkpqwhyr819");
         userService.editUser(user);
-        Mail mail=new Mail();
+        Mail mail = new Mail();
         mail.setSendToEmail(user.getEmail());
         mail.setSubject("Recover Password");
         mail.setSenderPassword("ovilmpbewocdmwjz");
-        mail.setMessage("Hello "+user.getFirstName()+"Your new password is "+user.getPassword());
+        mail.setMessage("Hello " + user.getFirstName() + "Your new password is " + user.getPassword());
         mail.setFromEmail("18xxperson@gmail.com");
         return mail;
     }
+
+    public String recoverEmail(String firstname, String lastname)
+    {
+        List<User> list = userService.findAllUsers();
+        for (User user : list) {
+            if (user.getFirstName().equals(firstname) && user.getLastName().equals(lastname))
+                return user.getEmail();
+        }
+        return "";
+    }
+
 
     public Mail register(String email)
     {
