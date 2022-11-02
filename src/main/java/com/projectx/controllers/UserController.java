@@ -2,18 +2,31 @@ package com.projectx.controllers;
 
 import com.projectx.Driver;
 import com.projectx.aspects.annotations.NoAuth;
+import com.projectx.models.Mail;
 import com.projectx.models.User;
+import com.projectx.services.MailService;
 import com.projectx.services.UserService;
 import com.projectx.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 
 @RestController("userController")
 @RequestMapping("user")
@@ -21,6 +34,9 @@ import java.util.Objects;
 public class UserController {
     @Autowired
     private UserService userService;
+    
+    @Autowired 
+    private MailService mailService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -38,8 +54,11 @@ public class UserController {
     public ResponseEntity<String> createUser(@RequestBody User user) {
         ResponseEntity<String> response;
         User newUser = this.userService.createUser(user);
-        if(newUser != null)
+        
+        if(newUser != null) {
+        	Mail mail=mailService.register(newUser.getEmail());
             response = new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
+        }
         else
             response = new ResponseEntity<>("Email entered already exists", HttpStatus.CONFLICT);
         return response;
@@ -114,6 +133,20 @@ public class UserController {
         }
         return response;
     }
+    
+    /*
+     * get user from database by email*/
+    @NoAuth
+    @GetMapping("/by/{email}")
+    public ResponseEntity<User> verifyUserEmail(@PathVariable String email) {
+    	User tempUser = this.userService.findUserByEmail(email);
+    	if(tempUser == null) {
+    		return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+    	} else {
+    		return new ResponseEntity<User>(tempUser, HttpStatus.ACCEPTED);
+    	}
+    	
+    }
 
     /**
      * Update the user in the database
@@ -138,4 +171,5 @@ public class UserController {
 
         return response;
     }
+
 }
